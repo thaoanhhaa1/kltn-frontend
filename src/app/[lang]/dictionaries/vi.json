@@ -1,0 +1,16 @@
+{
+    "auth": {
+        "login": {
+            "title": "Đăng nhập",
+            "description": "Vui lòng nhập thông tin đăng nhập của bạn.",
+            "separator": "Hoặc",
+            "email": "Email",
+            "password": "Mật khẩu",
+            "submit": "Đăng nhập",
+            "forgot": "Quên mật khẩu?",
+            "register": "Đăng ký",
+            "don't_have_account": "Chưa có tài khoản?",
+            "password_placeholder": "Nhập mật khẩu của bạn"
+        }
+    }
+}

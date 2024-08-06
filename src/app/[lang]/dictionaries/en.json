@@ -1,0 +1,16 @@
+{
+    "auth": {
+        "login": {
+            "title": "Login",
+            "description": "Please enter your credentials to login.",
+            "separator": "Or",
+            "email": "Email",
+            "password": "Password",
+            "submit": "Login",
+            "forgot": "Forgot password?",
+            "register": "Register",
+            "don't_have_account": "Don't have an account?",
+            "password_placeholder": "Enter your password"
+        }
+    }
+}
