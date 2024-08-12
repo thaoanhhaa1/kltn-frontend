@@ -30,7 +30,6 @@ const request = async <Response>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', url:
     if (!res.ok) {
         if (result?.details) throw new EntryError(result.statusCode, result.message, result.details);
         else if (res.status === 401) {
-            // Refresh token
         } else throw new CustomError(res.status, result.message);
     }
 

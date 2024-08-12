@@ -1,4 +1,4 @@
-import SignInForm from '@/app/[lang]/(auth)/sign-in/sign-in-form';
+import SignUpForm from '@/app/[lang]/(auth)/sign-up/sign-up-form';
 import { getDictionary } from '@/app/[lang]/dictionaries';
 import GoogleIcon from '@/components/svgs/google-icon';
 import { Button } from '@/components/ui/button';
@@ -14,14 +14,15 @@ const SignInPage = async ({
     };
 }) => {
     const dict = await getDictionary(lang);
-    const loginDict = dict.auth.login;
+    const registerDict = dict.auth.register;
+    const accountTypes = dict.account_type;
 
     return (
         <div className="min-h-screen flex justify-center items-center px-2">
             <Card className="mx-auto w-full max-w-lg">
                 <CardHeader>
-                    <CardTitle className="text-2xl">{loginDict.title}</CardTitle>
-                    <CardDescription>{loginDict.description}</CardDescription>
+                    <CardTitle className="text-2xl">{registerDict.title}</CardTitle>
+                    <CardDescription>{registerDict.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-4">
@@ -38,20 +39,15 @@ const SignInPage = async ({
                         {/* Separate */}
                         <div className="flex items-center gap-2">
                             <hr className="flex-1 border-gray-300" />
-                            <span className="text-sm text-muted-foreground">{loginDict.separator}</span>
+                            <span className="text-sm text-muted-foreground">{registerDict.separator}</span>
                             <hr className="flex-1 border-gray-300" />
                         </div>
-                        <SignInForm loginDict={loginDict} />
+                        <SignUpForm accountTypesDict={accountTypes} registerDict={registerDict} />
                     </div>
-                    <div className="mt-4 text-sm flex flex-wrap justify-center xs:justify-between items-center gap-4">
-                        <span>
-                            {loginDict["don't_have_account"]}{' '}
-                            <Link href="/sign-up" className="underline">
-                                {loginDict.register}
-                            </Link>
-                        </span>
-                        <Link href="#" className="underline">
-                            {loginDict.forgot}
+                    <div className="mt-4 text-sm text-center">
+                        {registerDict.already_have_account}{' '}
+                        <Link href="/sign-in" className="underline">
+                            {registerDict.login}
                         </Link>
                     </div>
                 </CardContent>

@@ -11,6 +11,27 @@
             "register": "Đăng ký",
             "don't_have_account": "Chưa có tài khoản?",
             "password_placeholder": "Nhập mật khẩu của bạn"
+        },
+        "register": {
+            "title": "Đăng ký",
+            "description": "Nhập thông tin của bạn để tạo tài khoản.",
+            "separator": "Hoặc",
+            "name": "Họ tên",
+            "email": "Email",
+            "password": "Mật khẩu",
+            "otp": "OTP",
+            "submit": "Đăng ký",
+            "login": "Đăng nhập",
+            "already_have_account": "Đã có tài khoản?",
+            "password_placeholder": "Nhập mật khẩu của bạn",
+            "name_placeholder": "Nhập họ tên của bạn",
+            "otp_placeholder": "Nhập OTP của bạn",
+            "get_otp": "Nhận OTP",
+            "account_type": "Loại tài khoản"
         }
+    },
+    "account_type": {
+        "owner": "Chủ nhà",
+        "renter": "Người thuê"
     }
 }
