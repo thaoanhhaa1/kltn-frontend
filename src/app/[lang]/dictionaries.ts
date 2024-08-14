@@ -20,3 +20,5 @@ export type Dictionary = Awaited<ReturnType<typeof getDictionary>>;
 export type LoginDictionary = Dictionary['auth']['login'];
 export type RegisterDictionary = Dictionary['auth']['register'];
 export type AccountTypeDictionary = Dictionary['account_type'];
+export type HeaderDictionary = Dictionary['header'];
+export type ModeDictionary = Dictionary['mode'];

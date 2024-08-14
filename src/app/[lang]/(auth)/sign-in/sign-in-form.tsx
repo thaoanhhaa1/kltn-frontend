@@ -9,13 +9,14 @@ import CustomError, { EntryError } from '@/lib/error';
 import http from '@/lib/http';
 import { LoginInput, loginSchema } from '@/schemas/auth.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const SignInForm = ({ loginDict }: { loginDict: LoginDictionary }) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const { lang } = useParams();
 
     const form = useForm<LoginInput>({
         resolver: zodResolver(loginSchema),
@@ -34,7 +35,7 @@ const SignInForm = ({ loginDict }: { loginDict: LoginDictionary }) => {
                 baseUrl: '',
             });
 
-            router.push('/');
+            router.push(`/${lang}`);
         } catch (error) {
             if (error instanceof EntryError) {
                 error.details.forEach((detail) => {
@@ -48,9 +49,8 @@ const SignInForm = ({ loginDict }: { loginDict: LoginDictionary }) => {
                     title: error.name,
                     description: error.message,
                 });
+                setLoading(false);
             }
-        } finally {
-            setLoading(false);
         }
     }
 

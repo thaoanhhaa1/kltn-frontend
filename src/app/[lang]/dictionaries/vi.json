@@ -33,5 +33,21 @@
     "account_type": {
         "owner": "Chủ nhà",
         "renter": "Người thuê"
+    },
+    "header": {
+        "home": "Trang chủ",
+        "rent": "Thuê nhà",
+        "chart": "Biểu đồ biến động giá",
+        "my-account": "Tài khoản của tôi",
+        "settings": "Cài đặt",
+        "logout": "Đăng xuất",
+        "search-placeholder": "Tìm kiếm bất động sản...",
+        "sign-up": "Đăng ký",
+        "sign-in": "Đăng nhập"
+    },
+    "mode": {
+        "light": "Sáng",
+        "dark": "Tối",
+        "system": "Mặc định hệ thống"
     }
 }

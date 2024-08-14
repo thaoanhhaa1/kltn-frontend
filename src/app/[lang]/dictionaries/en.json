@@ -33,5 +33,21 @@
     "account_type": {
         "owner": "Owner",
         "renter": "Renter"
+    },
+    "header": {
+        "home": "Home",
+        "rent": "Rent",
+        "chart": "Price fluctuation chart",
+        "my-account": "My account",
+        "settings": "Settings",
+        "logout": "Logout",
+        "search-placeholder": "Search properties...",
+        "sign-up": "Sign up",
+        "sign-in": "Sign in"
+    },
+    "mode": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System default"
     }
 }
