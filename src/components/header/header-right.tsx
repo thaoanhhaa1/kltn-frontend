@@ -1,19 +1,11 @@
 import { HeaderDictionary, ModeDictionary } from '@/app/[lang]/dictionaries';
-import SignOut from '@/components/header/sign-out';
 import { ModeToggle } from '@/components/mode-toggle';
+import MyAccount from '@/components/my-account';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { IUser } from '@/interfaces/user';
-import { SIGN_IN, SIGN_UP } from '@/path';
-import { CircleUser, Search } from 'lucide-react';
+import { DASHBOARD, SIGN_IN, SIGN_UP } from '@/path';
+import { Search } from 'lucide-react';
 import Link from 'next/link';
 
 const HeaderRight = ({
@@ -42,22 +34,13 @@ const HeaderRight = ({
                 </div>
             </form>
             <ModeToggle modeDict={modeDict} />
+            {user?.user_types.includes('admin') && (
+                <Button variant="outline" asChild>
+                    <Link href={`/${lang}${DASHBOARD}`}>{headerDict.dashboard}</Link>
+                </Button>
+            )}
             {user ? (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="secondary" size="icon" className="rounded-full">
-                            <CircleUser className="h-5 w-5" />
-                            <span className="sr-only">Toggle user menu</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>{headerDict['my-account']}</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>{headerDict.settings}</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <SignOut>{headerDict.logout}</SignOut>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <MyAccount user={user} headerDict={headerDict} />
             ) : (
                 <>
                     <Button variant="outline" asChild>

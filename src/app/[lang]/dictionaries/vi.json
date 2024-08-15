@@ -43,7 +43,15 @@
         "logout": "Đăng xuất",
         "search-placeholder": "Tìm kiếm bất động sản...",
         "sign-up": "Đăng ký",
-        "sign-in": "Đăng nhập"
+        "sign-in": "Đăng nhập",
+        "dashboard": "Dashboard"
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "properties": "Bất động sản",
+        "users": "Người dùng",
+        "analytics": "Thống kê",
+        "settings": "Cài đặt"
     },
     "mode": {
         "light": "Sáng",

@@ -1,3 +1,4 @@
+import DashboardBreadcrumb from '@/app/[lang]/(admin)/dashboard/dashboard-breadcrumb';
 import { IPayloadJWT } from '@/interfaces/jwt';
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
@@ -21,7 +22,12 @@ const DashboardPage = () => {
         return <div>Unauthorized</div>;
     }
 
-    return <div>Dashboard Page</div>;
+    return (
+        <div>
+            <DashboardBreadcrumb />
+            Dashboard Page
+        </div>
+    );
 };
 
 export default DashboardPage;

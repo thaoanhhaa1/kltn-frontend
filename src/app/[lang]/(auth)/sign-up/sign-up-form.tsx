@@ -12,7 +12,7 @@ import { RegisterInput, registerSchema } from '@/schemas/auth.schema';
 import { otpSchema } from '@/schemas/otp.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RadioGroup, RadioGroupItem } from '@radix-ui/react-radio-group';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -24,6 +24,7 @@ const SignUpForm = ({
     accountTypesDict: AccountTypeDictionary;
 }) => {
     const router = useRouter();
+    const { lang } = useParams();
     const [loading, setLoading] = useState(false);
     const accountTypes = useMemo(
         () => [
@@ -59,7 +60,8 @@ const SignUpForm = ({
                 baseUrl: '',
             });
 
-            router.push('/');
+            router.push(`/${lang}`);
+            router.refresh();
         } catch (error) {
             if (error instanceof EntryError) {
                 error.details.forEach((detail) => {

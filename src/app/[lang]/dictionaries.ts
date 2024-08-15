@@ -22,3 +22,4 @@ export type RegisterDictionary = Dictionary['auth']['register'];
 export type AccountTypeDictionary = Dictionary['account_type'];
 export type HeaderDictionary = Dictionary['header'];
 export type ModeDictionary = Dictionary['mode'];
+export type SidebarDictionary = Dictionary['sidebar'];

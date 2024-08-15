@@ -36,6 +36,7 @@ const SignInForm = ({ loginDict }: { loginDict: LoginDictionary }) => {
             });
 
             router.push(`/${lang}`);
+            router.refresh();
         } catch (error) {
             if (error instanceof EntryError) {
                 error.details.forEach((detail) => {

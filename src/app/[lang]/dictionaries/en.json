@@ -43,7 +43,15 @@
         "logout": "Logout",
         "search-placeholder": "Search properties...",
         "sign-up": "Sign up",
-        "sign-in": "Sign in"
+        "sign-in": "Sign in",
+        "dashboard": "Dashboard"
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "properties": "Properties",
+        "users": "Users",
+        "analytics": "Analytics",
+        "settings": "Settings"
     },
     "mode": {
         "light": "Light",
