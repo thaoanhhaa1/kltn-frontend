@@ -23,3 +23,4 @@ export type AccountTypeDictionary = Dictionary['account_type'];
 export type HeaderDictionary = Dictionary['header'];
 export type ModeDictionary = Dictionary['mode'];
 export type SidebarDictionary = Dictionary['sidebar'];
+export type UserDashboardDictionary = Dictionary['user-dashboard'];

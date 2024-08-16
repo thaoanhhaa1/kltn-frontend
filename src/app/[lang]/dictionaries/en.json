@@ -57,5 +57,16 @@
         "light": "Light",
         "dark": "Dark",
         "system": "System default"
+    },
+    "user-dashboard": {
+        "id": "ID",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "user-type": "User type",
+        "status": "Status",
+        "created-at": "Created at",
+        "updated-at": "Updated at",
+        "actions": "Actions"
     }
 }

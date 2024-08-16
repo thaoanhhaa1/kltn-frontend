@@ -57,5 +57,16 @@
         "light": "Sáng",
         "dark": "Tối",
         "system": "Mặc định hệ thống"
+    },
+    "user-dashboard": {
+        "id": "ID",
+        "name": "Họ tên",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "user-type": "Loại người dùng",
+        "status": "Trạng thái",
+        "created-at": "Ngày tạo",
+        "updated-at": "Ngày cập nhật",
+        "actions": "Hành động"
     }
 }
