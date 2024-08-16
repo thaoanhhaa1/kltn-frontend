@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+    logging: {
+        fetches: true,
+    },
+};
 
 export default nextConfig;

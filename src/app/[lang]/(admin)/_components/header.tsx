@@ -1,18 +1,17 @@
 import HeaderBreadcrumb from '@/app/[lang]/(admin)/_components/header-breadcrumb';
 import HeaderItem from '@/app/[lang]/(admin)/_components/header-item';
 import { HeaderDictionary, ModeDictionary, SidebarDictionary } from '@/app/[lang]/dictionaries';
+import Logo from '@/components/logo';
 import { ModeToggle } from '@/components/mode-toggle';
 import MyAccount from '@/components/my-account';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { envConfig } from '@/config/envConfig';
 import { IUser } from '@/interfaces/user';
 import http from '@/lib/http';
 import { DASHBOARD, DASHBOARD_ANALYTICS, DASHBOARD_PROPERTIES, DASHBOARD_SETTINGS, DASHBOARD_USERS } from '@/path';
 import { DashboardIcon } from '@radix-ui/react-icons';
-import { House, LineChart, Package2, PanelLeft, Settings, Users2 } from 'lucide-react';
+import { House, LineChart, PanelLeft, Settings, Users2 } from 'lucide-react';
 import { cookies } from 'next/headers';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 const Header = async ({
@@ -56,13 +55,7 @@ const Header = async ({
                 </SheetTrigger>
                 <SheetContent side="left" className="sm:max-w-xs">
                     <nav className="grid gap-6 text-lg font-medium">
-                        <Link
-                            href={`/${lang}${DASHBOARD}`}
-                            className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
-                        >
-                            <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-                            <span className="sr-only">{envConfig.NEXT_PUBLIC_WEB_NAME}</span>
-                        </Link>
+                        <Logo lang={lang} />
                         <HeaderItem
                             icon={<DashboardIcon className="h-5 w-5" />}
                             link={`/${lang}${DASHBOARD}`}

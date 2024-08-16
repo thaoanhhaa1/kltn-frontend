@@ -1,10 +1,9 @@
 import NavItem from '@/app/[lang]/(admin)/_components/nav-item';
 import { SidebarDictionary } from '@/app/[lang]/dictionaries';
-import { envConfig } from '@/config/envConfig';
+import Logo from '@/components/logo';
 import { DASHBOARD, DASHBOARD_ANALYTICS, DASHBOARD_PROPERTIES, DASHBOARD_SETTINGS, DASHBOARD_USERS } from '@/path';
 import { DashboardIcon } from '@radix-ui/react-icons';
-import { House, LineChart, Package2, Settings, Users2 } from 'lucide-react';
-import Link from 'next/link';
+import { House, LineChart, Settings, Users2 } from 'lucide-react';
 
 const Sidebar = ({
     sidebarDict,
@@ -18,13 +17,7 @@ const Sidebar = ({
     return (
         <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
             <nav className="flex flex-col items-center gap-4 px-2 sm:py-4">
-                <Link
-                    href={`/${lang}${DASHBOARD}`}
-                    className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
-                >
-                    <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
-                    <span className="sr-only">{envConfig.NEXT_PUBLIC_WEB_NAME}</span>
-                </Link>
+                <Logo lang={lang} />
                 <NavItem
                     link={`/${lang}${DASHBOARD}`}
                     title={sidebarDict.dashboard}

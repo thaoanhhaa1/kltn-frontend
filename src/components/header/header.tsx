@@ -1,11 +1,12 @@
 import { HeaderDictionary, ModeDictionary } from '@/app/[lang]/dictionaries';
 import HeaderRight from '@/components/header/header-right';
+import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { IUser } from '@/interfaces/user';
 import http from '@/lib/http';
 import { HOME } from '@/path';
-import { House, Menu, Package2 } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 
@@ -38,10 +39,7 @@ const Header = async ({
     return (
         <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
             <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-                <Link href="#" className="flex items-center gap-2 text-lg font-semibold md:text-base">
-                    <House className="h-6 w-6" />
-                    <span className="sr-only">Acme Inc</span>
-                </Link>
+                <Logo lang={lang} />
                 <Link
                     href={`/${lang}${HOME}`}
                     className="text-nowrap text-foreground transition-colors hover:text-foreground"
@@ -64,10 +62,7 @@ const Header = async ({
                 </SheetTrigger>
                 <SheetContent side="left">
                     <nav className="grid gap-6 text-lg font-medium">
-                        <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
-                            <Package2 className="h-6 w-6" />
-                            <span className="sr-only">Acme Inc</span>
-                        </Link>
+                        <Logo lang={lang} />
                         <Link href={`/${lang}${HOME}`} className="hover:text-foreground">
                             {headerDict.home}
                         </Link>
