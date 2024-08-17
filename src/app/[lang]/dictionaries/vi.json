@@ -11,6 +11,78 @@
             "register": "Đăng ký",
             "don't_have_account": "Chưa có tài khoản?",
             "password_placeholder": "Nhập mật khẩu của bạn"
+        },
+        "register": {
+            "title": "Đăng ký",
+            "description": "Nhập thông tin của bạn để tạo tài khoản.",
+            "separator": "Hoặc",
+            "name": "Họ tên",
+            "email": "Email",
+            "password": "Mật khẩu",
+            "otp": "OTP",
+            "submit": "Đăng ký",
+            "login": "Đăng nhập",
+            "already_have_account": "Đã có tài khoản?",
+            "password_placeholder": "Nhập mật khẩu của bạn",
+            "name_placeholder": "Nhập họ tên của bạn",
+            "otp_placeholder": "Nhập OTP của bạn",
+            "get_otp": "Nhận OTP",
+            "account_type": "Loại tài khoản"
         }
+    },
+    "account_type": {
+        "owner": "Chủ nhà",
+        "renter": "Người thuê"
+    },
+    "header": {
+        "home": "Trang chủ",
+        "rent": "Thuê nhà",
+        "chart": "Biểu đồ biến động giá",
+        "my-account": "Tài khoản của tôi",
+        "settings": "Cài đặt",
+        "logout": "Đăng xuất",
+        "search-placeholder": "Tìm kiếm bất động sản...",
+        "sign-up": "Đăng ký",
+        "sign-in": "Đăng nhập",
+        "dashboard": "Dashboard"
+    },
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "properties": "Bất động sản",
+        "users": "Người dùng",
+        "analytics": "Thống kê",
+        "settings": "Cài đặt"
+    },
+    "mode": {
+        "light": "Sáng",
+        "dark": "Tối",
+        "system": "Mặc định hệ thống"
+    },
+    "user-dashboard": {
+        "id": "ID",
+        "name": "Họ tên",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "user-type": "Loại người dùng",
+        "status": "Trạng thái",
+        "created-at": "Ngày tạo",
+        "updated-at": "Ngày cập nhật",
+        "actions": "Hành động"
+    },
+    "property-dashboard": {
+        "id": "ID",
+        "title": "Tiêu đề",
+        "description": "Mô tả",
+        "deposit": "Tiền đặt cọc",
+        "status": "Trạng thái",
+        "address": "Địa chỉ",
+        "ward": "Phường",
+        "district": "Quận",
+        "city": "Thành phố",
+        "prices": "Giá",
+        "id-owner": "ID - Chủ nhà",
+        "created_at": "Ngày tạo",
+        "updated_at": "Ngày cập nhật",
+        "actions": "Hành động"
     }
 }

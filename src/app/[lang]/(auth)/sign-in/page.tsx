@@ -46,7 +46,7 @@ const SignInPage = async ({
                     <div className="mt-4 text-sm flex flex-wrap justify-center xs:justify-between items-center gap-4">
                         <span>
                             {loginDict["don't_have_account"]}{' '}
-                            <Link href="#" className="underline">
+                            <Link href="/sign-up" className="underline">
                                 {loginDict.register}
                             </Link>
                         </span>
