@@ -6,7 +6,7 @@ import { initDataTable } from '@/constants/init-data';
 import usePagination from '@/hooks/usePagination';
 import { IProperty, PropertyStatus } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
-import { formatCurrency, formatDateTime, getPropertyStatusColor } from '@/lib/utils';
+import { formatCurrency, formatDateTime, getPropertyStatusColor, toSkipTake } from '@/lib/utils';
 import { getAllNotDeletedProperties } from '@/services/property-service';
 import { Button, Space, TableProps, Tag, Tooltip } from 'antd';
 import { Eye } from 'lucide-react';
@@ -133,10 +133,7 @@ const PropertiesTable = ({ propertiesDashboardDict }: { propertiesDashboardDict:
             setLoading(true);
 
             try {
-                const res = await getAllNotDeletedProperties({
-                    skip: (page - 1) * pageSize,
-                    take: pageSize,
-                });
+                const res = await getAllNotDeletedProperties(toSkipTake(page, pageSize));
 
                 setData(res);
             } catch (error) {

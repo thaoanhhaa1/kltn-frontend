@@ -2,34 +2,24 @@
 
 import { UserDashboardDictionary } from '@/app/[lang]/dictionaries';
 import TablePagination from '@/components/table-pagination';
-import { IPageInfo } from '@/interfaces/pagination';
+import { initDataTable } from '@/constants/init-data';
+import usePagination from '@/hooks/usePagination';
+import { ITable } from '@/interfaces/table';
 import { IUser } from '@/interfaces/user';
-import http from '@/lib/http';
-import { formatDateTime, getRoleColor, getUserStatusColor } from '@/lib/utils';
+import { formatDateTime, getRoleColor, getUserStatusColor, toSkipTake } from '@/lib/utils';
+import { getAllUsers } from '@/services/user-service';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
 import { Button, Space, TableProps, Tag } from 'antd';
 import { Edit2, Trash } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-interface IUsersTable {
-    data: IUser[];
-    pageInfo: IPageInfo;
-}
+type IUsersTable = ITable<IUser>;
 
 const UsersTable = ({ userDashboardDict }: { userDashboardDict: UserDashboardDictionary }) => {
-    const [users, setUsers] = React.useState<IUsersTable>({
-        data: [],
-        pageInfo: {
-            current: 1,
-            pageSize: 10,
-            total: 0,
-        },
-    });
-    const searchParams = useSearchParams();
-    const page = Number(searchParams.get('page') || 1);
-    const pageSize = Number(searchParams.get('pageSize') || 10);
+    const [users, setUsers] = useState<IUsersTable>(initDataTable);
+    const [loading, setLoading] = useState(false);
+    const { page, pageSize } = usePagination();
 
     const columns: TableProps<IUser>['columns'] = useMemo(
         () => [
@@ -103,18 +93,15 @@ const UsersTable = ({ userDashboardDict }: { userDashboardDict: UserDashboardDic
 
     useEffect(() => {
         const fetch = async () => {
+            setLoading(true);
             try {
-                const params = {
-                    skip: String((page - 1) * pageSize),
-                    take: String(pageSize),
-                };
-                const search = new URLSearchParams(params).toString();
-
-                const res = await http.get<IUsersTable>(`/user-service/users?${search}`);
+                const res = await getAllUsers(toSkipTake(page, pageSize));
 
                 setUsers(res);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -123,6 +110,7 @@ const UsersTable = ({ userDashboardDict }: { userDashboardDict: UserDashboardDic
 
     return (
         <TablePagination
+            loading={loading}
             rowKey={(record) => record.user_id.toString()}
             columns={columns}
             dataSource={users.data}

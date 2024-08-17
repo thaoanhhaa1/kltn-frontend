@@ -1,3 +1,4 @@
+import { IPagination } from '@/interfaces/pagination';
 import { PropertyStatus } from '@/interfaces/property';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
@@ -42,4 +43,11 @@ export const formatDateTime = (dateTime: string) => {
 
 export const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+};
+
+export const toSkipTake = (page: number, pageSize: number): IPagination => {
+    return {
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+    };
 };
