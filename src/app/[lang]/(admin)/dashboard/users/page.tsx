@@ -16,7 +16,9 @@ const UsersPage = async ({
     return (
         <div>
             <UsersBreadcrumb sidebarDict={sidebarDict} />
-            <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">Users</h2>
+            <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+                {sidebarDict.users}
+            </h2>
             <UsersTable userDashboardDict={userDashboardDict} />
         </div>
     );

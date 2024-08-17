@@ -1,3 +1,4 @@
+import { PropertyStatus } from '@/interfaces/property';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
 import { type ClassValue, clsx } from 'clsx';
@@ -28,6 +29,17 @@ export const getUserStatusColor = (userStatus: UserStatus) => {
     return 'error';
 };
 
+export const getPropertyStatusColor = (propertyStatus: PropertyStatus) => {
+    if (propertyStatus === 'ACTIVE') return 'success';
+    if (propertyStatus === 'INACTIVE') return 'warning';
+    if (propertyStatus === 'UNAVAILABLE') return 'error';
+    return 'processing';
+};
+
 export const formatDateTime = (dateTime: string) => {
     return dayjs(dateTime).format('HH:mm:ss DD/MM/YYYY');
+};
+
+export const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
 };

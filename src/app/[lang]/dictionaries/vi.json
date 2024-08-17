@@ -68,5 +68,21 @@
         "created-at": "Ngày tạo",
         "updated-at": "Ngày cập nhật",
         "actions": "Hành động"
+    },
+    "property-dashboard": {
+        "id": "ID",
+        "title": "Tiêu đề",
+        "description": "Mô tả",
+        "deposit": "Tiền đặt cọc",
+        "status": "Trạng thái",
+        "address": "Địa chỉ",
+        "ward": "Phường",
+        "district": "Quận",
+        "city": "Thành phố",
+        "prices": "Giá",
+        "id-owner": "ID - Chủ nhà",
+        "created_at": "Ngày tạo",
+        "updated_at": "Ngày cập nhật",
+        "actions": "Hành động"
     }
 }

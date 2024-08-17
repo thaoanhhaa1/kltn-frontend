@@ -2,7 +2,7 @@
 
 import { UserDashboardDictionary } from '@/app/[lang]/dictionaries';
 import TablePagination from '@/components/table-pagination';
-import { IPagination } from '@/interfaces/pagination';
+import { IPageInfo } from '@/interfaces/pagination';
 import { IUser } from '@/interfaces/user';
 import http from '@/lib/http';
 import { formatDateTime, getRoleColor, getUserStatusColor } from '@/lib/utils';
@@ -15,7 +15,7 @@ import React, { useEffect, useMemo } from 'react';
 
 interface IUsersTable {
     data: IUser[];
-    pageInfo: IPagination;
+    pageInfo: IPageInfo;
 }
 
 const UsersTable = ({ userDashboardDict }: { userDashboardDict: UserDashboardDictionary }) => {

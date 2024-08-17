@@ -24,3 +24,4 @@ export type HeaderDictionary = Dictionary['header'];
 export type ModeDictionary = Dictionary['mode'];
 export type SidebarDictionary = Dictionary['sidebar'];
 export type UserDashboardDictionary = Dictionary['user-dashboard'];
+export type PropertyDashboardDictionary = Dictionary['property-dashboard'];

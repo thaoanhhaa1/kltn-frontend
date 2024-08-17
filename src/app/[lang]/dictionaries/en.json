@@ -68,5 +68,21 @@
         "created-at": "Created at",
         "updated-at": "Updated at",
         "actions": "Actions"
+    },
+    "property-dashboard": {
+        "id": "ID",
+        "title": "Title",
+        "description": "Description",
+        "deposit": "Deposit",
+        "status": "Status",
+        "address": "Address",
+        "ward": "Ward",
+        "district": "District",
+        "city": "City",
+        "prices": "Price",
+        "id-owner": "ID - Owner",
+        "created_at": "Created at",
+        "updated_at": "Updated at",
+        "actions": "Actions"
     }
 }

@@ -23,7 +23,7 @@ const TablePagination = <T extends object>(props: TablePaginationProps<T>) => {
     return (
         <Table
             scroll={{
-                x: 1200,
+                x: 'max-content',
             }}
             {...props}
             columns={columnsCustom}
