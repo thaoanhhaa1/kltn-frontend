@@ -1,4 +1,4 @@
-import { envConfig } from '@/config/envConfig';
+import { envConfig, isClient } from '@/config/envConfig';
 import CustomError, { EntryError } from '@/lib/error';
 
 type CustomRequestInit = RequestInit & {
@@ -15,6 +15,17 @@ const request = async <Response>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', url:
     const baseUrl = int?.baseUrl ?? envConfig.NEXT_PUBLIC_API_URL;
     const body = int?.body ? (isFormData ? int.body : JSON.stringify(int.body)) : undefined;
 
+    if (typeof int?.baseUrl === 'undefined') {
+        if (isClient) {
+            const res = await fetch('/api/auth/access-token', {
+                method: 'POST',
+            });
+            const data = await res.json();
+
+            baseHeaders['Authorization'] = `Bearer ${data.data}`;
+        }
+    }
+
     const res = await fetch(`${baseUrl}${url}`, {
         ...int,
         headers: {
@@ -30,7 +41,7 @@ const request = async <Response>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', url:
     if (!res.ok) {
         if (result?.details) throw new EntryError(result.statusCode, result.message, result.details);
         else if (res.status === 401) {
-            // Refresh token
+            throw new CustomError(res.status, 'Unauthorized');
         } else throw new CustomError(res.status, result.message);
     }
 
