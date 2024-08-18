@@ -11,3 +11,12 @@ export const getAllNotDeletedProperties = async (params: IPagination): Promise<I
 
     return http.get<ITable<IProperty>>(`/property-service/properties/all?${search}`);
 };
+
+export const getAllNotDeletedPropertiesByOwnerId = async (params: IPagination): Promise<ITable<IProperty>> => {
+    const search = new URLSearchParams({
+        skip: String(params.skip),
+        take: String(params.take),
+    }).toString();
+
+    return http.get<ITable<IProperty>>(`/property-service/properties/owner?${search}`);
+};

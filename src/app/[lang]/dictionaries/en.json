@@ -62,7 +62,8 @@
         "properties": "Properties",
         "post": "Post",
         "users": "Users",
-        "analytics": "Analytics"
+        "analytics": "Analytics",
+        "owner": "Owner"
     },
     "mode": {
         "light": "Light",

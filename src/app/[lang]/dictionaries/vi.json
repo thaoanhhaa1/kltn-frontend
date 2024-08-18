@@ -62,7 +62,8 @@
         "properties": "Bất động sản",
         "post": "Đăng tin",
         "users": "Khách hàng",
-        "analytics": "Thống kê"
+        "analytics": "Thống kê",
+        "owner": "Chủ nhà"
     },
     "mode": {
         "light": "Sáng",
