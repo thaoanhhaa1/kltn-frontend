@@ -1,20 +1,26 @@
 'use client';
 
-import { PropertyDashboardDictionary } from '@/app/[lang]/dictionaries';
+import { PropertyDashboardDictionary, PropertyOwnerDictionary } from '@/app/[lang]/dictionaries';
 import TablePagination from '@/components/table-pagination';
 import { initDataTable } from '@/constants/init-data';
 import usePagination from '@/hooks/usePagination';
 import { IProperty, PropertyStatus } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
 import { formatCurrency, formatDateTime, getPropertyStatusColor, toSkipTake } from '@/lib/utils';
-import { getAllNotDeletedPropertiesByOwnerId } from '@/services/property-service';
-import { Button, Space, TableProps, Tag, Tooltip } from 'antd';
+import { getAllNotDeletedPropertiesByOwnerId, updateVisibleProperties } from '@/services/property-service';
+import { Button, Flex, Space, TableProps, Tag, Tooltip } from 'antd';
 import { Eye } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type IPropertiesTable = ITable<IProperty>;
 
-const PropertiesTable = ({ propertiesDashboardDict }: { propertiesDashboardDict: PropertyDashboardDictionary }) => {
+const PropertiesTable = ({
+    propertiesDashboardDict,
+    propertyOwnerDict,
+}: {
+    propertiesDashboardDict: PropertyDashboardDictionary;
+    propertyOwnerDict: PropertyOwnerDictionary;
+}) => {
     const [data, setData] = useState<IPropertiesTable>(initDataTable);
     const [loading, setLoading] = useState(false);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -118,10 +124,45 @@ const PropertiesTable = ({ propertiesDashboardDict }: { propertiesDashboardDict:
 
     const getCheckboxProps = useCallback((record: IProperty) => {
         return {
-            disabled: record.status === 'UNAVAILABLE',
+            disabled: ['UNAVAILABLE', 'PENDING'].includes(record.status),
             name: record.property_id,
         };
     }, []);
+
+    const handleUpdateProperties = useCallback((properties: Array<IProperty>) => {
+        setData((prev) => {
+            const oldProperties = prev.data;
+
+            const newProperties = oldProperties.map((property) => {
+                const newProperty = properties.find((p) => p.property_id === property.property_id);
+
+                if (newProperty) {
+                    return newProperty;
+                }
+
+                return property;
+            });
+
+            return {
+                ...prev,
+                data: newProperties,
+            };
+        });
+    }, []);
+
+    const handleActiveProperties = useCallback(async () => {
+        const res = await updateVisibleProperties(selectedRowKeys as string[], 'ACTIVE');
+
+        handleUpdateProperties(res);
+        setSelectedRowKeys([]);
+    }, [handleUpdateProperties, selectedRowKeys]);
+
+    const handleInactiveProperties = useCallback(async () => {
+        const res = await updateVisibleProperties(selectedRowKeys as string[], 'INACTIVE');
+
+        handleUpdateProperties(res);
+        setSelectedRowKeys([]);
+    }, [handleUpdateProperties, selectedRowKeys]);
 
     useEffect(() => {
         const fetch = async () => {
@@ -142,19 +183,30 @@ const PropertiesTable = ({ propertiesDashboardDict }: { propertiesDashboardDict:
     }, [page, pageSize]);
 
     return (
-        <TablePagination
-            loading={loading}
-            rowKey={(record) => record.property_id}
-            columns={columns}
-            dataSource={data.data}
-            pagination={data.pageInfo}
-            rowSelection={{
-                type: 'checkbox',
-                selectedRowKeys,
-                getCheckboxProps,
-                onChange: setSelectedRowKeys,
-            }}
-        />
+        <>
+            <Flex gap="small" wrap className="my-4">
+                <Button disabled={!selectedRowKeys.length} type="primary" onClick={handleActiveProperties}>
+                    {propertyOwnerDict.active}
+                </Button>
+                <Button disabled={!selectedRowKeys.length} type="primary" onClick={handleInactiveProperties}>
+                    {propertyOwnerDict.inactive}
+                </Button>
+            </Flex>
+            <TablePagination
+                loading={loading}
+                rowKey={(record) => record.property_id}
+                columns={columns}
+                dataSource={data.data}
+                pagination={data.pageInfo}
+                rowSelection={{
+                    fixed: true,
+                    type: 'checkbox',
+                    selectedRowKeys,
+                    getCheckboxProps,
+                    onChange: setSelectedRowKeys,
+                }}
+            />
+        </>
     );
 };
 

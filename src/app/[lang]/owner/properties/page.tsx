@@ -12,6 +12,7 @@ const PropertiesPage = async ({
     const dict = await getDictionary(lang);
     const propertiesDashboardDict = dict['property-dashboard'];
     const sidebarDict = dict['owner-sidebar'];
+    const propertyOwnerDict = dict['property-owner'];
 
     return (
         <div>
@@ -19,7 +20,7 @@ const PropertiesPage = async ({
             <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
                 {sidebarDict.properties}
             </h2>
-            <PropertiesTable propertiesDashboardDict={propertiesDashboardDict} />
+            <PropertiesTable propertiesDashboardDict={propertiesDashboardDict} propertyOwnerDict={propertyOwnerDict} />
         </div>
     );
 };

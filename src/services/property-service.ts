@@ -1,5 +1,5 @@
 import { IPagination } from '@/interfaces/pagination';
-import { IProperty } from '@/interfaces/property';
+import { IProperty, PropertyStatus } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
 import http from '@/lib/http';
 
@@ -19,4 +19,11 @@ export const getAllNotDeletedPropertiesByOwnerId = async (params: IPagination): 
     }).toString();
 
     return http.get<ITable<IProperty>>(`/property-service/properties/owner?${search}`);
+};
+
+export const updateVisibleProperties = async (propertyIds: string[], status: PropertyStatus) => {
+    return http.post<Array<IProperty>>('/property-service/properties/visible', {
+        properties: propertyIds,
+        status,
+    });
 };
