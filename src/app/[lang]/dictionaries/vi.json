@@ -44,7 +44,11 @@
         "search-placeholder": "Tìm kiếm bất động sản...",
         "sign-up": "Đăng ký",
         "sign-in": "Đăng nhập",
-        "dashboard": "Dashboard"
+        "dashboard": "Dashboard",
+        "post": "Đăng tin",
+        "overview": "Tổng quan",
+        "properties": "Bất động sản",
+        "users": "Khách hàng"
     },
     "sidebar": {
         "dashboard": "Dashboard",
@@ -52,6 +56,13 @@
         "users": "Người dùng",
         "analytics": "Thống kê",
         "settings": "Cài đặt"
+    },
+    "owner-sidebar": {
+        "overview": "Tổng quan",
+        "properties": "Bất động sản",
+        "post": "Đăng tin",
+        "users": "Khách hàng",
+        "analytics": "Thống kê"
     },
     "mode": {
         "light": "Sáng",

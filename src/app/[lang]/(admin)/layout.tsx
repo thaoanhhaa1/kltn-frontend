@@ -1,7 +1,7 @@
-import Header from '@/app/[lang]/(admin)/_components/header';
-import Sidebar from '@/app/[lang]/(admin)/_components/sidebar';
 import { getDictionary } from '@/app/[lang]/dictionaries';
-import { BreadcrumbProvider } from '@/context/breadcrumb';
+import ManageLayout from '@/components/manage-layout';
+import { DashboardIcon } from '@radix-ui/react-icons';
+import { House, LineChart, Settings, Users2 } from 'lucide-react';
 
 export default async function BaseLayout({
     children,
@@ -16,16 +16,46 @@ export default async function BaseLayout({
     const modeDict = dict.mode;
     const sidebarDict = dict.sidebar;
     const headerDict = dict.header;
+    const topNavList = [
+        {
+            link: `/${lang}/dashboard`,
+            title: sidebarDict.dashboard,
+            icon: <DashboardIcon className="w-5 h-5" />,
+        },
+        {
+            link: `/${lang}/dashboard/properties`,
+            title: sidebarDict.properties,
+            icon: <House className="w-5 h-5" />,
+        },
+        {
+            link: `/${lang}/dashboard/users`,
+            title: sidebarDict.users,
+            icon: <Users2 className="w-5 h-5" />,
+        },
+        {
+            link: `/${lang}/dashboard/analytics`,
+            title: sidebarDict.analytics,
+            icon: <LineChart className="w-5 h-5" />,
+        },
+    ];
+
+    const bottomNavList = [
+        {
+            link: `/${lang}/dashboard/settings`,
+            title: sidebarDict.settings,
+            icon: <Settings className="w-5 h-5" />,
+        },
+    ];
 
     return (
-        <main className="flex min-h-screen w-full flex-col bg-muted/40">
-            <Sidebar sidebarDict={sidebarDict} params={{ lang }} />
-            <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-                <BreadcrumbProvider>
-                    <Header params={{ lang }} modeDict={modeDict} headerDict={headerDict} sidebarDict={sidebarDict} />
-                    <div className="p-4 sm:px-6 sm:py-0 md:gap-8">{children}</div>
-                </BreadcrumbProvider>
-            </div>
-        </main>
+        <ManageLayout
+            headerDict={headerDict}
+            modeDict={modeDict}
+            params={{ lang }}
+            topNavList={topNavList}
+            bottomNavList={bottomNavList}
+        >
+            {children}
+        </ManageLayout>
     );
 }

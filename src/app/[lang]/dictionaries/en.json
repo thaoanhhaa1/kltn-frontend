@@ -44,7 +44,11 @@
         "search-placeholder": "Search properties...",
         "sign-up": "Sign up",
         "sign-in": "Sign in",
-        "dashboard": "Dashboard"
+        "dashboard": "Dashboard",
+        "post": "Post",
+        "overview": "Overview",
+        "properties": "Properties",
+        "users": "Users"
     },
     "sidebar": {
         "dashboard": "Dashboard",
@@ -52,6 +56,13 @@
         "users": "Users",
         "analytics": "Analytics",
         "settings": "Settings"
+    },
+    "owner-sidebar": {
+        "overview": "Overview",
+        "properties": "Properties",
+        "post": "Post",
+        "users": "Users",
+        "analytics": "Analytics"
     },
     "mode": {
         "light": "Light",
