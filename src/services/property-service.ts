@@ -27,3 +27,7 @@ export const updateVisibleProperties = async (propertyIds: string[], status: Pro
         status,
     });
 };
+
+export const createProperty = async (formData: FormData) => {
+    return http.post<IProperty>('/property-service/properties', formData);
+};

@@ -78,3 +78,11 @@
         @apply !opacity-100 !translate-x-0;
     }
 }
+
+.ant-collapse {
+    @apply !bg-white;
+}
+
+.ant-upload-list {
+    @apply mt-3;
+}
