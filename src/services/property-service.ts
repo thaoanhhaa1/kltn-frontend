@@ -31,3 +31,7 @@ export const updateVisibleProperties = async (propertyIds: string[], status: Pro
 export const createProperty = async (formData: FormData) => {
     return http.post<IProperty>('/property-service/properties', formData);
 };
+
+export const softDeleteProperty = async (propertyId: string) => {
+    return http.delete<IProperty>(`/property-service/properties/${propertyId}`, {});
+};

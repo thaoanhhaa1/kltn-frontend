@@ -7,10 +7,15 @@ import usePagination from '@/hooks/usePagination';
 import { IProperty, PropertyStatus } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
 import { formatCurrency, formatDateTime, getPropertyStatusColor, toSkipTake } from '@/lib/utils';
-import { getAllNotDeletedPropertiesByOwnerId, updateVisibleProperties } from '@/services/property-service';
+import {
+    getAllNotDeletedPropertiesByOwnerId,
+    softDeleteProperty,
+    updateVisibleProperties,
+} from '@/services/property-service';
 import { Button, Flex, Space, TableProps, Tag, Tooltip } from 'antd';
-import { Eye } from 'lucide-react';
+import { Eye, Trash } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 
 type IPropertiesTable = ITable<IProperty>;
 
@@ -26,6 +31,35 @@ const PropertiesTable = ({
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
     const { page, pageSize } = usePagination();
+
+    const getProperties = useCallback(async (page: number, pageSize: number) => {
+        setLoading(true);
+
+        try {
+            const res = await getAllNotDeletedPropertiesByOwnerId(toSkipTake(page, pageSize));
+
+            setData(res);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    const handleSoftDeleteProperties = useCallback(
+        async (propertyId: string) => {
+            try {
+                await softDeleteProperty(propertyId);
+
+                getProperties(1, pageSize);
+                toast.success(propertyOwnerDict['message-delete-success']);
+            } catch (error) {
+                console.log(error);
+                toast.error(propertyOwnerDict['message-delete-fail']);
+            }
+        },
+        [getProperties, pageSize, propertyOwnerDict],
+    );
 
     const columns: TableProps<IProperty>['columns'] = useMemo(
         () => [
@@ -112,14 +146,35 @@ const PropertiesTable = ({
                 fixed: 'right',
                 align: 'center',
                 width: 110,
-                render: () => (
+                render: (property: IProperty) => (
                     <Space>
                         <Button type="text" icon={<Eye className="w-5 h-5" />} />
+                        <Button
+                            onClick={() => handleSoftDeleteProperties(property.property_id)}
+                            disabled={property.status === 'UNAVAILABLE'}
+                            type="text"
+                            danger
+                            icon={<Trash className="w-5 h-5" />}
+                        />
                     </Space>
                 ),
             },
         ],
-        [propertiesDashboardDict],
+        [
+            handleSoftDeleteProperties,
+            propertiesDashboardDict.actions,
+            propertiesDashboardDict.address,
+            propertiesDashboardDict.city,
+            propertiesDashboardDict.created_at,
+            propertiesDashboardDict.deposit,
+            propertiesDashboardDict.description,
+            propertiesDashboardDict.district,
+            propertiesDashboardDict.prices,
+            propertiesDashboardDict.status,
+            propertiesDashboardDict.title,
+            propertiesDashboardDict.updated_at,
+            propertiesDashboardDict.ward,
+        ],
     );
 
     const getCheckboxProps = useCallback((record: IProperty) => {
@@ -151,36 +206,32 @@ const PropertiesTable = ({
     }, []);
 
     const handleActiveProperties = useCallback(async () => {
-        const res = await updateVisibleProperties(selectedRowKeys as string[], 'ACTIVE');
+        try {
+            const res = await updateVisibleProperties(selectedRowKeys as string[], 'ACTIVE');
 
-        handleUpdateProperties(res);
-        setSelectedRowKeys([]);
-    }, [handleUpdateProperties, selectedRowKeys]);
+            handleUpdateProperties(res);
+            setSelectedRowKeys([]);
+            toast.success(propertyOwnerDict['message-active-success']);
+        } catch (error) {
+            toast.error(propertyOwnerDict['message-active-fail']);
+        }
+    }, [handleUpdateProperties, propertyOwnerDict, selectedRowKeys]);
 
     const handleInactiveProperties = useCallback(async () => {
-        const res = await updateVisibleProperties(selectedRowKeys as string[], 'INACTIVE');
+        try {
+            const res = await updateVisibleProperties(selectedRowKeys as string[], 'INACTIVE');
 
-        handleUpdateProperties(res);
-        setSelectedRowKeys([]);
-    }, [handleUpdateProperties, selectedRowKeys]);
+            handleUpdateProperties(res);
+            setSelectedRowKeys([]);
+            toast.success(propertyOwnerDict['message-inactive-success']);
+        } catch (error) {
+            toast.error(propertyOwnerDict['message-inactive-fail']);
+        }
+    }, [handleUpdateProperties, propertyOwnerDict, selectedRowKeys]);
 
     useEffect(() => {
-        const fetch = async () => {
-            setLoading(true);
-
-            try {
-                const res = await getAllNotDeletedPropertiesByOwnerId(toSkipTake(page, pageSize));
-
-                setData(res);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetch();
-    }, [page, pageSize]);
+        getProperties(page, pageSize);
+    }, [getProperties, page, pageSize]);
 
     return (
         <>

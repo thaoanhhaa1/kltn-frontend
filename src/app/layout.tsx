@@ -5,6 +5,8 @@ import { cn } from '@/lib/utils';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 
 const inter = Inter({
@@ -29,6 +31,7 @@ export default function RootLayout({
                     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                         <TooltipProvider>{children}</TooltipProvider>
                         <Toaster />
+                        <ToastContainer />
                     </ThemeProvider>
                 </AntdRegistry>
             </body>

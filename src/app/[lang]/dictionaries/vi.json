@@ -99,7 +99,13 @@
     },
     "property-owner": {
         "active": "Hiện",
-        "inactive": "Ẩn"
+        "inactive": "Ẩn",
+        "message-active-success": "Bất động sản đã được hiển thị",
+        "message-inactive-success": "Bất động sản đã được ẩn",
+        "message-active-fail": "Bất động sản không thể hiển thị",
+        "message-inactive-fail": "Bất động sản không thể ẩn",
+        "message-delete-success": "Bất động sản đã bị xóa",
+        "message-delete-fail": "Bất động sản không thể xóa"
     },
     "add-property": {
         "basic-info": "Thông tin cơ bản",

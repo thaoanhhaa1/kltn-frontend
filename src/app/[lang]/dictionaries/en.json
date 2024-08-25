@@ -99,7 +99,13 @@
     },
     "property-owner": {
         "active": "Active",
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "message-active-success": "Property has been displayed",
+        "message-inactive-success": "Property has been hidden",
+        "message-active-fail": "Property cannot be displayed",
+        "message-inactive-fail": "Property cannot be hidden",
+        "message-delete-success": "Property has been deleted",
+        "message-delete-fail": "Property cannot be deleted"
     },
     "add-property": {
         "basic-info": "Basic information",
