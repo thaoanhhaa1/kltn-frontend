@@ -30,3 +30,15 @@ export interface IProperty {
     prices: number;
     owner: Pick<IUser, 'user_id' | 'name' | 'phone_number' | 'avatar' | 'email'>;
 }
+
+export type IFiterProperty = {
+    title?: IProperty['title'];
+    deposit_from?: IProperty['deposit'];
+    deposit_to?: IProperty['deposit'];
+    price_from?: IProperty['prices'];
+    price_to?: IProperty['prices'];
+    status?: IProperty['status'];
+    city?: IProperty['address']['city'];
+    district?: IProperty['address']['district'];
+    ward?: IProperty['address']['ward'];
+};

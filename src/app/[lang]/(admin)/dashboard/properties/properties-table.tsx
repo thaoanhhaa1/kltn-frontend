@@ -79,14 +79,14 @@ const PropertiesTable = ({ propertiesDashboardDict }: { propertiesDashboardDict:
                 dataIndex: 'deposit',
                 align: 'right',
                 width: 130,
-                render: formatCurrency,
+                render: (value) => formatCurrency(value, true),
             },
             {
                 title: propertiesDashboardDict.prices,
                 dataIndex: 'prices',
                 align: 'right',
                 width: 130,
-                render: formatCurrency,
+                render: (value) => formatCurrency(value, true),
             },
             {
                 title: propertiesDashboardDict.status,

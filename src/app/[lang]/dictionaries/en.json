@@ -105,7 +105,24 @@
         "message-active-fail": "Property cannot be displayed",
         "message-inactive-fail": "Property cannot be hidden",
         "message-delete-success": "Property has been deleted",
-        "message-delete-fail": "Property cannot be deleted"
+        "message-delete-fail": "Property cannot be deleted",
+        "title-placeholder": "Enter title",
+        "deposit-from": "Deposit from",
+        "deposit-from-placeholder": "Enter deposit from",
+        "deposit-to": "Deposit to",
+        "deposit-to-placeholder": "Enter deposit to",
+        "price-from": "Price from",
+        "price-from-placeholder": "Enter price from",
+        "price-to": "Price to",
+        "price-to-placeholder": "Enter price to",
+        "status-placeholder": "Select status",
+        "city-placeholder": "Select province, city",
+        "district-placeholder": "Select district",
+        "ward-placeholder": "Select ward, commune",
+        "pop-delete-title": "Delete property",
+        "pop-delete-content": "Are you sure you want to delete this property?",
+        "pop-delete-cancel": "Cancel",
+        "pop-delete-confirm": "Delete"
     },
     "add-property": {
         "basic-info": "Basic information",
@@ -159,5 +176,9 @@
         "upload-subtitle": "Support for a single or bulk upload. Strictly prohibited from uploading company data or other banned files.",
         "upload-requires": "Please upload at least one image or video",
         "post": "Post"
+    },
+    "filter": {
+        "search": "Search",
+        "cancel": "Cancel"
     }
 }

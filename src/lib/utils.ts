@@ -41,8 +41,11 @@ export const formatDateTime = (dateTime: string) => {
     return dayjs(dateTime).format('HH:mm:ss DD/MM/YYYY');
 };
 
-export const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+export const formatCurrency = (value: number, showVND?: boolean) => {
+    const formatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+
+    if (showVND) return formatted;
+    return formatted.slice(0, formatted.length - 2);
 };
 
 export const toSkipTake = (page: number, pageSize: number): IPagination => {
@@ -50,4 +53,13 @@ export const toSkipTake = (page: number, pageSize: number): IPagination => {
         skip: (page - 1) * pageSize,
         take: pageSize,
     };
+};
+
+export const convertObjectToParams = (obj: Record<string, any>) => {
+    const newObj = Object.entries(obj).reduce((acc, [key, value]) => {
+        if (value !== undefined && value !== null && value !== '') acc[key] = value;
+        return acc;
+    }, {} as Record<string, any>);
+
+    return new URLSearchParams(newObj).toString();
 };
