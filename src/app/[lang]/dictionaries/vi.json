@@ -95,7 +95,19 @@
         "id-owner": "ID - Chủ nhà",
         "created_at": "Ngày tạo",
         "updated_at": "Ngày cập nhật",
-        "actions": "Hành động"
+        "actions": "Hành động",
+        "approve": "Duyệt",
+        "reject": "Từ chối",
+        "message-approve-success": "Bất động sản đã được duyệt",
+        "message-reject-success": "Bất động sản đã bị từ chối",
+        "message-approve-fail": "Bất động sản không thể duyệt",
+        "message-reject-fail": "Bất động sản không thể từ chối",
+        "reject-modal-title": "Từ chối bất động sản",
+        "reject-reason-label": "Lý do",
+        "reject-reason-placeholder": "Nhập lý do từ chối",
+        "reject-reason-required": "Vui lòng nhập lý do từ chối!",
+        "reject-modal-ok": "Từ chối",
+        "reject-modal-cancel": "Hủy"
     },
     "property-owner": {
         "active": "Hiện",

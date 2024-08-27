@@ -33,7 +33,8 @@ export const getUserStatusColor = (userStatus: UserStatus) => {
 export const getPropertyStatusColor = (propertyStatus: PropertyStatus) => {
     if (propertyStatus === 'ACTIVE') return 'success';
     if (propertyStatus === 'INACTIVE') return 'warning';
-    if (propertyStatus === 'UNAVAILABLE') return 'error';
+    if (propertyStatus === 'UNAVAILABLE') return 'purple';
+    if (propertyStatus === 'REJECTED') return 'error';
     return 'processing';
 };
 

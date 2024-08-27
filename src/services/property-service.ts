@@ -1,5 +1,5 @@
 import { IPagination } from '@/interfaces/pagination';
-import { IFiterProperty, IProperty, PropertyStatus } from '@/interfaces/property';
+import { ApprovalStatus, IFiterProperty, IProperty, PropertyStatus, VisibleStatus } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
 import http from '@/lib/http';
 import { convertObjectToParams } from '@/lib/utils';
@@ -21,10 +21,18 @@ export const getAllNotDeletedPropertiesByOwnerId = async (
     return http.get<ITable<IProperty>>(`/property-service/properties/owner?${search}`);
 };
 
-export const updateVisibleProperties = async (propertyIds: string[], status: PropertyStatus) => {
+export const updateVisibleProperties = async (propertyIds: string[], status: VisibleStatus) => {
     return http.post<Array<IProperty>>('/property-service/properties/visible', {
         properties: propertyIds,
         status,
+    });
+};
+
+export const updateApprovalProperties = async (propertyIds: string[], status: ApprovalStatus, reason?: string) => {
+    return http.post<Array<IProperty>>('/property-service/properties/approval', {
+        properties: propertyIds,
+        status,
+        reason,
     });
 };
 

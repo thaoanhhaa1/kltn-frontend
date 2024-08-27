@@ -228,7 +228,7 @@ const PropertiesTable = ({
 
     const getCheckboxProps = useCallback((record: IProperty) => {
         return {
-            disabled: ['UNAVAILABLE', 'PENDING'].includes(record.status),
+            disabled: ['UNAVAILABLE', 'PENDING', 'REJECTED'].includes(record.status),
             name: record.property_id,
         };
     }, []);

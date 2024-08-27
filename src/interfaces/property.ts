@@ -1,7 +1,10 @@
 import { IAttribute } from '@/interfaces/attribute';
 import { IUser } from '@/interfaces/user';
 
-export type PropertyStatus = 'PENDING' | 'ACTIVE' | 'INACTIVE' | 'UNAVAILABLE';
+export type PropertyStatus = 'PENDING' | 'ACTIVE' | 'INACTIVE' | 'UNAVAILABLE' | 'REJECTED';
+export type ApprovalStatus = Extract<PropertyStatus, 'ACTIVE' | 'REJECTED'>;
+export type VisibleStatus = Extract<PropertyStatus, 'ACTIVE' | 'INACTIVE'>;
+
 export interface ICondition {
     condition_type: string;
     condition_value: string;

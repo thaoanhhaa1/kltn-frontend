@@ -95,7 +95,19 @@
         "id-owner": "ID - Owner",
         "created_at": "Created at",
         "updated_at": "Updated at",
-        "actions": "Actions"
+        "actions": "Actions",
+        "approve": "Approve",
+        "reject": "Reject",
+        "message-approve-success": "Property has been approved",
+        "message-reject-success": "Property has been rejected",
+        "message-approve-fail": "Property cannot be approved",
+        "message-reject-fail": "Property cannot be rejected",
+        "reject-modal-title": "Reject property",
+        "reject-reason-label": "Reason",
+        "reject-reason-placeholder": "Enter reject reason",
+        "reject-reason-required": "Please enter reject reason!",
+        "reject-modal-ok": "Reject",
+        "reject-modal-cancel": "Cancel"
     },
     "property-owner": {
         "active": "Active",
