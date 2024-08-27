@@ -1,28 +1,27 @@
-import HeaderBreadcrumb from '@/app/[lang]/(admin)/_components/header-breadcrumb';
-import HeaderItem from '@/app/[lang]/(admin)/_components/header-item';
-import { HeaderDictionary, ModeDictionary, SidebarDictionary } from '@/app/[lang]/dictionaries';
+import { HeaderDictionary, ModeDictionary } from '@/app/[lang]/dictionaries';
 import Logo from '@/components/logo';
+import HeaderBreadcrumb from '@/components/manage-header/header-breadcrumb';
+import HeaderItem from '@/components/manage-header/header-item';
 import { ModeToggle } from '@/components/mode-toggle';
 import MyAccount from '@/components/my-account';
+import { INavItem } from '@/components/sidebar/nav-item';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { IUser } from '@/interfaces/user';
 import http from '@/lib/http';
-import { DASHBOARD, DASHBOARD_ANALYTICS, DASHBOARD_PROPERTIES, DASHBOARD_SETTINGS, DASHBOARD_USERS } from '@/path';
-import { DashboardIcon } from '@radix-ui/react-icons';
-import { House, LineChart, PanelLeft, Settings, Users2 } from 'lucide-react';
+import { PanelLeft } from 'lucide-react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 const Header = async ({
     modeDict,
     headerDict,
-    sidebarDict,
+    navList,
     params: { lang },
 }: {
     modeDict: ModeDictionary;
     headerDict: HeaderDictionary;
-    sidebarDict: SidebarDictionary;
+    navList: INavItem[];
     params: {
         lang: string;
     };
@@ -54,33 +53,17 @@ const Header = async ({
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="sm:max-w-xs">
+                    <SheetTitle></SheetTitle>
                     <nav className="grid gap-6 text-lg font-medium">
                         <Logo lang={lang} />
-                        <HeaderItem
-                            icon={<DashboardIcon className="h-5 w-5" />}
-                            link={`/${lang}${DASHBOARD}`}
-                            title={sidebarDict.dashboard}
-                        />
-                        <HeaderItem
-                            icon={<House className="h-5 w-5" />}
-                            link={`/${lang}${DASHBOARD_PROPERTIES}`}
-                            title={sidebarDict.properties}
-                        />
-                        <HeaderItem
-                            icon={<Users2 className="h-5 w-5" />}
-                            link={`/${lang}${DASHBOARD_USERS}`}
-                            title={sidebarDict.users}
-                        />
-                        <HeaderItem
-                            icon={<LineChart className="h-5 w-5" />}
-                            link={`/${lang}${DASHBOARD_ANALYTICS}`}
-                            title={sidebarDict.analytics}
-                        />
-                        <HeaderItem
-                            icon={<Settings className="h-5 w-5" />}
-                            link={`/${lang}${DASHBOARD_SETTINGS}`}
-                            title={sidebarDict.settings}
-                        />
+                        {navList.map((navItem) => (
+                            <HeaderItem
+                                key={navItem.title}
+                                link={navItem.link}
+                                title={navItem.title}
+                                icon={navItem.icon}
+                            />
+                        ))}
                     </nav>
                 </SheetContent>
             </Sheet>

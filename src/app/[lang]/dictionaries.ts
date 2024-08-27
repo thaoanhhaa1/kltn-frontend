@@ -25,3 +25,6 @@ export type ModeDictionary = Dictionary['mode'];
 export type SidebarDictionary = Dictionary['sidebar'];
 export type UserDashboardDictionary = Dictionary['user-dashboard'];
 export type PropertyDashboardDictionary = Dictionary['property-dashboard'];
+export type OwnerSidebarDictionary = Dictionary['owner-sidebar'];
+export type PropertyOwnerDictionary = Dictionary['property-owner'];
+export type AddPropertyDictionary = Dictionary['add-property'];

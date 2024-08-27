@@ -6,3 +6,7 @@ export const DASHBOARD_PROPERTIES = '/dashboard/properties';
 export const DASHBOARD_USERS = '/dashboard/users';
 export const DASHBOARD_ANALYTICS = '/dashboard/analytics';
 export const DASHBOARD_SETTINGS = '/dashboard/settings';
+export const ADD_PROPERTY = '/owner/properties/add';
+export const OWNER_PROPERTIES = '/owner/properties';
+export const OWNER = '/owner';
+export const OWNER_USERS = '/owner/users';
