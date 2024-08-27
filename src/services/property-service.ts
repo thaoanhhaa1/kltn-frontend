@@ -1,7 +1,8 @@
 import { IPagination } from '@/interfaces/pagination';
-import { IProperty } from '@/interfaces/property';
+import { ApprovalStatus, IFiterProperty, IProperty, PropertyStatus, VisibleStatus } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
 import http from '@/lib/http';
+import { convertObjectToParams } from '@/lib/utils';
 
 export const getAllNotDeletedProperties = async (params: IPagination): Promise<ITable<IProperty>> => {
     const search = new URLSearchParams({
@@ -11,3 +12,36 @@ export const getAllNotDeletedProperties = async (params: IPagination): Promise<I
 
     return http.get<ITable<IProperty>>(`/property-service/properties/all?${search}`);
 };
+
+export const getAllNotDeletedPropertiesByOwnerId = async (
+    params: IPagination & IFiterProperty,
+): Promise<ITable<IProperty>> => {
+    const search = convertObjectToParams(params);
+
+    return http.get<ITable<IProperty>>(`/property-service/properties/owner?${search}`);
+};
+
+export const updateVisibleProperties = async (propertyIds: string[], status: VisibleStatus) => {
+    return http.post<Array<IProperty>>('/property-service/properties/visible', {
+        properties: propertyIds,
+        status,
+    });
+};
+
+export const updateApprovalProperties = async (propertyIds: string[], status: ApprovalStatus, reason?: string) => {
+    return http.post<Array<IProperty>>('/property-service/properties/approval', {
+        properties: propertyIds,
+        status,
+        reason,
+    });
+};
+
+export const createProperty = async (formData: FormData) => {
+    return http.post<IProperty>('/property-service/properties', formData);
+};
+
+export const softDeleteProperty = async (propertyId: string) => {
+    return http.delete<IProperty>(`/property-service/properties/${propertyId}`, {});
+};
+
+export const getPropertyStatus = () => http.get<Array<PropertyStatus>>('/property-service/properties/status');

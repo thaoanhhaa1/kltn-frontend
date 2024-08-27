@@ -6,7 +6,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 
-const NavItem = ({ link, icon, title }: { link: string; title: string; icon: ReactNode }) => {
+export interface INavItem {
+    link: string;
+    title: string;
+    icon: ReactNode;
+}
+
+const NavItem = ({ link, icon, title }: INavItem) => {
     const pathname = usePathname();
     const isActive = pathname === link;
 

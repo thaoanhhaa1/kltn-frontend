@@ -4,7 +4,7 @@ import MyAccount from '@/components/my-account';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { IUser } from '@/interfaces/user';
-import { DASHBOARD, SIGN_IN, SIGN_UP } from '@/path';
+import { ADD_PROPERTY, DASHBOARD, SIGN_IN, SIGN_UP } from '@/path';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
 
@@ -37,6 +37,11 @@ const HeaderRight = ({
             {user?.user_types.includes('admin') && (
                 <Button variant="outline" asChild>
                     <Link href={`/${lang}${DASHBOARD}`}>{headerDict.dashboard}</Link>
+                </Button>
+            )}
+            {user?.user_types.includes('owner') && (
+                <Button variant="outline" asChild>
+                    <Link href={`/${lang}${ADD_PROPERTY}`}>{headerDict.post}</Link>
                 </Button>
             )}
             {user ? (
