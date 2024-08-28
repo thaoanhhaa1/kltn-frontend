@@ -2,18 +2,41 @@
 
 import FormPopover from '@/components/form-popover';
 import { envConfig } from '@/config/envConfig';
-import { selectProps } from '@/constants/init-props';
+import { interiorOptions } from '@/constants/init-data';
+import { inputNumberProps, selectProps } from '@/constants/init-props';
 import { IAttributeCbb } from '@/interfaces/attribute';
 import { convertCurrencyToText, formatCurrency } from '@/lib/utils';
 import { getCities, getDistricts, getWards, IAddress } from '@/services/address-service';
 import { getAllAttributesCbb } from '@/services/attribute-service';
-import { Col, Flex, Form, Input, Row, Select, Slider, Typography } from 'antd';
+import { Col, Flex, Form, Input, InputNumber, Row, Select, Slider, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { RotateCcw, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const getAddress = ({ city, district, ward }: { city: string; district: string; ward: string }) => {
     return `${city}${district ? `, ${district}` : ''}${ward ? `, ${ward}` : ''}`;
+};
+
+const getTitleMoreInfo = ({
+    bedroom,
+    bathroom,
+    furniture,
+}: {
+    bedroom: number;
+    bathroom: number;
+    furniture: string;
+}) => {
+    const res = [];
+
+    if (bedroom) res.push(`${bedroom} phòng ngủ`);
+
+    if (bathroom) res.push(`${bathroom} phòng tắm`);
+
+    if (furniture) res.push(furniture);
+
+    if (res.length === 0) return 'Xem thêm';
+
+    return res.join(', ');
 };
 
 const fieldNames = {
@@ -38,6 +61,11 @@ const Banner = () => {
     const [attributes, setAttributes] = useState<IAttributeCbb[]>([]);
     const [loadingAttributes, setLoadingAttributes] = useState(false);
     const [selectedAttributes, setSelectedAttributes] = useState<string[]>([]);
+    const [moreInfo, setMoreInfo] = useState({
+        bedroom: 0,
+        bathroom: 0,
+        furniture: '',
+    });
 
     const handleCityChange = async (cityId: string) => {
         form.setFieldsValue({
@@ -131,13 +159,44 @@ const Banner = () => {
 
     const handleClickReset = () => {
         form.resetFields();
-        setAddressName({
-            city: '',
-            district: '',
-            ward: '',
+
+        handleResetMoreInfo();
+        handleResetArea();
+        handleResetPrice();
+        handleResetAttributes();
+    };
+
+    const handleChangeBedroom = (value: number | null) => {
+        setMoreInfo((prev) => ({
+            ...prev,
+            bedroom: value || 0,
+        }));
+    };
+    const handleChangeBathroom = (value: number | null) => {
+        setMoreInfo((prev) => ({
+            ...prev,
+            bathroom: value || 0,
+        }));
+    };
+    const handleChangeFurniture = (value: string | undefined) => {
+        setMoreInfo((prev) => ({
+            ...prev,
+            furniture: value || '',
+        }));
+    };
+
+    const handleResetMoreInfo = () => {
+        form.setFieldsValue({
+            bedroom: undefined,
+            bathroom: undefined,
+            furniture: undefined,
         });
-        setPriceRange([0, 0]);
-        setSelectedAttributes([]);
+
+        setMoreInfo({
+            bedroom: 0,
+            bathroom: 0,
+            furniture: '',
+        });
     };
 
     useEffect(() => {
@@ -281,8 +340,36 @@ const Banner = () => {
                             </FormPopover>
                         </Col>
                         <Col span={6}>
-                            <FormPopover className="w-full" title="Xem thêm">
-                                <Typography.Title level={5}>Khu vực</Typography.Title>
+                            <FormPopover
+                                className="w-full"
+                                title={getTitleMoreInfo(moreInfo)}
+                                onReset={handleResetMoreInfo}
+                            >
+                                <Typography.Text className="flex-1">Số phòng ngủ</Typography.Text>
+                                <Form.Item className="!my-2 w-full" name="bedroom">
+                                    <InputNumber
+                                        onChange={handleChangeBedroom}
+                                        {...inputNumberProps}
+                                        placeholder="Nhập số phòng ngủ"
+                                    />
+                                </Form.Item>
+                                <Typography.Text className="flex-1">Số phòng tắm, vệ sinh</Typography.Text>
+                                <Form.Item className="!my-2 w-full" name="bathroom">
+                                    <InputNumber
+                                        onChange={handleChangeBathroom}
+                                        {...inputNumberProps}
+                                        placeholder="Nhập số phòng tắm, vệ sinh"
+                                    />
+                                </Form.Item>
+                                <Typography.Text className="flex-1">Nội thất</Typography.Text>
+                                <Form.Item className="!my-2" name="furniture">
+                                    <Select
+                                        onChange={handleChangeFurniture}
+                                        allowClear
+                                        options={interiorOptions}
+                                        placeholder="Chọn tình trạng nội thất"
+                                    />
+                                </Form.Item>
                             </FormPopover>
                         </Col>
                     </Row>

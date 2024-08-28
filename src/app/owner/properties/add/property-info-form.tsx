@@ -1,4 +1,5 @@
 import AttributesForm from '@/app/owner/properties/add/attributes-form';
+import { interiorOptions } from '@/constants/init-data';
 import { Col, Form, InputNumber, Row, Select } from 'antd';
 
 const inputNumberProps = {
@@ -12,21 +13,6 @@ const inputNumberProps = {
 };
 
 const PropertyInfoForm = () => {
-    const interiorOptions = [
-        {
-            label: 'Đầy đủ nội thất',
-            value: 'Đầy đủ nội thất',
-        },
-        {
-            label: 'Nội thất cơ bản',
-            value: 'Nội thất cơ bản',
-        },
-        {
-            label: 'Không nội thất',
-            value: 'Không nội thất',
-        },
-    ];
-
     return (
         <Row gutter={12}>
             <Col span={8}>
