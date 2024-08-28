@@ -1,4 +1,3 @@
-import { HeaderDictionary, ModeDictionary } from '@/app/[lang]/dictionaries';
 import Logo from '@/components/logo';
 import HeaderBreadcrumb from '@/components/manage-header/header-breadcrumb';
 import HeaderItem from '@/components/manage-header/header-item';
@@ -9,23 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { IUser } from '@/interfaces/user';
 import http from '@/lib/http';
+import { SIGN_IN } from '@/path';
 import { PanelLeft } from 'lucide-react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-const Header = async ({
-    modeDict,
-    headerDict,
-    navList,
-    params: { lang },
-}: {
-    modeDict: ModeDictionary;
-    headerDict: HeaderDictionary;
-    navList: INavItem[];
-    params: {
-        lang: string;
-    };
-}) => {
+const Header = async ({ navList }: { navList: INavItem[] }) => {
     let user: IUser | undefined;
 
     try {
@@ -41,7 +29,7 @@ const Header = async ({
         user = res;
     } catch (error) {}
 
-    if (!user) redirect(`/${lang}/sign-in`);
+    if (!user) redirect(SIGN_IN);
 
     return (
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -55,7 +43,7 @@ const Header = async ({
                 <SheetContent side="left" className="sm:max-w-xs">
                     <SheetTitle></SheetTitle>
                     <nav className="grid gap-6 text-lg font-medium">
-                        <Logo lang={lang} />
+                        <Logo />
                         {navList.map((navItem) => (
                             <HeaderItem
                                 key={navItem.title}
@@ -69,8 +57,8 @@ const Header = async ({
             </Sheet>
             <HeaderBreadcrumb />
             <div className="ml-auto flex gap-4">
-                <ModeToggle modeDict={modeDict} />
-                {user && <MyAccount headerDict={headerDict} user={user} />}
+                <ModeToggle />
+                {user && <MyAccount user={user} />}
             </div>
         </header>
     );
