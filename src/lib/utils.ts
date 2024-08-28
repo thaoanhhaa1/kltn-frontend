@@ -64,3 +64,21 @@ export const convertObjectToParams = (obj: Record<string, any>) => {
 
     return new URLSearchParams(newObj).toString();
 };
+
+export function convertCurrencyToText(number: number): string {
+    const units: { value: number; text: string }[] = [
+        { value: 10 ** 9, text: 'tỷ' },
+        { value: 10 ** 6, text: 'triệu' },
+        { value: 10 ** 3, text: 'nghìn' },
+        { value: 1, text: '' },
+    ];
+
+    for (const unit of units) {
+        if (number >= unit.value) {
+            const convertedNumber = Math.floor(number / unit.value);
+            return `${convertedNumber} ${unit.text}`.trim();
+        }
+    }
+
+    return number.toString();
+}

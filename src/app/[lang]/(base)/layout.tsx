@@ -21,7 +21,7 @@ export default async function BaseLayout({
                 modeDict={dict.mode}
                 headerDict={dict.header}
             />
-            {children}
+            <div className="max-w-6xl mx-auto">{children}</div>
         </main>
     );
 }
