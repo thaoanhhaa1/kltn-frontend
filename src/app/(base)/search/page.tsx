@@ -3,6 +3,7 @@ import SearchComponent from '@/components/search';
 import { ICountAvailableProperties } from '@/interfaces/property';
 import { countAvailableProperties } from '@/services/property-service';
 import { Divider } from 'antd';
+import { Suspense } from 'react';
 
 const SearchPage = async () => {
     let countResult: ICountAvailableProperties = {
@@ -19,7 +20,9 @@ const SearchPage = async () => {
         <div className="pt-12">
             <SearchComponent />
             <Divider />
-            <SearchResult count={countResult.data} />
+            <Suspense>
+                <SearchResult count={countResult.data} />
+            </Suspense>
         </div>
     );
 };

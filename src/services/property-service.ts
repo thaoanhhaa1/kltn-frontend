@@ -54,6 +54,6 @@ export const softDeleteProperty = async (propertyId: string) => {
 export const getPropertyStatus = () => http.get<Array<PropertyStatus>>('/property-service/properties/status');
 
 export const searchProperties = (searchParams: string) =>
-    http.get<Array<IProperty>>(`/property-service/properties/search?${searchParams}`);
+    http.get<ITable<IProperty>>(`/property-service/properties/search?${searchParams}`);
 
 export const countAvailableProperties = () => http.get<ICountAvailableProperties>('/property-service/properties/count');

@@ -1,20 +1,22 @@
 'use client';
 
 import HorizontalProperty from '@/components/property/horizontal-property';
+import HorizontalPropertySkeleton from '@/components/property/horizontal-property-skeleton';
+import SkeletonRender from '@/components/skeleton-render';
 import { DEFAULT_SORT_PROPERTY, sortPropertyOptions } from '@/constants/init-data';
 import usePagination from '@/hooks/usePagination';
 import { IProperty } from '@/interfaces/property';
 import { convertObjectToParams, formatCurrency, toSkipTake } from '@/lib/utils';
 import { searchProperties } from '@/services/property-service';
-import { Flex, Select, Typography } from 'antd';
+import { Flex, Pagination, Select, Typography } from 'antd';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
-// TODO Skeleton loading
 const SearchResult = ({ count }: { count: number }) => {
     const router = useRouter();
     const [properties, setProperties] = useState<IProperty[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [total, setTotal] = useState(0);
 
     const { page, pageSize } = usePagination();
     const searchParams = useSearchParams();
@@ -63,6 +65,18 @@ const SearchResult = ({ count }: { count: number }) => {
         router.push(`?${convertObjectToParams({ ...searchParams, sort: value, page: 1, pageSize })}`);
     };
 
+    const handlePageChange = (page: number) => {
+        const { skip, take, ...searchParams } = getSearchParams();
+
+        router.push(`?${convertObjectToParams({ ...searchParams, page, pageSize })}`);
+    };
+
+    const handlePageSizeChange = (pageSize: number) => {
+        const { skip, take, ...searchParams } = getSearchParams();
+
+        router.push(`?${convertObjectToParams({ ...searchParams, page: 1, pageSize })}`);
+    };
+
     useEffect(() => {
         const fetchProperties = async () => {
             setLoading(true);
@@ -70,7 +84,8 @@ const SearchResult = ({ count }: { count: number }) => {
             try {
                 const res = await searchProperties(convertObjectToParams(getSearchParams()));
 
-                setProperties(res);
+                setProperties(res.data);
+                setTotal(res.pageInfo.total);
             } catch (error) {
                 console.log(error);
             } finally {
@@ -82,7 +97,7 @@ const SearchResult = ({ count }: { count: number }) => {
     }, [getSearchParams]);
 
     return (
-        <div>
+        <div className="pb-10">
             <div className="mt-6">
                 <Typography.Title level={3}>Các tin đăng bất động sản</Typography.Title>
                 <Typography.Text type="secondary">Hiện có {formatCurrency(count, false)} bất động sản</Typography.Text>
@@ -100,10 +115,22 @@ const SearchResult = ({ count }: { count: number }) => {
                 />
             </Flex>
             <Flex gap={24} vertical>
-                {properties.map((property) => (
-                    <HorizontalProperty property={property} key={property.property_id} />
-                ))}
+                {loading ||
+                    properties.map((property) => <HorizontalProperty property={property} key={property.property_id} />)}
             </Flex>
+            {loading && <SkeletonRender controller={HorizontalPropertySkeleton} className="gap-6 mt-6" vertical />}
+            <Pagination
+                style={{
+                    marginTop: '40px',
+                }}
+                hideOnSinglePage
+                align="center"
+                current={page}
+                pageSize={pageSize}
+                total={total}
+                onChange={handlePageChange}
+                onShowSizeChange={handlePageSizeChange}
+            />
         </div>
     );
 };
