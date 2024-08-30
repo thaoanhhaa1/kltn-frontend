@@ -11,3 +11,4 @@ export const OWNER_PROPERTIES = '/owner/properties';
 export const OWNER = '/owner';
 export const OWNER_USERS = '/owner/users';
 export const FORGOT_PASSWORD = '/forgot-password';
+export const SEARCH = '/search';

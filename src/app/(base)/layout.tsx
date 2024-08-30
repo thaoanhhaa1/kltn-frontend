@@ -4,7 +4,7 @@ export default async function BaseLayout({ children }: { children: React.ReactNo
     return (
         <main>
             <Header />
-            <div className="max-w-6xl mx-auto">{children}</div>
+            <div className="max-w-6xl mx-auto px-6">{children}</div>
         </main>
     );
 }

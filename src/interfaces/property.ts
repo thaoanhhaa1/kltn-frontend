@@ -45,3 +45,9 @@ export type IFiterProperty = {
     district?: IProperty['address']['district'];
     ward?: IProperty['address']['ward'];
 };
+
+export interface ICountAvailableProperties {
+    data: number;
+    status: number;
+    success: boolean;
+}

@@ -1,5 +1,12 @@
 import { IPagination } from '@/interfaces/pagination';
-import { ApprovalStatus, IFiterProperty, IProperty, PropertyStatus, VisibleStatus } from '@/interfaces/property';
+import {
+    ApprovalStatus,
+    ICountAvailableProperties,
+    IFiterProperty,
+    IProperty,
+    PropertyStatus,
+    VisibleStatus,
+} from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
 import http from '@/lib/http';
 import { convertObjectToParams } from '@/lib/utils';
@@ -45,3 +52,8 @@ export const softDeleteProperty = async (propertyId: string) => {
 };
 
 export const getPropertyStatus = () => http.get<Array<PropertyStatus>>('/property-service/properties/status');
+
+export const searchProperties = (searchParams: string) =>
+    http.get<Array<IProperty>>(`/property-service/properties/search?${searchParams}`);
+
+export const countAvailableProperties = () => http.get<ICountAvailableProperties>('/property-service/properties/count');
