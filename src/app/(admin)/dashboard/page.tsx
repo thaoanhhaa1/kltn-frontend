@@ -1,0 +1,33 @@
+import DashboardBreadcrumb from '@/app/(admin)/dashboard/dashboard-breadcrumb';
+import { IPayloadJWT } from '@/interfaces/jwt';
+import { jwtDecode } from 'jwt-decode';
+import { cookies } from 'next/headers';
+
+const DashboardPage = () => {
+    const cookiesStore = cookies();
+    const accessToken = cookiesStore.get('accessToken')?.value;
+    // const refreshToken = cookiesStore.get('refreshToken')?.value;
+
+    if (!accessToken) {
+        return <div>Unauthorized</div>;
+    }
+
+    try {
+        const payload: IPayloadJWT = jwtDecode(accessToken);
+
+        if (!payload.userTypes.includes('admin')) {
+            return <div>Forbidden </div>;
+        }
+    } catch (error) {
+        return <div>Unauthorized</div>;
+    }
+
+    return (
+        <div>
+            <DashboardBreadcrumb />
+            Dashboard Page
+        </div>
+    );
+};
+
+export default DashboardPage;

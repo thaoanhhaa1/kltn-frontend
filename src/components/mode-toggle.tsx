@@ -11,9 +11,8 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ModeDictionary } from '@/app/[lang]/dictionaries';
 
-export function ModeToggle({ modeDict }: { modeDict: ModeDictionary }) {
+export function ModeToggle() {
     const { setTheme } = useTheme();
 
     return (
@@ -26,9 +25,9 @@ export function ModeToggle({ modeDict }: { modeDict: ModeDictionary }) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme('light')}>{modeDict.light}</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme('dark')}>{modeDict.dark}</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme('system')}>{modeDict.system}</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme('light')}>Sáng</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme('dark')}>Tối</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme('system')}>Mặc định hệ thống</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );
