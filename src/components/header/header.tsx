@@ -3,28 +3,11 @@ import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { IUser } from '@/interfaces/user';
-import http from '@/lib/http';
 import { HOME } from '@/path';
 import { Menu } from 'lucide-react';
-import { cookies } from 'next/headers';
 import Link from 'next/link';
 
-const Header = async () => {
-    let user: IUser | undefined;
-
-    try {
-        const cookiesStore = cookies();
-        const accessToken = cookiesStore.get('accessToken')?.value || '';
-
-        const res: IUser = await http.get('/user-service/users/me', {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-
-        user = res;
-    } catch (error) {}
-
+const Header = ({ user }: { user?: IUser }) => {
     return (
         <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-10">
             <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
