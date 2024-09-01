@@ -1,4 +1,3 @@
-import { HeaderDictionary, ModeDictionary } from '@/app/[lang]/dictionaries';
 import { ModeToggle } from '@/components/mode-toggle';
 import MyAccount from '@/components/my-account';
 import { Button } from '@/components/ui/button';
@@ -8,19 +7,7 @@ import { ADD_PROPERTY, DASHBOARD, SIGN_IN, SIGN_UP } from '@/path';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
 
-const HeaderRight = ({
-    headerDict,
-    modeDict,
-    user,
-    params: { lang },
-}: {
-    modeDict: ModeDictionary;
-    headerDict: HeaderDictionary;
-    user?: IUser;
-    params: {
-        lang: string;
-    };
-}) => {
+const HeaderRight = ({ user }: { user?: IUser }) => {
     return (
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
             <form className="ml-auto flex-1 sm:flex-initial">
@@ -28,31 +15,31 @@ const HeaderRight = ({
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                         type="search"
-                        placeholder={headerDict['search-placeholder']}
+                        placeholder="Tìm kiếm bất động sản..."
                         className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
                     />
                 </div>
             </form>
-            <ModeToggle modeDict={modeDict} />
+            <ModeToggle />
             {user?.user_types.includes('admin') && (
                 <Button variant="outline" asChild>
-                    <Link href={`/${lang}${DASHBOARD}`}>{headerDict.dashboard}</Link>
+                    <Link href={DASHBOARD}>Dashboard</Link>
                 </Button>
             )}
             {user?.user_types.includes('owner') && (
                 <Button variant="outline" asChild>
-                    <Link href={`/${lang}${ADD_PROPERTY}`}>{headerDict.post}</Link>
+                    <Link href={ADD_PROPERTY}>Đăng tin</Link>
                 </Button>
             )}
             {user ? (
-                <MyAccount user={user} headerDict={headerDict} />
+                <MyAccount user={user} />
             ) : (
                 <>
                     <Button variant="outline" asChild>
-                        <Link href={`${lang}${SIGN_UP}`}>{headerDict['sign-up']}</Link>
+                        <Link href={SIGN_UP}>Đăng ký</Link>
                     </Button>
                     <Button asChild>
-                        <Link href={`${lang}${SIGN_IN}`}>{headerDict['sign-in']}</Link>
+                        <Link href={SIGN_IN}>Đăng nhập</Link>
                     </Button>
                 </>
             )}

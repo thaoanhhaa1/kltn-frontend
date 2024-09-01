@@ -1,6 +1,5 @@
 'use client';
 
-import { HeaderDictionary } from '@/app/[lang]/dictionaries';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,25 +14,24 @@ import { IUser } from '@/interfaces/user';
 import http from '@/lib/http';
 import { getNameAvatar } from '@/lib/utils';
 import { OWNER, OWNER_PROPERTIES, SIGN_IN } from '@/path';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
-const MyAccount = ({ headerDict, user }: { headerDict: HeaderDictionary; user: IUser }) => {
+const MyAccount = ({ user }: { user: IUser }) => {
     const router = useRouter();
-    const { lang } = useParams();
 
     const ownerMenu = useMemo(
         () => [
             {
-                title: headerDict.overview,
-                onClick: () => router.push(`/${lang}${OWNER}`),
+                title: 'Tổng quan',
+                onClick: () => router.push(OWNER),
             },
             {
-                title: headerDict.properties,
-                onClick: () => router.push(`/${lang}${OWNER_PROPERTIES}`),
+                title: 'Bất động sản',
+                onClick: () => router.push(OWNER_PROPERTIES),
             },
         ],
-        [headerDict, lang, router],
+        [router],
     );
 
     const handleLogout = async () => {
@@ -42,7 +40,7 @@ const MyAccount = ({ headerDict, user }: { headerDict: HeaderDictionary; user: I
                 baseUrl: '',
             });
 
-            router.push(`/${lang}${SIGN_IN}`);
+            router.push(SIGN_IN);
         } catch (error) {
             console.error('Error signing out', error);
         }
@@ -59,7 +57,7 @@ const MyAccount = ({ headerDict, user }: { headerDict: HeaderDictionary; user: I
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuLabel>{headerDict['my-account']}</DropdownMenuLabel>
+                <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
                 {user.user_types.includes('owner') && (
                     <>
                         <DropdownMenuSeparator />
@@ -71,9 +69,9 @@ const MyAccount = ({ headerDict, user }: { headerDict: HeaderDictionary; user: I
                     </>
                 )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>{headerDict.settings}</DropdownMenuItem>
+                <DropdownMenuItem>Cài đặt</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>{headerDict.logout}</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>Đăng xuất</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );

@@ -5,6 +5,13 @@ const nextConfig = {
             fullUrl: true,
         },
     },
+    images: {
+        remotePatterns: [
+            {
+                hostname: 'firebasestorage.googleapis.com',
+            },
+        ],
+    },
 };
 
 export default nextConfig;
