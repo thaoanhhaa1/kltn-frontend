@@ -57,3 +57,5 @@ export const searchProperties = (searchParams: string) =>
     http.get<ITable<IProperty>>(`/property-service/properties/search?${searchParams}`);
 
 export const countAvailableProperties = () => http.get<ICountAvailableProperties>('/property-service/properties/count');
+
+export const getPropertyBySlug = (slug: string) => http.get<IProperty>(`/property-service/properties/slug/${slug}`);
