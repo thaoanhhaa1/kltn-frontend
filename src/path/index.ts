@@ -12,3 +12,5 @@ export const OWNER = '/owner';
 export const OWNER_USERS = '/owner/users';
 export const FORGOT_PASSWORD = '/forgot-password';
 export const SEARCH = '/search';
+export const PROFILE = '/user';
+export const WALLET = '/wallet';
