@@ -9,7 +9,7 @@ export interface IUser {
     status: UserStatus;
     avatar: string | null;
     phone_number: string | null;
-    wallet_address: string | null;
+    wallet_address: `0x${string}` | null;
     created_at: string;
     updated_at: string;
 }

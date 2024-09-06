@@ -27,3 +27,7 @@ export const getMe = async (accessToken: string): Promise<IUser> => {
 export const updateMyInfo = async (data: FormData): Promise<IUser> => {
     return http.put<IUser>('/user-service/users', data);
 };
+
+export const updateWalletAddress = async (wallet_address: string): Promise<void> => {
+    return http.patch<void>('/user-service/users/wallet', { wallet_address });
+};
