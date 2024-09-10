@@ -21,12 +21,12 @@ const HeaderRight = ({ user }: { user?: IUser }) => {
                 </div>
             </form>
             <ModeToggle />
-            {user?.user_types.includes('admin') && (
+            {user?.userTypes.includes('admin') && (
                 <Button variant="outline" asChild>
                     <Link href={DASHBOARD}>Dashboard</Link>
                 </Button>
             )}
-            {user?.user_types.includes('owner') && (
+            {user?.userTypes.includes('owner') && (
                 <Button variant="outline" asChild>
                     <Link href={ADD_PROPERTY}>Đăng tin</Link>
                 </Button>

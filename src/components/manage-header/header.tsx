@@ -7,8 +7,8 @@ import { INavItem } from '@/components/sidebar/nav-item';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { IUser } from '@/interfaces/user';
-import http from '@/lib/http';
 import { SIGN_IN } from '@/path';
+import { getMe } from '@/services/user-service';
 import { PanelLeft } from 'lucide-react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -20,11 +20,7 @@ const Header = async ({ navList }: { navList: INavItem[] }) => {
         const cookiesStore = cookies();
         const accessToken = cookiesStore.get('accessToken')?.value || '';
 
-        const res: IUser = await http.get('/user-service/users/me', {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
+        const res: IUser = await getMe(accessToken);
 
         user = res;
     } catch (error) {}

@@ -12,9 +12,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { OWNER as OWNER_ROLE, RENTER } from '@/constants/account-type';
 import { IUser } from '@/interfaces/user';
-import http from '@/lib/http';
 import { getNameAvatar } from '@/lib/utils';
 import { OWNER, OWNER_PROPERTIES, PROFILE, SIGN_IN, WALLET } from '@/path';
+import { signOut } from '@/services/auth-service';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
@@ -43,20 +43,18 @@ const MyAccount = ({ user }: { user: IUser }) => {
             },
         ];
 
-        if (user.user_types.includes(RENTER) || user.user_types.includes(OWNER_ROLE))
+        if (user.userTypes.includes(RENTER) || user.userTypes.includes(OWNER_ROLE))
             menu.push({
                 title: 'Ví',
                 onClick: () => router.push(WALLET),
             });
 
         return menu;
-    }, [router, user.user_types]);
+    }, [router, user.userTypes]);
 
     const handleLogout = async () => {
         try {
-            await http.post('/api/auth/sign-out', null, {
-                baseUrl: '',
-            });
+            await signOut();
 
             router.push(SIGN_IN);
         } catch (error) {
@@ -76,7 +74,7 @@ const MyAccount = ({ user }: { user: IUser }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
-                {user.user_types.includes('owner') && (
+                {user.userTypes.includes('owner') && (
                     <>
                         <DropdownMenuSeparator />
                         {ownerMenu.map((item) => (

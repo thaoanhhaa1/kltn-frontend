@@ -9,7 +9,7 @@ export const getAllUsers = async (params: IPagination): Promise<ITable<IUser>> =
         take: String(params.take),
     }).toString();
 
-    return http.get<ITable<IUser>>(`/user-service/users?${search}`);
+    return http.get<ITable<IUser>>(`/estate-manager-service/users?${search}`);
 };
 
 export const getMe = async (accessToken: string): Promise<IUser> => {
@@ -17,7 +17,7 @@ export const getMe = async (accessToken: string): Promise<IUser> => {
         throw new Error('Access token is required');
     }
 
-    return http.get<IUser>('/user-service/users/me', {
+    return http.get<IUser>('/estate-manager-service/users/me', {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
@@ -25,9 +25,9 @@ export const getMe = async (accessToken: string): Promise<IUser> => {
 };
 
 export const updateMyInfo = async (data: FormData): Promise<IUser> => {
-    return http.put<IUser>('/user-service/users', data);
+    return http.put<IUser>('/estate-manager-service/users', data);
 };
 
 export const updateWalletAddress = async (wallet_address: string): Promise<void> => {
-    return http.patch<void>('/user-service/users/wallet', { wallet_address });
+    return http.patch<void>('/estate-manager-service/users/wallet', { wallet_address });
 };
