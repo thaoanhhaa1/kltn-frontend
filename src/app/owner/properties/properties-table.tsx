@@ -97,7 +97,7 @@ const PropertiesTable = () => {
         () => [
             {
                 title: '#',
-                dataIndex: 'property_id',
+                dataIndex: 'propertyId',
                 width: 50,
                 render: (_: any, __: any, index: number) => index + 1,
             },
@@ -185,7 +185,7 @@ const PropertiesTable = () => {
                             title="Xoá bất động sản?"
                             description="Bạn có chắc chắn muốn xóa bất động sản này?"
                             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-                            onConfirm={() => handleSoftDeleteProperties(property.property_id)}
+                            onConfirm={() => handleSoftDeleteProperties(property.propertyId)}
                             okText="Xóa"
                             cancelText="Hủy"
                             okType="danger"
@@ -207,7 +207,7 @@ const PropertiesTable = () => {
     const getCheckboxProps = useCallback((record: IProperty) => {
         return {
             disabled: ['UNAVAILABLE', 'PENDING', 'REJECTED'].includes(record.status),
-            name: record.property_id,
+            name: record.propertyId,
         };
     }, []);
 
@@ -216,7 +216,7 @@ const PropertiesTable = () => {
             const oldProperties = prev.data;
 
             const newProperties = oldProperties.map((property) => {
-                const newProperty = properties.find((p) => p.property_id === property.property_id);
+                const newProperty = properties.find((p) => p.propertyId === property.propertyId);
 
                 if (newProperty) {
                     return newProperty;
@@ -482,7 +482,7 @@ const PropertiesTable = () => {
             )}
             <TablePagination
                 loading={loading}
-                rowKey={(record) => record.property_id}
+                rowKey={(record) => record.propertyId}
                 columns={columns}
                 dataSource={data.data}
                 pagination={data.pageInfo}

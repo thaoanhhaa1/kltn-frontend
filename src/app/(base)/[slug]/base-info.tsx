@@ -8,7 +8,7 @@ import { Typography } from 'antd';
 const BaseInfo = ({ property }: { property: IProperty }) => {
     return (
         <>
-            <Typography.Text type="secondary">{convertDateToTimeAgo(new Date(property.created_at))}</Typography.Text>
+            <Typography.Text type="secondary">{convertDateToTimeAgo(new Date(property.createdAt))}</Typography.Text>
             <Typography.Title
                 level={2}
                 style={{
@@ -24,9 +24,9 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
                 </Avatar>
                 <div>
                     <Typography.Title level={5}>Chủ nhà: {property.owner.name}</Typography.Title>
-                    {property.owner.phone_number && (
+                    {property.owner.phoneNumber && (
                         <Typography.Title level={5}>
-                            Số điện thoại liên hệ: {property.owner.phone_number}
+                            Số điện thoại liên hệ: {property.owner.phoneNumber}
                         </Typography.Title>
                     )}
                     <Typography.Title level={5}>Email liên hệ: {property.owner.email}</Typography.Title>
@@ -40,7 +40,7 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
                 Giá: {formatCurrency(property.prices, true)}
             </Typography.Title>
             <Typography.Paragraph>Tiền cọc: {formatCurrency(property.deposit, true)}</Typography.Paragraph>
-            <Typography.Paragraph>Thời gian tối thiểu: {property.min_duration} tháng</Typography.Paragraph>
+            <Typography.Paragraph>Thời gian tối thiểu: {property.minDuration} tháng</Typography.Paragraph>
         </>
     );
 };

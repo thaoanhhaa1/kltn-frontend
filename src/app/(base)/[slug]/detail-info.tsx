@@ -14,10 +14,9 @@ const DetailInfo = ({ property }: { property: IProperty }) => {
             <Typography.Title level={2}>Điều kiện</Typography.Title>
             <Row>
                 {property.conditions.map((condition) => (
-                    <Col span={6} key={condition.condition_type}>
+                    <Col span={6} key={condition.type}>
                         <Typography.Text>
-                            <span className="font-semibold">{condition.condition_type}</span>:{' '}
-                            {condition.condition_value}
+                            <span className="font-semibold">{condition.type}</span>: {condition.value}
                         </Typography.Text>
                     </Col>
                 ))}
@@ -33,7 +32,7 @@ const DetailInfo = ({ property }: { property: IProperty }) => {
             <Row>
                 {property.attributes.map((attribute, index) => (
                     <Col span={6} key={index}>
-                        <Typography.Text>{attribute.attribute_name}</Typography.Text>
+                        <Typography.Text>{attribute.name}</Typography.Text>
                     </Col>
                 ))}
             </Row>

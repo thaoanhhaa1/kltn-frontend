@@ -18,9 +18,9 @@ const WalletPage = async () => {
     } catch (error) {}
 
     if (!user) return redirect(SIGN_IN);
-    if (!(user.user_types.includes('owner') || user.user_types.includes('renter'))) return <Forbidden />;
+    if (!(user.userTypes.includes('owner') || user.userTypes.includes('renter'))) return <Forbidden />;
 
-    return <div>{(user.wallet_address && <WalletManage address={user.wallet_address} />) || <ConnectWallet />}</div>;
+    return <div>{(user.walletAddress && <WalletManage address={user.walletAddress} />) || <ConnectWallet />}</div>;
 };
 
 export default WalletPage;

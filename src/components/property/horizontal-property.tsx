@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const findByConditionType = (conditions: Array<ICondition>, type: string) => {
-    return conditions.find((condition) => condition.condition_type === type)?.condition_value || '';
+    return conditions.find((condition) => condition.type === type)?.value || '';
 };
 
 const HorizontalProperty = ({ property }: { property: IProperty }) => {
@@ -52,7 +52,7 @@ const HorizontalProperty = ({ property }: { property: IProperty }) => {
                     </Typography.Title>
                     <Flex align="center" justify="space-between">
                         <Typography.Text type="secondary">
-                            {convertDateToTimeAgo(new Date(property.created_at))}
+                            {convertDateToTimeAgo(new Date(property.createdAt))}
                         </Typography.Text>
                         <HeartBtn />
                     </Flex>

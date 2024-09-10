@@ -156,7 +156,7 @@ const UserForm = ({ user }: { user: IUser }) => {
                                     },
                                 },
                             ]}
-                            initialValue={user.phone_number}
+                            initialValue={user.phoneNumber}
                             name="phone_number"
                             label="Số điện thoại"
                         >
