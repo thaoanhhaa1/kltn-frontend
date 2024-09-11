@@ -16,3 +16,10 @@ export const selectProps = {
     showSearch: true,
     optionFilterProp: 'name',
 };
+
+export const datePickerProps = {
+    style: {
+        width: '100%',
+    },
+    format: 'DD/MM/YYYY',
+};

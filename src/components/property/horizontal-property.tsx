@@ -10,9 +10,9 @@ const findByConditionType = (conditions: Array<ICondition>, type: string) => {
 };
 
 const HorizontalProperty = ({ property }: { property: IProperty }) => {
-    const acreage = findByConditionType(property.conditions, 'Diện tích');
-    const bedroom = findByConditionType(property.conditions, 'Phòng ngủ');
-    const bathroom = findByConditionType(property.conditions, 'Phòng tắm');
+    const acreage = findByConditionType(property.rentalConditions, 'Diện tích');
+    const bedroom = findByConditionType(property.rentalConditions, 'Phòng ngủ');
+    const bathroom = findByConditionType(property.rentalConditions, 'Phòng tắm');
 
     return (
         <Link href={`/${property.slug}`} className="rounded-md shadow-lg border-t">
@@ -48,7 +48,7 @@ const HorizontalProperty = ({ property }: { property: IProperty }) => {
                         )}
                     </Flex>
                     <Typography.Title type="danger" level={4}>
-                        {formatCurrency(property.prices, true)}
+                        {formatCurrency(property.price, true)}
                     </Typography.Title>
                     <Flex align="center" justify="space-between">
                         <Typography.Text type="secondary">

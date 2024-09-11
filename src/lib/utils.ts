@@ -85,7 +85,7 @@ export function convertCurrencyToText(number: number): string {
 
 export const convertDateToTimeAgo = (date: Date) => {
     const now = new Date();
-    const diff = now.getTime() - date.getTime();
+    const diff = now.getTime() - date.getTime() + 7 * 60 * 60 * 1000;
 
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);

@@ -13,7 +13,7 @@ const DetailInfo = ({ property }: { property: IProperty }) => {
             </Typography.Paragraph>
             <Typography.Title level={2}>Điều kiện</Typography.Title>
             <Row>
-                {property.conditions.map((condition) => (
+                {property.rentalConditions.map((condition) => (
                     <Col span={6} key={condition.type}>
                         <Typography.Text>
                             <span className="font-semibold">{condition.type}</span>: {condition.value}

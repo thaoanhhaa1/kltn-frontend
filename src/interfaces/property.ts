@@ -29,8 +29,8 @@ export interface IProperty {
     };
     attributes: Array<IAttribute>;
     images: Array<string>;
-    conditions: Array<ICondition>;
-    prices: number;
+    rentalConditions: Array<ICondition>;
+    price: number;
     owner: Pick<IUser, 'userId' | 'name' | 'phoneNumber' | 'avatar' | 'email'>;
 }
 
@@ -38,8 +38,8 @@ export type IFiterProperty = {
     title?: IProperty['title'];
     deposit_from?: IProperty['deposit'];
     deposit_to?: IProperty['deposit'];
-    price_from?: IProperty['prices'];
-    price_to?: IProperty['prices'];
+    price_from?: IProperty['price'];
+    price_to?: IProperty['price'];
     status?: IProperty['status'];
     city?: IProperty['address']['city'];
     district?: IProperty['address']['district'];

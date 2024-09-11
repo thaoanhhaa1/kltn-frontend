@@ -2,7 +2,7 @@ import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
 
 export interface IUser {
-    userId: number;
+    userId: string;
     email: string;
     name: string;
     userTypes: Role[];

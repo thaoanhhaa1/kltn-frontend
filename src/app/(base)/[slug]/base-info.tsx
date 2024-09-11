@@ -1,11 +1,19 @@
 'use client';
 
+import RentalRequestModal from '@/app/(base)/[slug]/rental-request-modal';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IProperty } from '@/interfaces/property';
 import { convertDateToTimeAgo, formatCurrency, getNameAvatar } from '@/lib/utils';
-import { Typography } from 'antd';
+import { Button, Flex, Typography } from 'antd';
+import { useState } from 'react';
 
 const BaseInfo = ({ property }: { property: IProperty }) => {
+    const [openRentalRequest, setOpenRentalRequest] = useState(false);
+
+    const handleOpenRentalRequest = () => {
+        setOpenRentalRequest(true);
+    };
+
     return (
         <>
             <Typography.Text type="secondary">{convertDateToTimeAgo(new Date(property.createdAt))}</Typography.Text>
@@ -37,10 +45,24 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
                 {property.address.city}
             </Typography.Paragraph>
             <Typography.Title level={3} type="danger">
-                Giá: {formatCurrency(property.prices, true)}
+                Giá: {formatCurrency(property.price, true)}
             </Typography.Title>
             <Typography.Paragraph>Tiền cọc: {formatCurrency(property.deposit, true)}</Typography.Paragraph>
             <Typography.Paragraph>Thời gian tối thiểu: {property.minDuration} tháng</Typography.Paragraph>
+            <Flex
+                style={{
+                    marginTop: '12px',
+                }}
+                gap={12}
+            >
+                <Button type="primary" ghost>
+                    Liên hệ chủ nhà
+                </Button>
+                <Button type="primary" onClick={handleOpenRentalRequest}>
+                    Gửi yêu cầu thuê
+                </Button>
+            </Flex>
+            <RentalRequestModal property={property} open={openRentalRequest} setOpen={setOpenRentalRequest} />
         </>
     );
 };

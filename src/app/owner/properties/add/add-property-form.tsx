@@ -27,7 +27,7 @@ export interface IPropertyForm {
     bathroom: number;
     floor: number;
     deposit: number;
-    min_duration: number;
+    minDuration: number;
     attributeIds: Array<string>;
     images: UploadChangeParam<UploadFile<any>>;
 }
