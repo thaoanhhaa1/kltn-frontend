@@ -1,3 +1,4 @@
+import { RentalRequestStatus } from '@/interfaces/rentalRequest';
 import { z } from 'zod';
 
 export const createRentalRequestSchema = z
@@ -51,3 +52,8 @@ export const createRentalRequestSchema = z
     });
 
 export type ICreateRentalRequest = z.infer<typeof createRentalRequestSchema>;
+
+export interface IUpdateRentalRequestStatus {
+    slug: string;
+    status: Extract<RentalRequestStatus, 'APPROVED' | 'REJECTED' | 'CANCELLED'>;
+}

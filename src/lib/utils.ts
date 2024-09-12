@@ -1,5 +1,6 @@
 import { IPagination } from '@/interfaces/pagination';
 import { PropertyStatus } from '@/interfaces/property';
+import { RentalRequestStatus } from '@/interfaces/rentalRequest';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
 import { type ClassValue, clsx } from 'clsx';
@@ -36,6 +37,18 @@ export const getPropertyStatusColor = (propertyStatus: PropertyStatus) => {
     if (propertyStatus === 'UNAVAILABLE') return 'purple';
     if (propertyStatus === 'REJECTED') return 'error';
     return 'processing';
+};
+
+export const getRentalRequestColor = (status: RentalRequestStatus) => {
+    if (status === 'PENDING') return 'processing';
+    if (status === 'APPROVED') return 'success';
+    if (status === 'REJECTED') return 'error';
+    if (status === 'CANCELLED') return 'warning';
+    return 'default';
+};
+
+export const formatDate = (date: string) => {
+    return dayjs(date).format('DD/MM/YYYY');
 };
 
 export const formatDateTime = (dateTime: string) => {

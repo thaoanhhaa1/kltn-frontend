@@ -13,7 +13,7 @@ import {
 import { OWNER as OWNER_ROLE, RENTER } from '@/constants/account-type';
 import { IUser } from '@/interfaces/user';
 import { getNameAvatar } from '@/lib/utils';
-import { OWNER, OWNER_PROPERTIES, PROFILE, SIGN_IN, WALLET } from '@/path';
+import { OWNER, OWNER_PROPERTIES, PROFILE, RENTAL_REQUESTS, SIGN_IN, WALLET } from '@/path';
 import { signOut } from '@/services/auth-service';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
@@ -30,6 +30,19 @@ const MyAccount = ({ user }: { user: IUser }) => {
             {
                 title: 'Bất động sản',
                 onClick: () => router.push(OWNER_PROPERTIES),
+            },
+        ],
+        [router],
+    );
+
+    const renterMenu = useMemo(
+        () => [
+            {
+                title: 'Yêu cầu thuê nhà',
+                onClick: () => {
+                    router.push(RENTAL_REQUESTS);
+                    router.refresh();
+                },
             },
         ],
         [router],
@@ -84,6 +97,14 @@ const MyAccount = ({ user }: { user: IUser }) => {
                         ))}
                     </>
                 )}
+                <DropdownMenuSeparator />
+                {user.userTypes.includes('renter')
+                    ? renterMenu.map((item) => (
+                          <DropdownMenuItem key={item.title} onClick={item.onClick}>
+                              {item.title}
+                          </DropdownMenuItem>
+                      ))
+                    : null}
                 <DropdownMenuSeparator />
                 {authMenu.map((item) => (
                     <DropdownMenuItem key={item.title} onClick={item.onClick}>
