@@ -51,7 +51,7 @@ const MyAccount = ({ user }: { user: IUser }) => {
     const authMenu = useMemo(() => {
         const menu = [
             {
-                title: 'Thông tin cá nhân',
+                title: 'Quản lý tài khoản',
                 onClick: () => router.push(PROFILE),
             },
         ];

@@ -3,7 +3,7 @@ import { emailSchema, nameOfUserSchema, otpSchema, passwordSchema, phoneNumberSc
 
 export const updateSchema = z.object({
     name: nameOfUserSchema,
-    phone_number: phoneNumberSchema,
+    phoneNumber: phoneNumberSchema,
 });
 
 export type UpdateInput = z.infer<typeof updateSchema>;
@@ -13,7 +13,7 @@ export type UpdateRequest = UpdateInput & {
 
 export const updatePasswordSchema = z.object({
     password: passwordSchema,
-    old_password: passwordSchema,
+    oldPassword: passwordSchema,
 });
 
 export type UpdatePasswordInput = z.infer<typeof updatePasswordSchema>;

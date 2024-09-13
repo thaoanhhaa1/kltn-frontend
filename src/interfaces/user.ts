@@ -10,6 +10,7 @@ export interface IUser {
     avatar: string | null;
     phoneNumber: string | null;
     walletAddress: `0x${string}` | null;
+    isVerified: boolean;
     createdAt: string;
     updatedAt: string;
 }
