@@ -11,6 +11,7 @@ export const DASHBOARD_SETTINGS = '/dashboard/settings';
 export const ADD_PROPERTY = '/owner/properties/add';
 export const OWNER_PROPERTIES = '/owner/properties';
 export const OWNER = '/owner';
+export const OWNER_REQUESTS = '/owner/rental-requests';
 
 export const RENTAL_REQUESTS = '/rental-requests';
 

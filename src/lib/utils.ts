@@ -47,6 +47,14 @@ export const getRentalRequestColor = (status: RentalRequestStatus) => {
     return 'default';
 };
 
+export const getRentalRequestStatusText = (status: RentalRequestStatus) => {
+    if (status === 'PENDING') return 'Chờ xác nhận';
+    if (status === 'APPROVED') return 'Đã xác nhận';
+    if (status === 'REJECTED') return 'Đã từ chối';
+    if (status === 'CANCELLED') return 'Đã hủy';
+    return 'Không xác định';
+};
+
 export const formatDate = (date: string) => {
     return dayjs(date).format('DD/MM/YYYY');
 };
