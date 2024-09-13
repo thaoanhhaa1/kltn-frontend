@@ -150,7 +150,7 @@ const PropertiesTable = () => {
             },
             {
                 title: 'Giá',
-                dataIndex: 'prices',
+                dataIndex: 'price',
                 align: 'right',
                 width: 130,
                 render: (value) => formatCurrency(value, true),
