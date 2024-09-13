@@ -6,18 +6,18 @@ export type ApprovalStatus = Extract<PropertyStatus, 'ACTIVE' | 'REJECTED'>;
 export type VisibleStatus = Extract<PropertyStatus, 'ACTIVE' | 'INACTIVE'>;
 
 export interface ICondition {
-    condition_type: string;
-    condition_value: string;
+    type: string;
+    value: string;
 }
 
 export interface IProperty {
-    property_id: string;
+    propertyId: string;
     title: string;
     description: string;
-    created_at: string;
-    updated_at: string;
+    createdAt: string;
+    updatedAt: string;
     deposit: number;
-    min_duration: number;
+    minDuration: number;
     deleted: boolean;
     slug: string;
     status: PropertyStatus;
@@ -29,17 +29,17 @@ export interface IProperty {
     };
     attributes: Array<IAttribute>;
     images: Array<string>;
-    conditions: Array<ICondition>;
-    prices: number;
-    owner: Pick<IUser, 'user_id' | 'name' | 'phone_number' | 'avatar' | 'email'>;
+    rentalConditions: Array<ICondition>;
+    price: number;
+    owner: Pick<IUser, 'userId' | 'name' | 'phoneNumber' | 'avatar' | 'email'>;
 }
 
 export type IFiterProperty = {
     title?: IProperty['title'];
     deposit_from?: IProperty['deposit'];
     deposit_to?: IProperty['deposit'];
-    price_from?: IProperty['prices'];
-    price_to?: IProperty['prices'];
+    price_from?: IProperty['price'];
+    price_to?: IProperty['price'];
     status?: IProperty['status'];
     city?: IProperty['address']['city'];
     district?: IProperty['address']['district'];

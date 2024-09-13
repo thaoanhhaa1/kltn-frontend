@@ -27,13 +27,13 @@ const PropertiesTable = () => {
 
     const { page, pageSize } = usePagination();
 
-    const handleApprove = useCallback(async (property_id: string) => {
+    const handleApprove = useCallback(async (propertyId: string) => {
         try {
-            await updateApprovalProperties([property_id], 'ACTIVE');
+            await updateApprovalProperties([propertyId], 'ACTIVE');
             setData((prev) => ({
                 ...prev,
                 data: prev.data.map((property) =>
-                    property.property_id === property_id ? { ...property, status: 'ACTIVE' } : property,
+                    property.propertyId === propertyId ? { ...property, status: 'ACTIVE' } : property,
                 ),
             }));
 
@@ -49,13 +49,13 @@ const PropertiesTable = () => {
         setIsOpenRejectModal(true);
     }, []);
 
-    const handleConfirmReject = useCallback(async ({ property_id, reason }: IRejectInput) => {
+    const handleConfirmReject = useCallback(async ({ propertyId, reason }: IRejectInput) => {
         try {
-            await updateApprovalProperties([property_id], 'REJECTED', reason);
+            await updateApprovalProperties([propertyId], 'REJECTED', reason);
             setData((prev) => ({
                 ...prev,
                 data: prev.data.map((property) =>
-                    property.property_id === property_id ? { ...property, status: 'REJECTED' } : property,
+                    property.propertyId === propertyId ? { ...property, status: 'REJECTED' } : property,
                 ),
             }));
 
@@ -70,7 +70,7 @@ const PropertiesTable = () => {
         () => [
             {
                 title: '#',
-                dataIndex: 'property_id',
+                dataIndex: 'propertyId',
                 width: 50,
                 render: (_: any, __: any, index: number) => index + 1,
             },
@@ -117,7 +117,7 @@ const PropertiesTable = () => {
             {
                 title: 'ID - Chủ sở hữu',
                 width: 150,
-                render: (record: IProperty) => `${record.owner.user_id} - ${record.owner.name}`,
+                render: (record: IProperty) => `${record.owner.userId} - ${record.owner.name}`,
             },
             {
                 title: 'Tiền cọc',
@@ -163,7 +163,7 @@ const PropertiesTable = () => {
                             disabled={DISABLED_APPROVE_STATUS.includes(property.status)}
                             type="link"
                             icon={<Check className="w-5 h-5" />}
-                            onClick={() => handleApprove(property.property_id)}
+                            onClick={() => handleApprove(property.propertyId)}
                         />
                         <Button
                             disabled={DISABLED_REJECT_STATUS.includes(property.status)}
@@ -211,7 +211,7 @@ const PropertiesTable = () => {
             </Flex>
             <TablePagination
                 loading={loading}
-                rowKey={(record) => record.property_id}
+                rowKey={(record) => record.propertyId}
                 columns={columns}
                 dataSource={data.data}
                 pagination={data.pageInfo}

@@ -64,7 +64,7 @@ const PropertyInfoForm = () => {
                 </Form.Item>
             </Col>
             <Col span={8}>
-                <Form.Item label="Thời gian thuê tối thiểu" name="min_duration">
+                <Form.Item label="Thời gian thuê tối thiểu" name="minDuration">
                     <InputNumber
                         addonAfter="tháng"
                         {...inputNumberProps}

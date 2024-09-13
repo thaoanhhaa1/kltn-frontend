@@ -1,12 +1,16 @@
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { config } from '@/config/wagmiConfig';
+import AppKitProvider from '@/context/wagmi';
 import { cn } from '@/lib/utils';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { headers } from 'next/headers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { cookieToInitialState } from 'wagmi';
 import './globals.css';
 
 const inter = Inter({
@@ -24,16 +28,20 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const initialState = cookieToInitialState(config, headers().get('cookie'));
+
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={cn('min-h-screen bg-background font-sans antialiased', inter.variable)}>
-                <AntdRegistry>
-                    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                        <TooltipProvider>{children}</TooltipProvider>
-                        <Toaster />
-                        <ToastContainer />
-                    </ThemeProvider>
-                </AntdRegistry>
+                <AppKitProvider initialState={initialState}>
+                    <AntdRegistry>
+                        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                            <TooltipProvider>{children}</TooltipProvider>
+                            <Toaster />
+                            <ToastContainer />
+                        </ThemeProvider>
+                    </AntdRegistry>
+                </AppKitProvider>
             </body>
         </html>
     );

@@ -6,10 +6,10 @@ import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { OWNER, RENTER } from '@/constants/account-type';
 import CustomError, { EntryError } from '@/lib/error';
-import http from '@/lib/http';
 import { HOME } from '@/path';
 import { RegisterInput, registerSchema } from '@/schemas/auth.schema';
 import { otpSchema } from '@/schemas/otp.schema';
+import { register, saveToken, sendRegisterOTP } from '@/services/auth-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RadioGroup, RadioGroupItem } from '@radix-ui/react-radio-group';
 import { useRouter } from 'next/navigation';
@@ -47,11 +47,9 @@ const SignUpForm = () => {
     async function onSubmit(values: RegisterInput) {
         try {
             setLoading(true);
-            const res = await http.post('/user-service/auth/register', values);
+            const res = await register(values);
 
-            await http.post('/api/auth/token', res, {
-                baseUrl: '',
-            });
+            await saveToken(res);
 
             router.push(HOME);
             router.refresh();
@@ -68,6 +66,12 @@ const SignUpForm = () => {
                     title: error.name,
                     description: error.message,
                 });
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Lỗi không xác định',
+                    description: 'Vui lòng thử lại sau',
+                });
             }
         } finally {
             setLoading(false);
@@ -81,7 +85,7 @@ const SignUpForm = () => {
 
         if (res.success) {
             try {
-                await http.post('/user-service/auth/register/otp', { email });
+                await sendRegisterOTP(email);
                 toast({
                     title: 'Success',
                     description: 'OTP sent successfully',

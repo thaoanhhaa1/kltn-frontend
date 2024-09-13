@@ -1,8 +1,8 @@
 'use client';
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import http from '@/lib/http';
 import { SIGN_IN } from '@/path';
+import { signOut } from '@/services/auth-service';
 import { useRouter } from 'next/navigation';
 import { ReactNode } from 'react';
 
@@ -11,9 +11,7 @@ const SignOut = ({ children }: { children: ReactNode }) => {
 
     const handleSignOut = async () => {
         try {
-            await http.post('/api/auth/sign-out', null, {
-                baseUrl: '',
-            });
+            await signOut();
         } catch (error) {
         } finally {
             router.push(SIGN_IN);

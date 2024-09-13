@@ -5,7 +5,11 @@ type CustomRequestInit = RequestInit & {
     baseUrl?: string;
 };
 
-const request = async <Response>(method: 'GET' | 'POST' | 'PUT' | 'DELETE', url: string, int?: CustomRequestInit) => {
+const request = async <Response>(
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH',
+    url: string,
+    int?: CustomRequestInit,
+) => {
     const isFormData = int?.body instanceof FormData;
 
     const baseHeaders: HeadersInit = {};
@@ -58,6 +62,9 @@ const post = <Response>(url: string, body: any, init?: CustomRequestInit) =>
 const put = <Response>(url: string, body: any, init?: CustomRequestInit) =>
     request<Response>('PUT', url, { ...init, body });
 
+const patch = <Response>(url: string, body: any, init?: CustomRequestInit) =>
+    request<Response>('PATCH', url, { ...init, body });
+
 const del = <Response>(url: string, body: any, init?: CustomRequestInit) =>
     request<Response>('DELETE', url, { ...init, body });
 
@@ -65,6 +72,7 @@ const http = {
     get,
     post,
     put,
+    patch,
     delete: del,
 };
 

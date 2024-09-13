@@ -17,7 +17,7 @@ export const getAllNotDeletedProperties = async (params: IPagination): Promise<I
         take: String(params.take),
     }).toString();
 
-    return http.get<ITable<IProperty>>(`/property-service/properties/all?${search}`);
+    return http.get<ITable<IProperty>>(`/estate-manager-service/properties/all?${search}`);
 };
 
 export const getAllNotDeletedPropertiesByOwnerId = async (
@@ -25,18 +25,18 @@ export const getAllNotDeletedPropertiesByOwnerId = async (
 ): Promise<ITable<IProperty>> => {
     const search = convertObjectToParams(params);
 
-    return http.get<ITable<IProperty>>(`/property-service/properties/owner?${search}`);
+    return http.get<ITable<IProperty>>(`/estate-manager-service/properties/owner?${search}`);
 };
 
 export const updateVisibleProperties = async (propertyIds: string[], status: VisibleStatus) => {
-    return http.post<Array<IProperty>>('/property-service/properties/visible', {
+    return http.post<Array<IProperty>>('/estate-manager-service/properties/visible', {
         properties: propertyIds,
         status,
     });
 };
 
 export const updateApprovalProperties = async (propertyIds: string[], status: ApprovalStatus, reason?: string) => {
-    return http.post<Array<IProperty>>('/property-service/properties/approval', {
+    return http.post<Array<IProperty>>('/estate-manager-service/properties/approval', {
         properties: propertyIds,
         status,
         reason,
@@ -44,18 +44,20 @@ export const updateApprovalProperties = async (propertyIds: string[], status: Ap
 };
 
 export const createProperty = async (formData: FormData) => {
-    return http.post<IProperty>('/property-service/properties', formData);
+    return http.post<IProperty>('/estate-manager-service/properties', formData);
 };
 
 export const softDeleteProperty = async (propertyId: string) => {
-    return http.delete<IProperty>(`/property-service/properties/${propertyId}`, {});
+    return http.delete<IProperty>(`/estate-manager-service/properties/${propertyId}`, {});
 };
 
-export const getPropertyStatus = () => http.get<Array<PropertyStatus>>('/property-service/properties/status');
+export const getPropertyStatus = () => http.get<Array<PropertyStatus>>('/estate-manager-service/properties/status');
 
 export const searchProperties = (searchParams: string) =>
-    http.get<ITable<IProperty>>(`/property-service/properties/search?${searchParams}`);
+    http.get<ITable<IProperty>>(`/estate-manager-service/properties/search?${searchParams}`);
 
-export const countAvailableProperties = () => http.get<ICountAvailableProperties>('/property-service/properties/count');
+export const countAvailableProperties = () =>
+    http.get<ICountAvailableProperties>('/estate-manager-service/properties/count');
 
-export const getPropertyBySlug = (slug: string) => http.get<IProperty>(`/property-service/properties/slug/${slug}`);
+export const getPropertyBySlug = (slug: string) =>
+    http.get<IProperty>(`/estate-manager-service/properties/slug/${slug}`);

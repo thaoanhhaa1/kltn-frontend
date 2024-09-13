@@ -110,7 +110,7 @@ const UsersTable = () => {
     return (
         <TablePagination
             loading={loading}
-            rowKey={(record) => record.user_id.toString()}
+            rowKey={(record) => record.userId.toString()}
             columns={columns}
             dataSource={users.data}
             pagination={users.pageInfo}

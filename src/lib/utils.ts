@@ -1,5 +1,6 @@
 import { IPagination } from '@/interfaces/pagination';
 import { PropertyStatus } from '@/interfaces/property';
+import { RentalRequestStatus } from '@/interfaces/rentalRequest';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
 import { type ClassValue, clsx } from 'clsx';
@@ -36,6 +37,26 @@ export const getPropertyStatusColor = (propertyStatus: PropertyStatus) => {
     if (propertyStatus === 'UNAVAILABLE') return 'purple';
     if (propertyStatus === 'REJECTED') return 'error';
     return 'processing';
+};
+
+export const getRentalRequestColor = (status: RentalRequestStatus) => {
+    if (status === 'PENDING') return 'processing';
+    if (status === 'APPROVED') return 'success';
+    if (status === 'REJECTED') return 'error';
+    if (status === 'CANCELLED') return 'warning';
+    return 'default';
+};
+
+export const getRentalRequestStatusText = (status: RentalRequestStatus) => {
+    if (status === 'PENDING') return 'Chờ xác nhận';
+    if (status === 'APPROVED') return 'Đã xác nhận';
+    if (status === 'REJECTED') return 'Đã từ chối';
+    if (status === 'CANCELLED') return 'Đã hủy';
+    return 'Không xác định';
+};
+
+export const formatDate = (date: string) => {
+    return dayjs(date).format('DD/MM/YYYY');
 };
 
 export const formatDateTime = (dateTime: string) => {
@@ -85,7 +106,7 @@ export function convertCurrencyToText(number: number): string {
 
 export const convertDateToTimeAgo = (date: Date) => {
     const now = new Date();
-    const diff = now.getTime() - date.getTime();
+    const diff = now.getTime() - date.getTime() + 7 * 60 * 60 * 1000;
 
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);

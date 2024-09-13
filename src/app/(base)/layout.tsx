@@ -1,7 +1,7 @@
 import Chatbot from '@/components/chatbot/chatbot';
 import Header from '@/components/header/header';
 import { IUser } from '@/interfaces/user';
-import http from '@/lib/http';
+import { getMe } from '@/services/user-service';
 import { cookies } from 'next/headers';
 
 export default async function BaseLayout({ children }: { children: React.ReactNode }) {
@@ -11,11 +11,7 @@ export default async function BaseLayout({ children }: { children: React.ReactNo
         const cookiesStore = cookies();
         const accessToken = cookiesStore.get('accessToken')?.value || '';
 
-        const res = await http.get<IUser>('/user-service/users/me', {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
+        const res = await getMe(accessToken);
 
         user = res;
     } catch (error) {}
