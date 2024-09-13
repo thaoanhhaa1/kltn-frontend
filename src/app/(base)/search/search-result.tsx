@@ -116,7 +116,7 @@ const SearchResult = ({ count }: { count: number }) => {
             </Flex>
             <Flex gap={24} vertical>
                 {loading ||
-                    properties.map((property) => <HorizontalProperty property={property} key={property.property_id} />)}
+                    properties.map((property) => <HorizontalProperty property={property} key={property.propertyId} />)}
             </Flex>
             {loading && <SkeletonRender controller={HorizontalPropertySkeleton} className="gap-6 mt-6" vertical />}
             <Pagination

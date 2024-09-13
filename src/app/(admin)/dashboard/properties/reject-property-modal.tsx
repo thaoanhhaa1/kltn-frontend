@@ -8,7 +8,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 
 export interface IRejectInput {
     reason: string;
-    property_id: string;
+    propertyId: string;
     status: 'REJECTED';
 }
 
@@ -18,7 +18,7 @@ const RejectPropertyModal = ({
     setOpen,
     onReject,
 }: {
-    property: Pick<IProperty, 'property_id' | 'title'>;
+    property: Pick<IProperty, 'propertyId' | 'title'>;
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
     onReject: (values: IRejectInput) => Promise<void>;
@@ -33,7 +33,7 @@ const RejectPropertyModal = ({
 
         try {
             const values = await form.validateFields();
-            await onReject({ ...values, property_id: property.property_id });
+            await onReject({ ...values, propertyId: property.propertyId });
             setOpen(false);
             form.resetFields();
         } catch (error) {

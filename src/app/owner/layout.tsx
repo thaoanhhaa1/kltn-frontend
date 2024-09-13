@@ -1,7 +1,7 @@
 import ManageLayout from '@/components/manage-layout';
 import { INavItem } from '@/components/sidebar/nav-item';
-import { ADD_PROPERTY, OWNER, OWNER_PROPERTIES, OWNER_USERS } from '@/path';
-import { Home, PieChart, PlusCircle, Users } from 'lucide-react';
+import { ADD_PROPERTY, OWNER, OWNER_PROPERTIES, OWNER_REQUESTS, OWNER_USERS } from '@/path';
+import { Home, HousePlus, PieChart, PlusCircle, Users } from 'lucide-react';
 import { ReactNode } from 'react';
 
 const Layout = async ({ children }: { children: ReactNode }) => {
@@ -20,6 +20,11 @@ const Layout = async ({ children }: { children: ReactNode }) => {
             title: 'Đăng tin',
             link: ADD_PROPERTY,
             icon: <PlusCircle className="w-5 h-5" />,
+        },
+        {
+            title: 'Yêu cầu thuê nhà',
+            link: OWNER_REQUESTS,
+            icon: <HousePlus className="w-5 h-5" />,
         },
         {
             title: 'Người dùng',

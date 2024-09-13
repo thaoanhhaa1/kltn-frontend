@@ -10,10 +10,11 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { OWNER as OWNER_ROLE, RENTER } from '@/constants/account-type';
 import { IUser } from '@/interfaces/user';
-import http from '@/lib/http';
 import { getNameAvatar } from '@/lib/utils';
-import { OWNER, OWNER_PROPERTIES, SIGN_IN } from '@/path';
+import { OWNER, OWNER_PROPERTIES, PROFILE, RENTAL_REQUESTS, SIGN_IN, WALLET } from '@/path';
+import { signOut } from '@/services/auth-service';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
@@ -34,11 +35,39 @@ const MyAccount = ({ user }: { user: IUser }) => {
         [router],
     );
 
+    const renterMenu = useMemo(
+        () => [
+            {
+                title: 'Yêu cầu thuê nhà',
+                onClick: () => {
+                    router.push(RENTAL_REQUESTS);
+                    router.refresh();
+                },
+            },
+        ],
+        [router],
+    );
+
+    const authMenu = useMemo(() => {
+        const menu = [
+            {
+                title: 'Thông tin cá nhân',
+                onClick: () => router.push(PROFILE),
+            },
+        ];
+
+        if (user.userTypes.includes(RENTER) || user.userTypes.includes(OWNER_ROLE))
+            menu.push({
+                title: 'Ví',
+                onClick: () => router.push(WALLET),
+            });
+
+        return menu;
+    }, [router, user.userTypes]);
+
     const handleLogout = async () => {
         try {
-            await http.post('/api/auth/sign-out', null, {
-                baseUrl: '',
-            });
+            await signOut();
 
             router.push(SIGN_IN);
         } catch (error) {
@@ -51,14 +80,14 @@ const MyAccount = ({ user }: { user: IUser }) => {
             <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
                     <Avatar>
-                        <AvatarImage src={user.avatar || ''} />
+                        <AvatarImage src={user.avatar || ''} className="object-cover" />
                         <AvatarFallback>{getNameAvatar(user.name)}</AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
-                {user.user_types.includes('owner') && (
+                {user.userTypes.includes('owner') && (
                     <>
                         <DropdownMenuSeparator />
                         {ownerMenu.map((item) => (
@@ -69,6 +98,19 @@ const MyAccount = ({ user }: { user: IUser }) => {
                     </>
                 )}
                 <DropdownMenuSeparator />
+                {user.userTypes.includes('renter')
+                    ? renterMenu.map((item) => (
+                          <DropdownMenuItem key={item.title} onClick={item.onClick}>
+                              {item.title}
+                          </DropdownMenuItem>
+                      ))
+                    : null}
+                <DropdownMenuSeparator />
+                {authMenu.map((item) => (
+                    <DropdownMenuItem key={item.title} onClick={item.onClick}>
+                        {item.title}
+                    </DropdownMenuItem>
+                ))}
                 <DropdownMenuItem>Cài đặt</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>Đăng xuất</DropdownMenuItem>

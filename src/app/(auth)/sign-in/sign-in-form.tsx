@@ -5,9 +5,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import CustomError, { EntryError } from '@/lib/error';
-import http from '@/lib/http';
 import { HOME } from '@/path';
 import { LoginInput, loginSchema } from '@/schemas/auth.schema';
+import { login, saveToken } from '@/services/auth-service';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -28,11 +28,9 @@ const SignInForm = () => {
     async function onSubmit(values: LoginInput) {
         try {
             setLoading(true);
-            const res = await http.post('/user-service/auth/login', values);
+            const res = await login(values);
 
-            await http.post('/api/auth/token', res, {
-                baseUrl: '',
-            });
+            await saveToken(res);
 
             router.push(HOME);
             router.refresh();
@@ -49,8 +47,15 @@ const SignInForm = () => {
                     title: error.name,
                     description: error.message,
                 });
-                setLoading(false);
+            } else {
+                toast({
+                    variant: 'destructive',
+                    title: 'Lỗi không xác định',
+                    description: 'Vui lòng thử lại sau',
+                });
             }
+        } finally {
+            setLoading(false);
         }
     }
 

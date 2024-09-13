@@ -3,8 +3,8 @@ import { cookies } from 'next/headers';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-const authRoutes = ['/sign-in', '/sign-up', '/forgot-password', '/reset-password', '/verify-email'];
-const privateRoutes = ['/dashboard', '/owner', '/user'];
+const authRoutes = ['/sign-in', '/sign-up', '/forgot-password'];
+const privateRoutes = ['/dashboard', '/owner', '/user', '/rental-requests'];
 
 const checkAuth = ({ isAuth, request }: { isAuth: boolean; request: NextRequest }) => {
     if (isAuth && authRoutes.some((route) => request.nextUrl.pathname.includes(route))) {
@@ -31,5 +31,13 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*', '/owner/:path*', '/user/:path*'],
+    matcher: [
+        '/dashboard/:path*',
+        '/owner/:path*',
+        '/user/:path*',
+        '/sign-in',
+        '/sign-up',
+        '/forgot-password',
+        '/rental-requests',
+    ],
 };
