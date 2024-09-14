@@ -25,3 +25,9 @@ export const forgotPasswordSchema = z.object({
 });
 
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+
+export const forgotPasswordStepOneSchema = z.object({
+    email: emailSchema,
+});
+
+export type ForgotPasswordStepOneInput = z.infer<typeof forgotPasswordStepOneSchema>;

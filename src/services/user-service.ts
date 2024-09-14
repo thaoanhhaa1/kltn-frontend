@@ -2,7 +2,7 @@ import { IPagination } from '@/interfaces/pagination';
 import { ITable } from '@/interfaces/table';
 import { IUser } from '@/interfaces/user';
 import http from '@/lib/http';
-import { UpdatePasswordInput } from '@/schemas/user.schema';
+import { ForgotPasswordInput, UpdatePasswordInput } from '@/schemas/user.schema';
 
 export const getAllUsers = async (params: IPagination): Promise<ITable<IUser>> => {
     const search = new URLSearchParams({
@@ -39,4 +39,12 @@ export const verifyUser = async (data: FormData): Promise<IUser> => {
 
 export const updatePassword = async (data: UpdatePasswordInput): Promise<void> => {
     return http.post<void>('/estate-manager-service/users/update-password', data);
+};
+
+export const otpToUser = async (email: string): Promise<void> => {
+    return http.post<void>('/estate-manager-service/users/otp', { email });
+};
+
+export const forgotPassword = async (data: ForgotPasswordInput): Promise<void> => {
+    return http.post<void>('/estate-manager-service/users/forgot-password', data);
 };
