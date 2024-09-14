@@ -242,10 +242,13 @@ const SearchComponent = () => {
     useEffect(() => {
         const fetchCities = async () => {
             setCityLoading(true);
-            const cities = await getCities();
-            setCities(cities);
-
-            setCityLoading(false);
+            try {
+                const cities = await getCities();
+                setCities(cities);
+            } catch (error) {
+            } finally {
+                setCityLoading(false);
+            }
         };
 
         fetchCities();

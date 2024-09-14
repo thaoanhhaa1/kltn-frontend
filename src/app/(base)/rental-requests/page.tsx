@@ -19,7 +19,7 @@ const RentalRequestPage = async () => {
     return (
         <div className="mt-5">
             <Header />
-            <Row>
+            <Row gutter={12}>
                 {rentalRequests.data.map((rentalRequest) => (
                     <Col span={12} key={rentalRequest.requestId}>
                         <RentalRequest rentalRequest={rentalRequest} />

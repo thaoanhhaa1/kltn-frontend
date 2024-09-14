@@ -3,6 +3,7 @@ import CustomError, { EntryError } from '@/lib/error';
 
 type CustomRequestInit = RequestInit & {
     baseUrl?: string;
+    params?: Record<string, any>;
 };
 
 const request = async <Response>(
@@ -30,7 +31,9 @@ const request = async <Response>(
         }
     }
 
-    const res = await fetch(`${baseUrl}${url}`, {
+    const paramsQuery = int?.params ? '?' + new URLSearchParams(int?.params).toString() : '';
+
+    const res = await fetch(`${baseUrl}${url}${paramsQuery}`, {
         ...int,
         headers: {
             ...baseHeaders,

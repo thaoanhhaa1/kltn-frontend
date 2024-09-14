@@ -1,6 +1,7 @@
 import ConnectWallet from '@/app/(base)/user/wallet/connect-wallet';
 import WalletManage from '@/app/(base)/user/wallet/wallet-manage';
 import Forbidden from '@/components/forbidden';
+import SaveUser from '@/components/save-user';
 import { IUser } from '@/interfaces/user';
 import { SIGN_IN } from '@/path';
 import { getMe } from '@/services/user-service';
@@ -20,7 +21,12 @@ const WalletPage = async () => {
     if (!user) return redirect(SIGN_IN);
     if (!(user.userTypes.includes('owner') || user.userTypes.includes('renter'))) return <Forbidden />;
 
-    return <div>{(user.walletAddress && <WalletManage address={user.walletAddress} />) || <ConnectWallet />}</div>;
+    return (
+        <div>
+            {(user.walletAddress && <WalletManage address={user.walletAddress} />) || <ConnectWallet />}
+            <SaveUser user={user} />
+        </div>
+    );
 };
 
 export default WalletPage;

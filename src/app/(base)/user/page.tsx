@@ -1,6 +1,7 @@
 import UpdatePassword from '@/app/(base)/user/update-password';
 import UserForm from '@/app/(base)/user/user-form';
 import VerifyForm from '@/app/(base)/user/verify-form';
+import SaveUser from '@/components/save-user';
 import { IUser } from '@/interfaces/user';
 import { SIGN_IN } from '@/path';
 import { getMe } from '@/services/user-service';
@@ -44,6 +45,7 @@ const UserPage = async () => {
                 Quản lý tài khoản
             </h2>
             <Tabs defaultActiveKey="1" items={items} />
+            <SaveUser user={user} />
         </div>
     );
 };
