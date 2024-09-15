@@ -1,5 +1,6 @@
 'use client';
 
+import ContractModal from '@/app/owner/rental-requests/contract-modal';
 import TablePagination from '@/components/table-pagination';
 import { initDataTable } from '@/constants/init-data';
 import usePagination from '@/hooks/usePagination';
@@ -24,6 +25,7 @@ const RentalRequestsTable = () => {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<ITable<IRentalRequest>>(initDataTable);
     const { page, pageSize } = usePagination();
+    const [selectedRentalRequest, setSelectedRentalRequest] = useState<IRentalRequest | undefined>();
 
     const fetchRentalRequests = useCallback(async () => {
         setLoading(true);
@@ -54,6 +56,10 @@ const RentalRequestsTable = () => {
         },
         [fetchRentalRequests],
     );
+
+    const handlePreAccept = useCallback((rentalRequest: IRentalRequest) => {
+        setSelectedRentalRequest(rentalRequest);
+    }, []);
 
     const columns: TableProps<IRentalRequest>['columns'] = useMemo(
         () => [
@@ -123,12 +129,7 @@ const RentalRequestsTable = () => {
                             disabled={rentalRequest.status !== 'PENDING'}
                             type="link"
                             icon={<Check className="w-5 h-5" />}
-                            onClick={() =>
-                                handleUpdateStatus({
-                                    slug: rentalRequest.property.slug,
-                                    status: 'APPROVED',
-                                })
-                            }
+                            onClick={() => handlePreAccept(rentalRequest)}
                         />
                         <Button
                             disabled={rentalRequest.status !== 'PENDING'}
@@ -146,7 +147,7 @@ const RentalRequestsTable = () => {
                 ),
             },
         ],
-        [handleUpdateStatus],
+        [handlePreAccept, handleUpdateStatus],
     );
 
     useEffect(() => {
@@ -161,6 +162,11 @@ const RentalRequestsTable = () => {
                 columns={columns}
                 dataSource={data.data}
                 pagination={data.pageInfo}
+            />
+            <ContractModal
+                open={!!selectedRentalRequest}
+                onClose={() => setSelectedRentalRequest(undefined)}
+                rentalRequest={selectedRentalRequest}
             />
         </>
     );

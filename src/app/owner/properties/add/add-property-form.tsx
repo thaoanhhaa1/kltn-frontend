@@ -91,6 +91,8 @@ const AddPropertyForm = () => {
         const floor = values.floor;
         const interior = values.interior;
 
+        // Diện tích quyền sử dụng đất
+
         if (acreage)
             conditions.push({
                 type: 'Diện tích',
@@ -108,8 +110,8 @@ const AddPropertyForm = () => {
             });
         if (floor)
             conditions.push({
-                type: 'Tầng',
-                value: `${floor}`,
+                type: 'Số tầng',
+                value: `${floor} tầng`,
             });
         if (interior)
             conditions.push({
