@@ -1,25 +1,54 @@
 import { envConfig } from '@/config/envConfig';
 import { IGenerateContractResponse, IRentalRequest } from '@/interfaces/rentalRequest';
-import { generateContract } from '@/services/rental-request-service';
+import { createContract } from '@/services/contract-service';
+import { generateContract, ownerUpdateRentalRequestStatus } from '@/services/rental-request-service';
 import { Editor } from '@tinymce/tinymce-react';
 import { Flex, Modal, Spin } from 'antd';
 import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const ContractModal = ({
     rentalRequest,
     open,
     onClose,
+    fetchRentalRequests,
 }: {
     rentalRequest?: IRentalRequest;
     open: boolean;
     onClose: () => void;
+    fetchRentalRequests: () => Promise<void>;
 }) => {
     const editorRef = useRef<any>(null);
     const [preRender, setPreRender] = useState(true);
     const [loading, setLoading] = useState(false);
     const [contract, setContract] = useState<IGenerateContractResponse | undefined>();
 
-    const handleOk = () => {};
+    const handleOk = async () => {
+        if (!contract) return;
+
+        try {
+            const content = editorRef.current.getContent();
+
+            await Promise.all([
+                ownerUpdateRentalRequestStatus({
+                    slug: rentalRequest?.property.slug!,
+                    status: 'APPROVED',
+                }),
+                createContract({
+                    ...contract,
+                    contractTerms: content,
+                    ownerUserId: contract.ownerId,
+                    renterUserId: contract.renterId,
+                }),
+            ]);
+
+            toast.success('Tạo hợp đồng thành công');
+            await fetchRentalRequests();
+            onClose();
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handlePreRender = () => {
         setPreRender(false);

@@ -167,6 +167,7 @@ const RentalRequestsTable = () => {
                 open={!!selectedRentalRequest}
                 onClose={() => setSelectedRentalRequest(undefined)}
                 rentalRequest={selectedRentalRequest}
+                fetchRentalRequests={fetchRentalRequests}
             />
         </>
     );
