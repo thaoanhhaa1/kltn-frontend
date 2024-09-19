@@ -13,7 +13,16 @@ import {
 import { OWNER as OWNER_ROLE, RENTER } from '@/constants/account-type';
 import { IUser } from '@/interfaces/user';
 import { getNameAvatar } from '@/lib/utils';
-import { OWNER, OWNER_PROPERTIES, PROFILE, RENTAL_REQUESTS, SIGN_IN, WALLET } from '@/path';
+import {
+    OWNER,
+    OWNER_PROPERTIES,
+    PROFILE,
+    RENTAL_CONTRACTS,
+    RENTAL_REQUESTS,
+    RENTER_PAYMENTS,
+    SIGN_IN,
+    WALLET,
+} from '@/path';
 import { signOut } from '@/services/auth-service';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
@@ -41,6 +50,20 @@ const MyAccount = ({ user }: { user: IUser }) => {
                 title: 'Yêu cầu thuê nhà',
                 onClick: () => {
                     router.push(RENTAL_REQUESTS);
+                    router.refresh();
+                },
+            },
+            {
+                title: 'Hợp đồng của tôi',
+                onClick: () => {
+                    router.push(RENTAL_CONTRACTS);
+                    router.refresh();
+                },
+            },
+            {
+                title: 'Thanh toán hoá đơn',
+                onClick: () => {
+                    router.push(RENTER_PAYMENTS);
                     router.refresh();
                 },
             },

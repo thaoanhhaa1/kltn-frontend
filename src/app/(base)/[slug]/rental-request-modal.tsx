@@ -63,8 +63,11 @@ const RentalRequestModal = ({
             toast.success('Yêu cầu thuê nhà đã được gửi');
             setOpen(false);
         } catch (error) {
-            console.log(error);
-            toast.error('Đã có lỗi xảy ra');
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Có lỗi xảy ra');
+            }
         } finally {
             setConfirmLoading(false);
         }

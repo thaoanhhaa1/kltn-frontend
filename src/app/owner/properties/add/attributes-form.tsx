@@ -6,8 +6,8 @@ import { Col, Form, Select } from 'antd';
 import { useEffect, useState } from 'react';
 
 const fieldNames = {
-    label: 'attribute_name',
-    value: 'attribute_id',
+    label: 'name',
+    value: 'id',
 };
 
 const AttributesForm = ({ label, placeholder }: { label: string; placeholder: string }) => {

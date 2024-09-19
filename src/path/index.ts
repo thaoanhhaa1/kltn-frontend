@@ -14,6 +14,8 @@ export const OWNER = '/owner';
 export const OWNER_REQUESTS = '/owner/rental-requests';
 
 export const RENTAL_REQUESTS = '/rental-requests';
+export const RENTAL_CONTRACTS = '/contracts';
+export const RENTER_PAYMENTS = '/payments';
 
 export const OWNER_USERS = '/owner/users';
 export const FORGOT_PASSWORD = '/forgot-password';

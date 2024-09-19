@@ -5,6 +5,7 @@ import BasicInfoForm from '@/app/owner/properties/add/basic-info-form';
 import ImagesForm from '@/app/owner/properties/add/images-form';
 import PropertyInfoForm from '@/app/owner/properties/add/property-info-form';
 import { Card } from '@/components/ui/card';
+import { IPropertyType } from '@/interfaces/propertyType';
 import { OWNER_PROPERTIES } from '@/path';
 import { createProperty } from '@/services/property-service';
 import { Button, Collapse, CollapseProps, Flex, Form } from 'antd';
@@ -25,6 +26,8 @@ export interface IPropertyForm {
     interior: string;
     bedroom: number;
     bathroom: number;
+    landArea: number;
+    type: string;
     floor: number;
     deposit: number;
     minDuration: number;
@@ -47,6 +50,7 @@ const AddPropertyForm = () => {
         ward: '',
     } as IAddressName);
     const [loading, setLoading] = useState<boolean>(false);
+    const [type, setType] = useState<IPropertyType | undefined>();
 
     const basicInfoItems: CollapseProps['items'] = [
         {
@@ -66,7 +70,7 @@ const AddPropertyForm = () => {
         {
             key: '1',
             label: 'Thông tin bất động sản',
-            children: <PropertyInfoForm />,
+            children: <PropertyInfoForm setType={setType} />,
         },
     ];
     const imagesItems: CollapseProps['items'] = [
@@ -90,13 +94,17 @@ const AddPropertyForm = () => {
         const bedroom = values.bedroom;
         const floor = values.floor;
         const interior = values.interior;
-
-        // Diện tích quyền sử dụng đất
+        const landArea = values.landArea;
 
         if (acreage)
             conditions.push({
                 type: 'Diện tích',
                 value: `${acreage} m2`,
+            });
+        if (landArea)
+            conditions.push({
+                type: 'Diện tích quyền sử dụng đất',
+                value: `${landArea} m2`,
             });
         if (bathroom)
             conditions.push({
@@ -120,7 +128,11 @@ const AddPropertyForm = () => {
             });
 
         // latitude, longitude
-        const { images, ...rest } = {
+        const {
+            images,
+            type: _,
+            ...rest
+        } = {
             ...values,
             ...addressName,
         };
@@ -142,6 +154,7 @@ const AddPropertyForm = () => {
         });
 
         formData.append('conditions', JSON.stringify(conditions));
+        formData.append('type', JSON.stringify(type));
 
         try {
             await createProperty(formData);

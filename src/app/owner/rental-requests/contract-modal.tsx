@@ -47,6 +47,11 @@ const ContractModal = ({
             onClose();
         } catch (error) {
             console.log(error);
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error('Có lỗi xảy ra');
+            }
         }
     };
 
@@ -66,6 +71,11 @@ const ContractModal = ({
                 setContract(contract);
             } catch (error) {
                 console.log(error);
+                if (error instanceof Error) {
+                    toast.error(error.message);
+                } else {
+                    toast.error('Có lỗi xảy ra');
+                }
             } finally {
                 setLoading(false);
             }
@@ -87,6 +97,9 @@ const ContractModal = ({
             style={{
                 maxWidth: '800px',
                 paddingInline: '8px',
+            }}
+            okButtonProps={{
+                disabled: !contract,
             }}
         >
             <Editor

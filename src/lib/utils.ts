@@ -1,3 +1,4 @@
+import { ContractStatus } from '@/interfaces/contract';
 import { IPagination } from '@/interfaces/pagination';
 import { PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
@@ -39,6 +40,14 @@ export const getPropertyStatusColor = (propertyStatus: PropertyStatus) => {
     return 'processing';
 };
 
+export const getPropertyStatusText = (propertyStatus: PropertyStatus) => {
+    if (propertyStatus === 'ACTIVE') return 'Đã duyệt';
+    if (propertyStatus === 'INACTIVE') return 'Đã ẩn';
+    if (propertyStatus === 'UNAVAILABLE') return 'Đã cho thuê';
+    if (propertyStatus === 'REJECTED') return 'Đã từ chối';
+    return 'Đang chờ duyệt';
+};
+
 export const getRentalRequestColor = (status: RentalRequestStatus) => {
     if (status === 'PENDING') return 'processing';
     if (status === 'APPROVED') return 'success';
@@ -52,6 +61,24 @@ export const getRentalRequestStatusText = (status: RentalRequestStatus) => {
     if (status === 'APPROVED') return 'Đã xác nhận';
     if (status === 'REJECTED') return 'Đã từ chối';
     if (status === 'CANCELLED') return 'Đã hủy';
+    return 'Không xác định';
+};
+
+export const getContractColor = (status: ContractStatus) => {
+    if (status === 'WAITING') return 'processing';
+    if (status === 'DEPOSITED') return 'warning';
+    if (status === 'ONGOING') return 'success';
+    if (status === 'ENDED') return 'default';
+    if (status === 'OVERDUE') return 'error';
+    return 'default';
+};
+
+export const getContractStatusText = (status: ContractStatus) => {
+    if (status === 'WAITING') return 'Chờ xác nhận';
+    if (status === 'DEPOSITED') return 'Đã đặt cọc';
+    if (status === 'ONGOING') return 'Đang thuê';
+    if (status === 'ENDED') return 'Đã kết thúc';
+    if (status === 'OVERDUE') return 'Quá hạn';
     return 'Không xác định';
 };
 

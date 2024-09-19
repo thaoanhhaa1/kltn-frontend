@@ -1,4 +1,4 @@
-import { ICreateContractRequest } from '@/interfaces/contract';
+import { IContract, ICreateContractRequest } from '@/interfaces/contract';
 import http from '@/lib/http';
 
 export const createContract = ({
@@ -21,4 +21,12 @@ export const createContract = ({
         monthly_rent: monthlyRent,
         deposit_amount: depositAmount,
     });
+};
+
+export const getContractsByRenter = () => {
+    return http.get<Array<IContract>>('/contract-service/contracts/renter');
+};
+
+export const getContractsByOwner = () => {
+    return http.get<Array<IContract>>('/contract-service/contracts/owner');
 };
