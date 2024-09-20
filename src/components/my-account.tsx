@@ -14,8 +14,11 @@ import { OWNER as OWNER_ROLE, RENTER } from '@/constants/account-type';
 import { IUser } from '@/interfaces/user';
 import { getNameAvatar } from '@/lib/utils';
 import {
+    ADD_PROPERTY,
     OWNER,
+    OWNER_CONTRACTS,
     OWNER_PROPERTIES,
+    OWNER_REQUESTS,
     PROFILE,
     RENTAL_CONTRACTS,
     RENTAL_REQUESTS,
@@ -39,6 +42,18 @@ const MyAccount = ({ user }: { user: IUser }) => {
             {
                 title: 'Bất động sản',
                 onClick: () => router.push(OWNER_PROPERTIES),
+            },
+            {
+                title: 'Đăng tin',
+                onClick: () => router.push(ADD_PROPERTY),
+            },
+            {
+                title: 'Yêu cầu thuê nhà',
+                onClick: () => router.push(OWNER_REQUESTS),
+            },
+            {
+                title: 'Quản lý hợp đồng',
+                onClick: () => router.push(OWNER_CONTRACTS),
             },
         ],
         [router],

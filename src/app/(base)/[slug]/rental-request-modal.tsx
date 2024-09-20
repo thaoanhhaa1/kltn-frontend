@@ -104,7 +104,7 @@ const RentalRequestModal = ({
                             <DatePicker
                                 {...datePickerProps}
                                 placeholder="Ngày bắt đầu"
-                                minDate={dayjs().add(1, 'day')}
+                                minDate={dayjs().add(1, 'day')} // FIXME: Uncomment this line
                                 onChange={handleChangeFromDate}
                             />
                         </Form.Item>

@@ -2,6 +2,7 @@ import { ContractStatus } from '@/interfaces/contract';
 import { IPagination } from '@/interfaces/pagination';
 import { PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
+import { TransactionStatus } from '@/interfaces/transaction';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
 import { type ClassValue, clsx } from 'clsx';
@@ -78,6 +79,22 @@ export const getContractStatusText = (status: ContractStatus) => {
     if (status === 'DEPOSITED') return 'Đã đặt cọc';
     if (status === 'ONGOING') return 'Đang thuê';
     if (status === 'ENDED') return 'Đã kết thúc';
+    if (status === 'OVERDUE') return 'Quá hạn';
+    return 'Không xác định';
+};
+
+export const getTransactionColor = (status: TransactionStatus) => {
+    if (status === 'PENDING') return 'processing';
+    if (status === 'COMPLETED') return 'success';
+    if (status === 'FAILED') return 'error';
+    if (status === 'OVERDUE') return 'warning';
+    return 'default';
+};
+
+export const getTransactionStatusText = (status: TransactionStatus) => {
+    if (status === 'PENDING') return 'Chờ thanh toán';
+    if (status === 'COMPLETED') return 'Thành công';
+    if (status === 'FAILED') return 'Thất bại';
     if (status === 'OVERDUE') return 'Quá hạn';
     return 'Không xác định';
 };
