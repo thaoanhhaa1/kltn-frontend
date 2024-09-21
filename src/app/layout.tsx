@@ -35,7 +35,7 @@ export default function RootLayout({
             <body className={cn('min-h-screen bg-background font-sans antialiased', inter.variable)}>
                 <AppKitProvider initialState={initialState}>
                     <AntdRegistry>
-                        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
                             <TooltipProvider>{children}</TooltipProvider>
                             <Toaster />
                             <ToastContainer />

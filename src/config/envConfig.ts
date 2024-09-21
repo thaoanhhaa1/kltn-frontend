@@ -11,6 +11,7 @@ const envSchema = z.object({
     NEXT_PUBLIC_WAGMI_ICONS: z.array(z.string()),
     NEXT_PUBLIC_WAGMI_REDIRECT_NATIVE: z.string(),
     NEXT_PUBLIC_WAGMI_REDIRECT_UNIVERSAL: z.string(),
+    NEXT_PUBLIC_TINY_MCE_API_KEY: z.string(),
 });
 
 const envParser = envSchema.safeParse({
@@ -24,6 +25,7 @@ const envParser = envSchema.safeParse({
     NEXT_PUBLIC_WAGMI_ICONS: process.env.NEXT_PUBLIC_WAGMI_ICONS!.split(','),
     NEXT_PUBLIC_WAGMI_REDIRECT_NATIVE: process.env.NEXT_PUBLIC_WAGMI_REDIRECT_NATIVE!,
     NEXT_PUBLIC_WAGMI_REDIRECT_UNIVERSAL: process.env.NEXT_PUBLIC_WAGMI_REDIRECT_UNIVERSAL!,
+    NEXT_PUBLIC_TINY_MCE_API_KEY: process.env.NEXT_PUBLIC_TINY_MCE_API_KEY!,
 });
 
 if (!envParser.success) {

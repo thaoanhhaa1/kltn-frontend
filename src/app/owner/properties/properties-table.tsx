@@ -1,14 +1,15 @@
 'use client';
 
 import { IAddressName } from '@/app/owner/properties/add/add-property-form';
+import PriceInput from '@/components/input/price-input';
 import TableFilter from '@/components/table-filter';
 import TablePagination from '@/components/table-pagination';
 import { initDataTable } from '@/constants/init-data';
-import { inputNumberProps, selectProps } from '@/constants/init-props';
+import { selectProps } from '@/constants/init-props';
 import usePagination from '@/hooks/usePagination';
 import { IFiterProperty, IProperty, PropertyStatus } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
-import { formatCurrency, formatDateTime, getPropertyStatusColor, toSkipTake } from '@/lib/utils';
+import { formatCurrency, formatDateTime, getPropertyStatusColor, getPropertyStatusText, toSkipTake } from '@/lib/utils';
 import { getCities, getDistricts, getWards, IAddress } from '@/services/address-service';
 import {
     getAllNotDeletedPropertiesByOwnerId,
@@ -17,7 +18,7 @@ import {
     updateVisibleProperties,
 } from '@/services/property-service';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Flex, Form, Input, InputNumber, Popconfirm, Select, Space, TableProps, Tag, Tooltip } from 'antd';
+import { Button, Col, Flex, Form, Input, Popconfirm, Select, Space, TableProps, Tag, Tooltip } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { BaseOptionType, DefaultOptionType } from 'antd/es/select';
 import { Eye, Filter, Trash } from 'lucide-react';
@@ -150,7 +151,7 @@ const PropertiesTable = () => {
             },
             {
                 title: 'Giá',
-                dataIndex: 'prices',
+                dataIndex: 'price',
                 align: 'right',
                 width: 130,
                 render: (value) => formatCurrency(value, true),
@@ -159,7 +160,9 @@ const PropertiesTable = () => {
                 title: 'Trạng thái',
                 dataIndex: 'status',
                 width: 100,
-                render: (status: PropertyStatus) => <Tag color={getPropertyStatusColor(status)}>{status}</Tag>,
+                render: (status: PropertyStatus) => (
+                    <Tag color={getPropertyStatusColor(status)}>{getPropertyStatusText(status)}</Tag>
+                ),
             },
             {
                 title: 'Ngày tạo',
@@ -342,10 +345,15 @@ const PropertiesTable = () => {
     useEffect(() => {
         const fetchCities = async () => {
             setCityLoading(true);
-            const cities = await getCities();
-            setCities(cities);
 
-            setCityLoading(false);
+            try {
+                const cities = await getCities();
+                setCities(cities);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setCityLoading(false);
+            }
         };
 
         const fetchStatuses = async () => {
@@ -353,7 +361,7 @@ const PropertiesTable = () => {
             try {
                 const statuses = await getPropertyStatus();
 
-                setStatuses(statuses.map((item) => ({ label: item, value: item })));
+                setStatuses(statuses.map((item) => ({ label: getPropertyStatusText(item), value: item })));
             } catch (error) {
                 console.error(error);
             } finally {
@@ -397,42 +405,22 @@ const PropertiesTable = () => {
                     </Col>
                     <Col span={8}>
                         <Form.Item name="deposit_from" label="Tiền đặt cọc từ">
-                            <InputNumber
-                                addonAfter="VND"
-                                {...inputNumberProps}
-                                max={Number.MAX_SAFE_INTEGER}
-                                placeholder="Nhập tiền đặt cọc từ"
-                            />
+                            <PriceInput max={Number.MAX_SAFE_INTEGER} placeholder="Nhập tiền đặt cọc từ" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
                         <Form.Item name="deposit_to" label="Tiền đặt cọc đến">
-                            <InputNumber
-                                addonAfter="VND"
-                                {...inputNumberProps}
-                                max={Number.MAX_SAFE_INTEGER}
-                                placeholder="Nhập tiền đặt cọc đến"
-                            />
+                            <PriceInput max={Number.MAX_SAFE_INTEGER} placeholder="Nhập tiền đặt cọc đến" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
                         <Form.Item name="price_from" label="Giá từ">
-                            <InputNumber
-                                addonAfter="VND"
-                                {...inputNumberProps}
-                                max={Number.MAX_SAFE_INTEGER}
-                                placeholder="Nhập giá từ"
-                            />
+                            <PriceInput max={Number.MAX_SAFE_INTEGER} placeholder="Nhập giá từ" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
                         <Form.Item name="price_to" label="Giá đến">
-                            <InputNumber
-                                addonAfter="VND"
-                                {...inputNumberProps}
-                                max={Number.MAX_SAFE_INTEGER}
-                                placeholder="Nhập giá đến"
-                            />
+                            <PriceInput max={Number.MAX_SAFE_INTEGER} placeholder="Nhập giá đến" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>

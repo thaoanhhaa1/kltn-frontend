@@ -2,25 +2,28 @@ import { z } from 'zod';
 
 export const passwordSchema = z
     .string()
-    .min(1, { message: 'Password is required' })
-    .min(6, { message: 'Password must be at least 6 characters long' })
+    .min(1, { message: 'Vui lòng nhập mật khẩu' })
+    .min(6, { message: 'Mật khẩu phải chứa ít nhất 6 ký tự' })
     .regex(/^(?=.*[A-Za-z])(?=.*\d).{6,}$/, {
-        message: 'Password must contain at least one letter, one number',
+        message: 'Mật khẩu phải chứa ít nhất 1 chữ cái và 1 số',
     });
 
 export const phoneNumberSchema = z
     .string()
-    .min(10, { message: 'Phone number must be at least 10 digits long' })
-    .regex(/^0\d{9}$/, { message: 'Phone number must start with 0' })
+    .min(10, { message: 'Số điện thoại phải có 10 chữ số' })
+    .regex(/^0\d{9}$/, { message: 'Số điện thoại không hợp lệ' })
     .optional();
 
 export const nameOfUserSchema = z.string().min(1, { message: 'Name is required' });
 
-export const emailSchema = z.string().min(1, { message: 'Email is required' }).email({ message: 'Email is invalid' });
+export const emailSchema = z
+    .string()
+    .min(1, { message: 'Vui lòng nhập email' })
+    .email({ message: 'Email không hợp lệ' });
 
-export const userTypeSchema = z.enum(['renter', 'owner'], { message: 'User type must be "renter" or "owner"' });
+export const userTypeSchema = z.enum(['renter', 'owner'], { message: 'Vui lòng chọn loại tài khoản' });
 
 export const otpSchema = z
     .string()
-    .min(1, { message: 'OTP is required' })
-    .length(6, { message: 'OTP must be 6 characters long' });
+    .min(1, { message: 'Vui lòng nhập mã OTP' })
+    .length(6, { message: 'Mã OTP phải có 6 ký tự' });

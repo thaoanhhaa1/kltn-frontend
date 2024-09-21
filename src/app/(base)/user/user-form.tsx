@@ -4,18 +4,18 @@ import { IUser } from '@/interfaces/user';
 import { EntryError } from '@/lib/error';
 import { updateMyInfo } from '@/services/user-service';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Col, Flex, Form, GetProp, message, Row, Typography, Upload, UploadProps } from 'antd';
+import { Button, Col, Flex, Form, GetProp, message, Row, Upload, UploadProps } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import Input from 'antd/es/input/Input';
 import { UploadChangeParam, UploadFile } from 'antd/es/upload';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 interface IUpdateUser {
     name: string;
-    phone_number: string;
+    phoneNumber: string;
     avatar: UploadChangeParam<UploadFile<any>>;
 }
 
@@ -50,7 +50,7 @@ const UserForm = ({ user }: { user: IUser }) => {
             const formData = new FormData();
 
             formData.append('name', values.name);
-            formData.append('phone_number', values.phone_number);
+            formData.append('phoneNumber', values.phoneNumber);
             if (values.avatar?.fileList?.[0]?.originFileObj)
                 formData.append('avatar', values.avatar?.fileList?.[0]?.originFileObj);
 
@@ -80,16 +80,15 @@ const UserForm = ({ user }: { user: IUser }) => {
         </button>
     );
 
+    useEffect(() => {
+        form.setFieldsValue({
+            name: user.name,
+            phoneNumber: user.phoneNumber || '',
+        });
+    }, [form, user.name, user.phoneNumber]);
+
     return (
         <div className="mt-6">
-            <Typography.Title
-                style={{
-                    textAlign: 'center',
-                }}
-                level={3}
-            >
-                Thông tin cá nhân
-            </Typography.Title>
             <Form form={form} layout="vertical" onFinish={handleFinish}>
                 <Form.Item
                     style={{
@@ -133,7 +132,7 @@ const UserForm = ({ user }: { user: IUser }) => {
                             name="name"
                             label="Họ và tên"
                         >
-                            <Input placeholder="Nhập họ và tên" />
+                            <Input disabled={user.isVerified} placeholder="Nhập họ và tên" />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -157,7 +156,7 @@ const UserForm = ({ user }: { user: IUser }) => {
                                 },
                             ]}
                             initialValue={user.phoneNumber}
-                            name="phone_number"
+                            name="phoneNumber"
                             label="Số điện thoại"
                         >
                             <Input type="tel" placeholder="Nhập số điện thoại" />
