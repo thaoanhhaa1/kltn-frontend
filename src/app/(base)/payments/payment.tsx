@@ -3,8 +3,9 @@
 import PaymentTransaction from '@/app/(base)/payments/payment-transaction';
 import { Card } from '@/components/ui/card';
 import { ITransaction } from '@/interfaces/transaction';
-import { formatCurrency, formatDate, getTransactionColor, getTransactionStatusText } from '@/lib/utils';
+import { formatCurrency, formatDate, formatDateTime, getTransactionColor, getTransactionStatusText } from '@/lib/utils';
 import { Flex, Tag, Typography } from 'antd';
+import dayjs from 'dayjs';
 import { ReceiptText } from 'lucide-react';
 import Markdown from 'react-markdown';
 
@@ -46,6 +47,18 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                         <Typography.Text>Thời gian tạo:</Typography.Text>
                         <Typography.Text strong>{formatDate(transaction.created_at)}</Typography.Text>
                     </Flex>
+                    {transaction.end_date && (
+                        <div>
+                            <Typography.Text>Hạn thanh toán:</Typography.Text>
+                            &nbsp;
+                            <Typography.Text strong>{formatDateTime(transaction.end_date)}</Typography.Text>
+                            &nbsp;
+                            <Typography.Text>
+                                (Còn lại:&nbsp;
+                                <strong>{dayjs(transaction.end_date).diff(dayjs(), 'day')} ngày</strong>)
+                            </Typography.Text>
+                        </div>
+                    )}
                     <Flex
                         style={{
                             marginTop: 8,

@@ -12,6 +12,7 @@ export interface ITransaction {
     description: string;
     created_at: string;
     updated_at: string;
+    end_date: string | null;
 }
 
 export type TransactionStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'OVERDUE';

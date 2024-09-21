@@ -1,17 +1,22 @@
 'use client';
 
+import CancelModal from '@/app/(base)/contracts/cancel-modal';
 import TablePagination from '@/components/table-pagination';
 import { ContractStatus, IContract } from '@/interfaces/contract';
 import { formatCurrency, formatDate, formatDateTime, getContractColor, getContractStatusText } from '@/lib/utils';
 import { getContractsByRenter } from '@/services/contract-service';
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Popconfirm, Space, TableProps, Tag, Typography } from 'antd';
+import { Button, Space, TableProps, Tag, Tooltip, Typography } from 'antd';
 import { Eye, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 const ContractsPage = () => {
     const [contracts, setContracts] = useState<IContract[]>([]);
     const [loading, setLoading] = useState(true);
+    const [cancelContract, setCancelContract] = useState<IContract | null>(null);
+
+    const handleClickCancel = (contract: IContract) => {
+        setCancelContract(contract);
+    };
 
     const columns: TableProps<IContract>['columns'] = useMemo(
         () => [
@@ -87,24 +92,27 @@ const ContractsPage = () => {
                 width: 110,
                 render: (contract: IContract) => (
                     <Space>
-                        <Button type="text" icon={<Eye className="w-5 h-5" />} />
-                        <Popconfirm
-                            title="Bạn có chắc chắn muốn huỷ hợp đồng này?"
-                            description="Hợp đồng sẽ được chuyển sang trạng thái 'Đã huỷ'."
-                            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-                            // onConfirm={() => handleSoftDeleteProperties(property.propertyId)}
-                            okText="Đồng ý"
-                            cancelText="Hủy"
-                            okType="danger"
-                        >
-                            <Button type="text" danger icon={<X className="w-5 h-5" />} />
-                        </Popconfirm>
+                        <Tooltip title="Xem chi tiết">
+                            <Button type="text" icon={<Eye className="w-5 h-5" />} />
+                        </Tooltip>
+                        <Tooltip title="Huỷ hợp đồng">
+                            <Button
+                                type="text"
+                                danger
+                                icon={<X className="w-5 h-5" />}
+                                onClick={() => handleClickCancel(contract)}
+                            />
+                        </Tooltip>
                     </Space>
                 ),
             },
         ],
         [],
     );
+
+    const handleCloseCancelContract = () => {
+        setCancelContract(null);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -148,6 +156,7 @@ const ContractsPage = () => {
                 //     onChange: setSelectedRowKeys,
                 // }}
             />
+            <CancelModal contract={cancelContract} onClose={handleCloseCancelContract} />
         </div>
     );
 };
