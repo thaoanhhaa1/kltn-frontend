@@ -31,9 +31,6 @@ export default function RootLayout({
 
     return (
         <html lang="en" suppressHydrationWarning>
-            <header>
-                <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-            </header>
             <body className={cn('min-h-screen bg-background font-sans antialiased', inter.variable)}>
                 <AppKitProvider initialState={initialState}>
                     <AntdRegistry>

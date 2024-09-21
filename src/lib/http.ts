@@ -38,7 +38,6 @@ const request = async <Response>(
         headers: {
             ...baseHeaders,
             ...int?.headers,
-            referrerPolicy: 'unsafe-url',
         },
         method,
         body,
