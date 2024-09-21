@@ -13,7 +13,19 @@ import {
 import { OWNER as OWNER_ROLE, RENTER } from '@/constants/account-type';
 import { IUser } from '@/interfaces/user';
 import { getNameAvatar } from '@/lib/utils';
-import { OWNER, OWNER_PROPERTIES, PROFILE, RENTAL_REQUESTS, SIGN_IN, WALLET } from '@/path';
+import {
+    ADD_PROPERTY,
+    OWNER,
+    OWNER_CONTRACTS,
+    OWNER_PROPERTIES,
+    OWNER_REQUESTS,
+    PROFILE,
+    RENTAL_CONTRACTS,
+    RENTAL_REQUESTS,
+    RENTER_PAYMENTS,
+    SIGN_IN,
+    WALLET,
+} from '@/path';
 import { signOut } from '@/services/auth-service';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
@@ -31,6 +43,18 @@ const MyAccount = ({ user }: { user: IUser }) => {
                 title: 'Bất động sản',
                 onClick: () => router.push(OWNER_PROPERTIES),
             },
+            {
+                title: 'Đăng tin',
+                onClick: () => router.push(ADD_PROPERTY),
+            },
+            {
+                title: 'Yêu cầu thuê nhà',
+                onClick: () => router.push(OWNER_REQUESTS),
+            },
+            {
+                title: 'Quản lý hợp đồng',
+                onClick: () => router.push(OWNER_CONTRACTS),
+            },
         ],
         [router],
     );
@@ -44,6 +68,20 @@ const MyAccount = ({ user }: { user: IUser }) => {
                     router.refresh();
                 },
             },
+            {
+                title: 'Hợp đồng của tôi',
+                onClick: () => {
+                    router.push(RENTAL_CONTRACTS);
+                    router.refresh();
+                },
+            },
+            {
+                title: 'Thanh toán hoá đơn',
+                onClick: () => {
+                    router.push(RENTER_PAYMENTS);
+                    router.refresh();
+                },
+            },
         ],
         [router],
     );
@@ -51,7 +89,7 @@ const MyAccount = ({ user }: { user: IUser }) => {
     const authMenu = useMemo(() => {
         const menu = [
             {
-                title: 'Thông tin cá nhân',
+                title: 'Quản lý tài khoản',
                 onClick: () => router.push(PROFILE),
             },
         ];

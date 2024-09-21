@@ -21,7 +21,23 @@ const chains = [sepolia] as const;
 
 export const config = defaultWagmiConfig({
     connectors: [metaMask()],
-    chains,
+    chains: [
+        {
+            id: 1337,
+            name: 'Localhost',
+            nativeCurrency: {
+                decimals: 18,
+                symbol: 'ETH',
+                name: 'Ethereum',
+            },
+            rpcUrls: {
+                default: {
+                    http: ['http://localhost:7545'],
+                },
+            },
+        },
+        ...chains,
+    ],
     projectId,
     metadata,
     ssr: true,

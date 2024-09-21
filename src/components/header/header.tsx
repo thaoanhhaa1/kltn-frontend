@@ -7,7 +7,7 @@ import { HOME } from '@/path';
 import { Menu } from 'lucide-react';
 import Link from 'next/link';
 
-const Header = ({ user }: { user?: IUser }) => {
+const Header = ({ user, notificationsCount }: { user?: IUser; notificationsCount: number }) => {
     return (
         <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 z-10">
             <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
@@ -44,7 +44,7 @@ const Header = ({ user }: { user?: IUser }) => {
                     </nav>
                 </SheetContent>
             </Sheet>
-            <HeaderRight user={user} />
+            <HeaderRight user={user} notificationsCount={notificationsCount} />
         </header>
     );
 };

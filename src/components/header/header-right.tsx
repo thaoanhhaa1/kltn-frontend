@@ -1,13 +1,14 @@
 import Search from '@/components/header/search';
 import { ModeToggle } from '@/components/mode-toggle';
 import MyAccount from '@/components/my-account';
+import { Notifications } from '@/components/notification/notifications';
 import { Button } from '@/components/ui/button';
 import { IUser } from '@/interfaces/user';
 import { ADD_PROPERTY, DASHBOARD, SIGN_IN, SIGN_UP } from '@/path';
 import { Search as SearchIcon } from 'lucide-react';
 import Link from 'next/link';
 
-const HeaderRight = ({ user }: { user?: IUser }) => {
+const HeaderRight = ({ user, notificationsCount }: { user?: IUser; notificationsCount: number }) => {
     return (
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
             <form className="ml-auto flex-1 sm:flex-initial">
@@ -16,6 +17,7 @@ const HeaderRight = ({ user }: { user?: IUser }) => {
                     <Search />
                 </div>
             </form>
+            {user && <Notifications count={notificationsCount} />}
             <ModeToggle />
             {user?.userTypes.includes('admin') && (
                 <Button variant="outline" asChild>

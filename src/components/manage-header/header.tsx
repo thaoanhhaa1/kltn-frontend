@@ -3,6 +3,7 @@ import HeaderBreadcrumb from '@/components/manage-header/header-breadcrumb';
 import HeaderItem from '@/components/manage-header/header-item';
 import { ModeToggle } from '@/components/mode-toggle';
 import MyAccount from '@/components/my-account';
+import SaveUser from '@/components/save-user';
 import { INavItem } from '@/components/sidebar/nav-item';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -56,6 +57,7 @@ const Header = async ({ navList }: { navList: INavItem[] }) => {
                 <ModeToggle />
                 {user && <MyAccount user={user} />}
             </div>
+            <SaveUser user={user} />
         </header>
     );
 };

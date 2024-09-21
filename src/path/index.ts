@@ -12,8 +12,11 @@ export const ADD_PROPERTY = '/owner/properties/add';
 export const OWNER_PROPERTIES = '/owner/properties';
 export const OWNER = '/owner';
 export const OWNER_REQUESTS = '/owner/rental-requests';
+export const OWNER_CONTRACTS = '/owner/contracts';
 
 export const RENTAL_REQUESTS = '/rental-requests';
+export const RENTAL_CONTRACTS = '/contracts';
+export const RENTER_PAYMENTS = '/payments';
 
 export const OWNER_USERS = '/owner/users';
 export const FORGOT_PASSWORD = '/forgot-password';

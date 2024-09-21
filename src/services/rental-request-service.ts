@@ -1,5 +1,5 @@
 import { IPagination } from '@/interfaces/pagination';
-import { IRentalRequest } from '@/interfaces/rentalRequest';
+import { IGenerateContractRequest, IGenerateContractResponse, IRentalRequest } from '@/interfaces/rentalRequest';
 import { ITable } from '@/interfaces/table';
 import http from '@/lib/http';
 import { convertObjectToParams } from '@/lib/utils';
@@ -29,4 +29,8 @@ export const ownerGetAllRentalRequests = (params: IPagination) => {
     const queryParams = convertObjectToParams(params);
 
     return http.get<ITable<IRentalRequest>>(`/estate-manager-service/rental-requests/owner?${queryParams}`);
+};
+
+export const generateContract = (params: IGenerateContractRequest) => {
+    return http.post<IGenerateContractResponse>('/estate-manager-service/rental-requests/generate-contract', params);
 };
