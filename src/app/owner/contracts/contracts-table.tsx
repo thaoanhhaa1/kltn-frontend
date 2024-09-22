@@ -4,14 +4,13 @@ import CancelModal from '@/app/(base)/contracts/cancel-modal';
 import TablePagination from '@/components/table-pagination';
 import { ContractStatus, IContract } from '@/interfaces/contract';
 import { formatCurrency, formatDate, formatDateTime, getContractColor, getContractStatusText } from '@/lib/utils';
-import { getContractsByRenter } from '@/services/contract-service';
-import { Button, Space, TableProps, Tag, Tooltip, Typography } from 'antd';
+import { getContractsByOwner } from '@/services/contract-service';
+import { Button, Space, TableProps, Tag, Tooltip } from 'antd';
 import { Eye, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
-const ContractsPage = () => {
+const ContractsTable = () => {
     const [contracts, setContracts] = useState<IContract[]>([]);
-    console.log('🚀 ~ ContractsPage ~ contracts:', contracts);
     const [loading, setLoading] = useState(true);
     const [cancelContract, setCancelContract] = useState<IContract | null>(null);
 
@@ -33,8 +32,8 @@ const ContractsPage = () => {
                 width: 250,
             },
             {
-                title: 'Chủ nhà',
-                dataIndex: ['owner', 'name'],
+                title: 'Người thuê',
+                dataIndex: ['renter', 'name'],
                 width: 170,
             },
             {
@@ -116,7 +115,8 @@ const ContractsPage = () => {
             setLoading(true);
 
             try {
-                const res = await getContractsByRenter();
+                const res = await getContractsByOwner();
+                console.log('🚀 ~ fetchData ~ res:', res);
 
                 setContracts(res);
             } catch (error) {
@@ -130,15 +130,7 @@ const ContractsPage = () => {
     }, []);
 
     return (
-        <div className="mt-5">
-            <Typography.Title
-                style={{
-                    textAlign: 'center',
-                }}
-                level={3}
-            >
-                Hợp đồng của tôi
-            </Typography.Title>
+        <>
             <TablePagination
                 loading={loading}
                 rowKey={(record) => record.contract_id}
@@ -154,8 +146,8 @@ const ContractsPage = () => {
                 // }}
             />
             <CancelModal contract={cancelContract} onClose={handleCloseCancelContract} />
-        </div>
+        </>
     );
 };
 
-export default ContractsPage;
+export default ContractsTable;

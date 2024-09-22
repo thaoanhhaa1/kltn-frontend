@@ -3,12 +3,13 @@
 import RentalRequestModal from '@/app/(base)/[slug]/rental-request-modal';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IProperty } from '@/interfaces/property';
-import { convertDateToTimeAgo, formatCurrency, getNameAvatar } from '@/lib/utils';
+import { convertDateToGMT, convertDateToTimeAgo, formatCurrency, getNameAvatar } from '@/lib/utils';
 import { Button, Flex, Typography } from 'antd';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const BaseInfo = ({ property }: { property: IProperty }) => {
     const [openRentalRequest, setOpenRentalRequest] = useState(false);
+    const createdAt = convertDateToGMT(property.createdAt);
 
     const handleOpenRentalRequest = () => {
         setOpenRentalRequest(true);
@@ -16,7 +17,7 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
 
     return (
         <>
-            <Typography.Text type="secondary">{convertDateToTimeAgo(new Date(property.createdAt))}</Typography.Text>
+            <Typography.Text type="secondary">{convertDateToTimeAgo(createdAt)}</Typography.Text>
             <Typography.Title
                 level={2}
                 style={{

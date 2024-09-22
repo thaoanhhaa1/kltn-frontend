@@ -138,7 +138,7 @@ const RentalRequestsTable = () => {
                             icon={<X className="w-5 h-5" />}
                             onClick={() =>
                                 handleUpdateStatus({
-                                    slug: rentalRequest.property.slug,
+                                    requestId: rentalRequest.requestId,
                                     status: 'REJECTED',
                                 })
                             }

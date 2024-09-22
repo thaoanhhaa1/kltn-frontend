@@ -1,12 +1,60 @@
 'use client';
 
-import { Divider, Empty, Flex, Skeleton, Typography } from 'antd';
+import HistoryTransaction from '@/app/(base)/user/wallet/history-transaction';
+import { IHistoryTransaction, ITransactionType } from '@/interfaces/transaction';
+import { getHistoryTransactions } from '@/services/transaction-service';
+import { Divider, Empty, Flex, Skeleton, Spin, Tabs, Typography } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
 import { useBalance } from 'wagmi';
 
+const typeItems: Array<{
+    key: ITransactionType;
+    label: string;
+}> = [
+    {
+        key: 'ALL',
+        label: 'Tất cả',
+    },
+    {
+        key: 'INCOME',
+        label: 'Thu',
+    },
+    {
+        key: 'OUTCOME',
+        label: 'Chi',
+    },
+];
+
 const WalletManage = ({ address }: { address: `0x${string}` }) => {
+    const [transactions, setTransactions] = useState<Array<IHistoryTransaction>>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [type, setType] = useState<ITransactionType>('ALL');
+
     const { data } = useBalance({
         address,
     });
+
+    const fetchTransactions = useCallback(async () => {
+        setLoading(true);
+
+        try {
+            const data = await getHistoryTransactions(type);
+
+            setTransactions(data.data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }, [type]);
+
+    const handleChangeType = (type: string) => {
+        setType(type as ITransactionType);
+    };
+
+    useEffect(() => {
+        fetchTransactions();
+    }, [fetchTransactions]);
 
     return (
         <div>
@@ -27,7 +75,7 @@ const WalletManage = ({ address }: { address: `0x${string}` }) => {
                     }}
                     level={1}
                 >
-                    {Number(data?.value) / Math.pow(10, data?.decimals)}
+                    {(Number(data?.value) / Math.pow(10, data?.decimals)).toFixed(4)}
                     &nbsp;
                     {data?.symbol}
                 </Typography.Title>
@@ -62,7 +110,29 @@ const WalletManage = ({ address }: { address: `0x${string}` }) => {
             >
                 Lịch sử giao dịch
             </Typography.Title>
-            <Empty description={false} />
+            <Tabs defaultActiveKey="ALL" items={typeItems} onChange={handleChangeType} />
+            {!loading && transactions.length === 0 && <Empty description={false} />}
+            <Flex
+                vertical
+                style={{
+                    marginTop: 16,
+                }}
+                gap={12}
+            >
+                {transactions.map((transaction, index) => (
+                    <HistoryTransaction key={index} transaction={transaction} />
+                ))}
+            </Flex>
+            {loading && (
+                <Flex
+                    justify="center"
+                    style={{
+                        marginTop: 16,
+                    }}
+                >
+                    <Spin size="large" />
+                </Flex>
+            )}
         </div>
     );
 };

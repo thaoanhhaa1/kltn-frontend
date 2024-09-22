@@ -54,6 +54,6 @@ export const createRentalRequestSchema = z
 export type ICreateRentalRequest = z.infer<typeof createRentalRequestSchema>;
 
 export interface IUpdateRentalRequestStatus {
-    slug: string;
+    requestId: string;
     status: Extract<RentalRequestStatus, 'APPROVED' | 'REJECTED' | 'CANCELLED'>;
 }

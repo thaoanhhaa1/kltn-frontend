@@ -16,7 +16,7 @@ const RentalRequest = ({ rentalRequest }: { rentalRequest: IRentalRequest }) => 
     const handleCanCelRequest = async () => {
         try {
             await renterUpdateRentalRequestStatus({
-                slug: rentalRequest.property.slug,
+                requestId: rentalRequest.requestId,
                 status: 'CANCELLED',
             });
 
@@ -31,16 +31,16 @@ const RentalRequest = ({ rentalRequest }: { rentalRequest: IRentalRequest }) => 
     return (
         <Card className="overflow-hidden">
             <Flex>
-                <Link href={`/${rentalRequest.property.slug}`}>
+                <Link className="block w-1/3 aspect-square" href={`/${rentalRequest.property.slug}`}>
                     <Image
                         alt=""
                         src={rentalRequest.property.images[0]}
                         width={200}
                         height={200}
-                        className="h-[200px] aspect-square object-cover"
+                        className="w-full h-full object-cover"
                     />
                 </Link>
-                <Flex vertical className="px-4 py-2">
+                <Flex vertical className="px-4 py-2" flex={1}>
                     <Typography.Title level={5}>{rentalRequest.property.title}</Typography.Title>
                     <Flex gap={8} align="flex-end" justify="space-between" wrap>
                         <Typography.Title

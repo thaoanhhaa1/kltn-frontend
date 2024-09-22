@@ -17,7 +17,7 @@ export interface IContract {
     start_date: string;
     end_date: string;
     deleted: boolean;
-    status: string;
+    status: ContractStatus;
     created_at: string;
     updated_at: string;
     monthly_rent: number;
@@ -26,4 +26,4 @@ export interface IContract {
     transaction_hash_contract: string;
 }
 
-export type ContractStatus = 'WAITING' | 'DEPOSITED' | 'ONGOING' | 'ENDED' | 'OVERDUE';
+export type ContractStatus = 'WAITING' | 'DEPOSITED' | 'ONGOING' | 'ENDED' | 'OVERDUE' | 'CANCELLED';

@@ -31,7 +31,7 @@ const ContractModal = ({
 
             await Promise.all([
                 ownerUpdateRentalRequestStatus({
-                    slug: rentalRequest?.property.slug!,
+                    requestId: rentalRequest?.requestId!,
                     status: 'APPROVED',
                 }),
                 createContract({

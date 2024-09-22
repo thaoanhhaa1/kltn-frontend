@@ -1,5 +1,4 @@
 import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { config } from '@/config/wagmiConfig';
 import AppKitProvider from '@/context/wagmi';
@@ -37,7 +36,6 @@ export default function RootLayout({
                     <AntdRegistry>
                         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
                             <TooltipProvider>{children}</TooltipProvider>
-                            <Toaster />
                             <ToastContainer />
                         </ThemeProvider>
                     </AntdRegistry>
