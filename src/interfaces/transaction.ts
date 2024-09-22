@@ -21,3 +21,18 @@ export interface IDepositTransaction {
     contractId: string;
     transactionId: number;
 }
+
+export type ITransactionType = 'ALL' | 'INCOME' | 'OUTCOME';
+
+export interface IHistoryTransaction {
+    id: number;
+    amount: number;
+    amount_eth: number | null;
+    fee: number | null;
+    transaction_hash: string | null;
+    title: string;
+    description: string;
+    updated_at: string;
+    from_id: string | null;
+    to_id: string | null;
+}
