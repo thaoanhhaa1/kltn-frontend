@@ -22,7 +22,7 @@ const chains = [sepolia] as const;
 export const config = defaultWagmiConfig({
     connectors: [metaMask()],
     chains: [
-        {
+        (process.env.NODE_ENV === 'development' && {
             id: 1337,
             name: 'Localhost',
             nativeCurrency: {
@@ -35,8 +35,7 @@ export const config = defaultWagmiConfig({
                     http: ['http://localhost:7545'],
                 },
             },
-        },
-        {
+        }) || {
             id: 1337,
             name: 'Staging',
             nativeCurrency: {

@@ -32,6 +32,7 @@ const WalletManage = ({ address }: { address: `0x${string}` }) => {
 
     const { data } = useBalance({
         address,
+        chainId: 1337,
     });
 
     const fetchTransactions = useCallback(async () => {
