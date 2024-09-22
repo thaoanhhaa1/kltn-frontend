@@ -71,6 +71,7 @@ export const getContractColor = (status: ContractStatus) => {
     if (status === 'ONGOING') return 'success';
     if (status === 'ENDED') return 'default';
     if (status === 'OVERDUE') return 'error';
+    if (status === 'CANCELLED') return 'default';
     return 'default';
 };
 
@@ -80,6 +81,7 @@ export const getContractStatusText = (status: ContractStatus) => {
     if (status === 'ONGOING') return 'Đang thuê';
     if (status === 'ENDED') return 'Đã kết thúc';
     if (status === 'OVERDUE') return 'Quá hạn';
+    if (status === 'CANCELLED') return 'Đã hủy';
     return 'Không xác định';
 };
 
@@ -88,6 +90,7 @@ export const getTransactionColor = (status: TransactionStatus) => {
     if (status === 'COMPLETED') return 'success';
     if (status === 'FAILED') return 'error';
     if (status === 'OVERDUE') return 'warning';
+    if (status === 'CANCELLED') return 'default';
     return 'default';
 };
 
@@ -96,6 +99,7 @@ export const getTransactionStatusText = (status: TransactionStatus) => {
     if (status === 'COMPLETED') return 'Thành công';
     if (status === 'FAILED') return 'Thất bại';
     if (status === 'OVERDUE') return 'Quá hạn';
+    if (status === 'CANCELLED') return 'Đã hủy';
     return 'Không xác định';
 };
 

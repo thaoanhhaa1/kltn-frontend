@@ -15,7 +15,7 @@ export interface ITransaction {
     end_date: string | null;
 }
 
-export type TransactionStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'OVERDUE';
+export type TransactionStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'OVERDUE' | 'CANCELLED';
 
 export interface IDepositTransaction {
     contractId: string;
