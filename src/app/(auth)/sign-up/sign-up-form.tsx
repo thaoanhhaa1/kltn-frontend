@@ -3,7 +3,6 @@
 import { ButtonLoading } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { toast } from '@/components/ui/use-toast';
 import { OWNER, RENTER } from '@/constants/account-type';
 import CustomError, { EntryError } from '@/lib/error';
 import { HOME } from '@/path';
@@ -15,6 +14,7 @@ import { RadioGroup, RadioGroupItem } from '@radix-ui/react-radio-group';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const SignUpForm = () => {
     const router = useRouter();
@@ -61,17 +61,9 @@ const SignUpForm = () => {
                     });
                 });
             } else if (error instanceof CustomError) {
-                toast({
-                    variant: 'destructive',
-                    title: error.name,
-                    description: error.message,
-                });
+                toast.error(error.message);
             } else {
-                toast({
-                    variant: 'destructive',
-                    title: 'Lỗi không xác định',
-                    description: 'Vui lòng thử lại sau',
-                });
+                toast.error('Lỗi không xác định');
             }
         } finally {
             setLoading(false);
@@ -86,10 +78,7 @@ const SignUpForm = () => {
         if (res.success) {
             try {
                 await sendRegisterOTP(email);
-                toast({
-                    title: 'Success',
-                    description: 'OTP sent successfully',
-                });
+                toast.success('Mã OTP đã được gửi thành công');
             } catch (error) {
                 if (error instanceof EntryError) {
                     error.details.forEach((detail) => {
@@ -98,17 +87,9 @@ const SignUpForm = () => {
                         });
                     });
                 } else if (error instanceof CustomError) {
-                    toast({
-                        variant: 'destructive',
-                        title: 'Error',
-                        description: error.message,
-                    });
+                    toast.error(error.message);
                 } else {
-                    toast({
-                        variant: 'destructive',
-                        title: 'Error',
-                        description: 'Something went wrong',
-                    });
+                    toast.error('Lỗi không xác định');
                 }
             }
         } else {

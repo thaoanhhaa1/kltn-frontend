@@ -166,3 +166,10 @@ export const convertDateToTimeAgo = (date: Date) => {
     if (minutes > 0) return `${minutes} phút trước`;
     return `${seconds} giây trước`;
 };
+
+export const convertDateToGMT = (date: Date | string) => {
+    const dateGMT = new Date(date);
+    dateGMT.setHours(dateGMT.getHours() + 7);
+
+    return dateGMT;
+};

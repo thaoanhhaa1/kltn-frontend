@@ -3,7 +3,6 @@
 import { ButtonLoading } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { toast } from '@/components/ui/use-toast';
 import CustomError, { EntryError } from '@/lib/error';
 import { SIGN_IN } from '@/path';
 import { ForgotPasswordStepOneInput, forgotPasswordStepOneSchema } from '@/schemas/user.schema';
@@ -13,6 +12,7 @@ import { Flex } from 'antd';
 import Link from 'next/link';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const StepOne = ({
     email,
@@ -48,17 +48,9 @@ const StepOne = ({
                     });
                 });
             } else if (error instanceof CustomError) {
-                toast({
-                    variant: 'destructive',
-                    title: error.name,
-                    description: error.message,
-                });
+                toast.error(error.message);
             } else {
-                toast({
-                    variant: 'destructive',
-                    title: 'Lỗi không xác định',
-                    description: 'Vui lòng thử lại sau',
-                });
+                toast.error('Lỗi không xác định');
             }
         } finally {
             setLoading(false);

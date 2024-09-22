@@ -13,13 +13,10 @@ const ConnectWallet = () => {
     const { disconnect } = useDisconnect();
 
     const handleConnect = async (connector: Connector) => {
+        console.log('Attempting to connect with connector:', connector);
         try {
-            const res = await connectAsync(
-                { connector },
-                {
-                    onError: () => disconnect(),
-                },
-            );
+            disconnect();
+            const res = await connectAsync({ connector });
 
             const walletAddress = res?.accounts[0];
 
@@ -51,7 +48,10 @@ const ConnectWallet = () => {
 
             <Flex justify="center">
                 {connectors
-                    .filter((item) => item.id === 'metaMaskSDK')
+                    .filter((item) => {
+                        console.log('Connector ID:', item.id);
+                        return item.id === 'metaMaskSDK';
+                    })
                     .map((connector) => (
                         <Button type="primary" ghost key={connector.uid} onClick={() => handleConnect(connector)}>
                             Kết nối với MetaMask

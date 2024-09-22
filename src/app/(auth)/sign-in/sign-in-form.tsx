@@ -3,7 +3,6 @@
 import { ButtonLoading } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { toast } from '@/components/ui/use-toast';
 import CustomError, { EntryError } from '@/lib/error';
 import { HOME } from '@/path';
 import { LoginInput, loginSchema } from '@/schemas/auth.schema';
@@ -12,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const SignInForm = () => {
     const router = useRouter();
@@ -42,17 +42,9 @@ const SignInForm = () => {
                     });
                 });
             } else if (error instanceof CustomError) {
-                toast({
-                    variant: 'destructive',
-                    title: error.name,
-                    description: error.message,
-                });
+                toast.error(error.message);
             } else {
-                toast({
-                    variant: 'destructive',
-                    title: 'Lỗi không xác định',
-                    description: 'Vui lòng thử lại sau',
-                });
+                toast.error('Lỗi không xác định');
             }
         } finally {
             setLoading(false);

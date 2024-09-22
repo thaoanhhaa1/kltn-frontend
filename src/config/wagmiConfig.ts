@@ -36,6 +36,20 @@ export const config = defaultWagmiConfig({
                 },
             },
         },
+        {
+            id: 1337,
+            name: 'Staging',
+            nativeCurrency: {
+                decimals: 18,
+                symbol: 'ETH',
+                name: 'Ethereum',
+            },
+            rpcUrls: {
+                default: {
+                    http: ['http://103.252.136.170:8545'],
+                },
+            },
+        },
         ...chains,
     ],
     projectId,
