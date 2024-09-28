@@ -1,12 +1,17 @@
+import { app } from '@/config/firebase.config';
+import { IChat, IConversation } from '@/interfaces/chat';
 import { ContractStatus } from '@/interfaces/contract';
 import { IPagination } from '@/interfaces/pagination';
 import { PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
 import { TransactionStatus } from '@/interfaces/transaction';
+import { IBaseUserEmbed } from '@/interfaces/user';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
+import { RcFile } from 'antd/es/upload';
 import { type ClassValue, clsx } from 'clsx';
 import dayjs from 'dayjs';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -176,4 +181,97 @@ export const convertDateToGMT = (date: Date | string) => {
     dateGMT.setHours(dateGMT.getHours() + 7);
 
     return dateGMT;
+};
+
+export const combineConversations = (
+    conversationsNew: Array<IConversation>,
+    conversationsOld: Array<IConversation>,
+) => {
+    const conversationIds = conversationsNew.map((conversation) => conversation.conversationId);
+    const newConversations = conversationsOld.filter(
+        (conversation) => !conversationIds.includes(conversation.conversationId),
+    );
+    const conversationsNewCombined = conversationsNew.map((conversation) => {
+        const oldConversation = conversationsOld.find((old) => old.conversationId === conversation.conversationId);
+
+        if (!oldConversation) return conversation;
+
+        return {
+            ...oldConversation,
+            ...conversation,
+            lastChat: conversation.lastChat || oldConversation.lastChat,
+        };
+    });
+
+    return [...conversationsNewCombined, ...newConversations];
+};
+
+export const getOtherUser = (participants: Array<IBaseUserEmbed>, userId: string) => {
+    return participants.find((participant) => participant.userId !== userId);
+};
+
+export const combineChats = (chatsLast: Array<IChat>, chatsOld?: Array<IChat>) => {
+    if (!chatsOld) return chatsLast;
+
+    const chatIds = chatsLast.map((chat) => chat.chatId);
+    const newChats = chatsOld.filter((chat) => !chatIds.includes(chat.chatId));
+
+    return [...chatsLast, ...newChats];
+};
+
+export const getTimeChat = (time: string) => {
+    const date = dayjs(time);
+
+    if (date.isSame(dayjs(), 'day')) return date.format('HH:mm');
+
+    return date.format('HH:mm DD/MM/YYYY');
+};
+
+export const createChatConversation = (firstUser: string, secondUser: string) => {
+    if (firstUser < secondUser) return `${firstUser}-${secondUser}`;
+
+    return `${secondUser}-${firstUser}`;
+};
+
+export const getFileTypeText = (type: string) => {
+    if (type.includes('image')) return '[Hình ảnh]';
+    if (type.includes('video')) return '[Video]';
+    if (type.includes('audio')) return '[Âm thanh]';
+
+    return '[Tệp tin]';
+};
+
+// FIREBASE
+const storage = getStorage(app);
+
+export const uploadFile = ({ file, folder = 'general' }: { file: RcFile; folder?: string }): Promise<string> => {
+    const fileName = `${Date.now()}-${file.name.split('.')[0]}.${file.type.split('/')[1]}`;
+    const contentType = file.type;
+    const metadata = {
+        contentType,
+    };
+
+    const storageRef = ref(storage, folder + '/' + fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+    return new Promise((res, rej) => {
+        uploadTask.on(
+            'state_changed',
+            () => {},
+            rej,
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then(res);
+            },
+        );
+    });
+};
+
+export const uploadFiles = ({
+    files,
+    folder = 'general',
+}: {
+    files: RcFile[];
+    folder?: string;
+}): Promise<Array<string>> => {
+    return Promise.all(files.map((file) => uploadFile({ file, folder })));
 };

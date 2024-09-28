@@ -1,3 +1,4 @@
+import Socket from '@/components/socket';
 import { ThemeProvider } from '@/components/theme-provider';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { config } from '@/config/wagmiConfig';
@@ -37,6 +38,7 @@ export default function RootLayout({
                         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
                             <TooltipProvider>{children}</TooltipProvider>
                             <ToastContainer />
+                            <Socket />
                         </ThemeProvider>
                     </AntdRegistry>
                 </AppKitProvider>

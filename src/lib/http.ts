@@ -1,5 +1,6 @@
 import { envConfig, isClient } from '@/config/envConfig';
 import CustomError, { EntryError } from '@/lib/error';
+import { convertObjectToParams } from '@/lib/utils';
 
 type CustomRequestInit = RequestInit & {
     baseUrl?: string;
@@ -31,7 +32,7 @@ const request = async <Response>(
         }
     }
 
-    const paramsQuery = int?.params ? '?' + new URLSearchParams(int?.params).toString() : '';
+    const paramsQuery = int?.params ? '?' + convertObjectToParams(int?.params) : '';
 
     const res = await fetch(`${baseUrl}${url}${paramsQuery}`, {
         ...int,
