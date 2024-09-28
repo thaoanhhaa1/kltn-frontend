@@ -21,10 +21,10 @@ export default async function BaseLayout({ children }: { children: React.ReactNo
     } catch (error) {}
 
     return (
-        <main>
+        <main className="h-screen flex flex-col">
             <SaveUser user={user} />
             <Header user={user} notificationsCount={notificationsCount ?? 0} />
-            <div className="max-w-6xl mx-auto px-6">{children}</div>
+            <div className="max-w-6xl w-full mx-auto px-6 flex-1">{children}</div>
             <Chatbot user={user} />
         </main>
     );

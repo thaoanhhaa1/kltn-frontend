@@ -1,13 +1,16 @@
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
 
-export interface IUser {
+export interface IBaseUserEmbed {
     userId: string;
-    email: string;
     name: string;
+    avatar: string | null;
+}
+
+export interface IUser extends IBaseUserEmbed {
+    email: string;
     userTypes: Role[];
     status: UserStatus;
-    avatar: string | null;
     phoneNumber: string | null;
     walletAddress: `0x${string}` | null;
     isVerified: boolean;

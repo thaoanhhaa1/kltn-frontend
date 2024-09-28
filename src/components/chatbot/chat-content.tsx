@@ -3,7 +3,7 @@ import ChatProperties from '@/components/chatbot/chat-properties';
 import TypingChat from '@/components/typing-chat';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { chatService } from '@/services/chat-service';
-import { useChatStore } from '@/stores/chat-store';
+import { useChatStore } from '@/stores/chatbot-store';
 import { Button, Divider, Flex, Input } from 'antd';
 import { Send } from 'lucide-react';
 import { ChangeEvent, Fragment } from 'react';
