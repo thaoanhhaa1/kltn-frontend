@@ -47,7 +47,7 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                         <Typography.Text>Thời gian tạo:</Typography.Text>
                         <Typography.Text strong>{formatDate(transaction.created_at)}</Typography.Text>
                     </Flex>
-                    {transaction.end_date && (
+                    {transaction.end_date && transaction.status === 'PENDING' && (
                         <div>
                             <Typography.Text>Hạn thanh toán:</Typography.Text>
                             &nbsp;

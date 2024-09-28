@@ -22,7 +22,7 @@ const chains = [sepolia] as const;
 export const config = defaultWagmiConfig({
     connectors: [metaMask()],
     chains: [
-        (false && {
+        (process.env.NODE_ENV === 'development' && {
             // FIXME
             id: 1337,
             name: 'Localhost',
@@ -46,7 +46,7 @@ export const config = defaultWagmiConfig({
             },
             rpcUrls: {
                 default: {
-                    http: ['http://103.252.136.170:8545'],
+                    http: ['https://ganache-staging.iuh-mern.id.vn'],
                 },
             },
         },
