@@ -1,3 +1,4 @@
+import { envConfig } from '@/config/envConfig';
 import { io, Socket } from 'socket.io-client';
 import { create } from 'zustand';
 
@@ -11,7 +12,7 @@ const useSocketStore = create<ISocketStore>((set) => ({
     socket: null,
     connect: () =>
         set({
-            socket: io('http://localhost:4001'),
+            socket: io(envConfig.NEXT_PUBLIC_SOCKET_ENDPOINT),
         }),
     disconnect: () => set({ socket: null }),
 }));
