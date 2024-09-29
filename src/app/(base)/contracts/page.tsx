@@ -1,6 +1,7 @@
 'use client';
 
 import CancelModal from '@/app/(base)/contracts/cancel-modal';
+import CancelBeforeDeposit from '@/components/contracts/cancel-before-deposit';
 import TablePagination from '@/components/table-pagination';
 import { ContractStatus, IContract } from '@/interfaces/contract';
 import { formatCurrency, formatDate, formatDateTime, getContractColor, getContractStatusText } from '@/lib/utils';
@@ -91,15 +92,19 @@ const ContractsPage = () => {
                         <Tooltip title="Xem chi tiết">
                             <Button type="text" icon={<Eye className="w-5 h-5" />} />
                         </Tooltip>
-                        <Tooltip title="Huỷ hợp đồng">
-                            <Button
-                                disabled={contract.status === 'ENDED' || contract.status === 'CANCELLED'}
-                                type="text"
-                                danger
-                                icon={<X className="w-5 h-5" />}
-                                onClick={() => handleClickCancel(contract)}
-                            />
-                        </Tooltip>
+                        {(contract.status === 'WAITING' && (
+                            <CancelBeforeDeposit contractId={contract.contract_id} setContracts={setContracts} />
+                        )) || (
+                            <Tooltip title="Huỷ hợp đồng">
+                                <Button
+                                    disabled={contract.status === 'ENDED' || contract.status === 'CANCELLED'}
+                                    type="text"
+                                    danger
+                                    icon={<X className="w-5 h-5" />}
+                                    onClick={() => handleClickCancel(contract)}
+                                />
+                            </Tooltip>
+                        )}
                     </Space>
                 ),
             },

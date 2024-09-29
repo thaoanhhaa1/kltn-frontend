@@ -30,3 +30,9 @@ export const getContractsByRenter = () => {
 export const getContractsByOwner = () => {
     return http.get<Array<IContract>>('/contract-service/contracts/owner');
 };
+
+export const cancelContractBeforeDeposit = (contractId: string) => {
+    return http.post<IContract>('/contract-service/contracts/cancel-before-deposit', {
+        contractId,
+    });
+};
