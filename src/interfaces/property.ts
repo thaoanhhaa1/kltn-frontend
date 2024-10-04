@@ -36,10 +36,10 @@ export interface IProperty {
 
 export type IFiterProperty = {
     title?: IProperty['title'];
-    deposit_from?: IProperty['deposit'];
-    deposit_to?: IProperty['deposit'];
-    price_from?: IProperty['price'];
-    price_to?: IProperty['price'];
+    depositFrom?: IProperty['deposit'];
+    depositTo?: IProperty['deposit'];
+    priceFrom?: IProperty['price'];
+    priceTo?: IProperty['price'];
     status?: IProperty['status'];
     city?: IProperty['address']['city'];
     district?: IProperty['address']['district'];

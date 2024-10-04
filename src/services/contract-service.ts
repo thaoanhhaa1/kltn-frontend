@@ -6,20 +6,20 @@ export const createContract = ({
     depositAmount,
     endDate,
     monthlyRent,
-    ownerUserId,
+    ownerId,
     propertyId,
-    renterUserId,
+    renterId,
     startDate,
 }: ICreateContractRequest) => {
     return http.post('/contract-service/contracts', {
-        owner_user_id: ownerUserId,
-        renter_user_id: renterUserId,
-        property_id: propertyId,
-        start_date: startDate,
-        end_date: endDate,
-        contract_terms: contractTerms,
-        monthly_rent: monthlyRent,
-        deposit_amount: depositAmount,
+        ownerId,
+        renterId,
+        propertyId,
+        startDate,
+        endDate,
+        contractTerms,
+        monthlyRent,
+        depositAmount,
     });
 };
 

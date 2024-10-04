@@ -31,11 +31,25 @@ export const getRoleColor = (role: Role) => {
     return 'blue';
 };
 
+export const getRoleText = (role: Role) => {
+    if (role === 'admin') return 'Quản trị viên';
+    if (role === 'owner') return 'Chủ nhà';
+    return 'Người thuê';
+};
+
 export const getUserStatusColor = (userStatus: UserStatus) => {
     if (userStatus === 'ACTIVE') return 'success';
     if (userStatus === 'INACTIVE') return 'processing';
     if (userStatus === 'BLOCKED') return 'red';
     return 'error';
+};
+
+export const getUserStatusText = (userStatus: UserStatus) => {
+    if (userStatus === 'ACTIVE') return 'Hoạt động';
+    if (userStatus === 'INACTIVE') return 'Chờ xác nhận';
+    if (userStatus === 'BLOCKED') return 'Bị chặn';
+    if (userStatus === 'DELETED') return 'Đã xóa';
+    return 'Không xác định';
 };
 
 export const getPropertyStatusColor = (propertyStatus: PropertyStatus) => {
@@ -76,7 +90,11 @@ export const getContractColor = (status: ContractStatus) => {
     if (status === 'ONGOING') return 'success';
     if (status === 'ENDED') return 'default';
     if (status === 'OVERDUE') return 'error';
-    if (status === 'CANCELLED') return 'default';
+    if (status === 'CANCELLED') return 'volcano';
+    if (status === 'PENDING_CANCELLATION') return 'cyan';
+    if (status === 'UNILATERAL_CANCELLATION') return 'purple';
+    if (status === 'APPROVED_CANCELLATION') return 'green';
+    if (status === 'REJECTED_CANCELLATION') return 'red';
     return 'default';
 };
 
@@ -87,6 +105,10 @@ export const getContractStatusText = (status: ContractStatus) => {
     if (status === 'ENDED') return 'Đã kết thúc';
     if (status === 'OVERDUE') return 'Quá hạn';
     if (status === 'CANCELLED') return 'Đã hủy';
+    if (status === 'PENDING_CANCELLATION') return 'Chờ xác nhận huỷ';
+    if (status === 'UNILATERAL_CANCELLATION') return 'Huỷ một phía';
+    if (status === 'APPROVED_CANCELLATION') return 'Chấp nhận huỷ';
+    if (status === 'REJECTED_CANCELLATION') return 'Từ chối huỷ';
     return 'Không xác định';
 };
 

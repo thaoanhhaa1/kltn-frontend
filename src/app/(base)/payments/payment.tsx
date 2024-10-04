@@ -21,7 +21,7 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                             <Markdown>{transaction.description}</Markdown>
                         </Typography.Text>
                     )}
-                    {transaction.transaction_hash && (
+                    {transaction.transactionHash && (
                         <div>
                             <Typography.Text>Mã giao dịch:</Typography.Text>
                             &nbsp;
@@ -31,11 +31,11 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                                     wordBreak: 'break-all',
                                 }}
                                 copyable={{
-                                    text: transaction.transaction_hash,
+                                    text: transaction.transactionHash,
                                     tooltips: ['Sao chép mã giao dịch', 'Đã sao chép'],
                                 }}
                             >
-                                {transaction.transaction_hash}
+                                {transaction.transactionHash}
                             </Typography.Text>
                         </div>
                     )}
@@ -45,17 +45,17 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                     </Flex>
                     <Flex gap={4}>
                         <Typography.Text>Thời gian tạo:</Typography.Text>
-                        <Typography.Text strong>{formatDate(transaction.created_at)}</Typography.Text>
+                        <Typography.Text strong>{formatDate(transaction.createdAt)}</Typography.Text>
                     </Flex>
-                    {transaction.end_date && transaction.status === 'PENDING' && (
+                    {transaction.endDate && transaction.status === 'PENDING' && (
                         <div>
                             <Typography.Text>Hạn thanh toán:</Typography.Text>
                             &nbsp;
-                            <Typography.Text strong>{formatDateTime(transaction.end_date)}</Typography.Text>
+                            <Typography.Text strong>{formatDateTime(transaction.endDate)}</Typography.Text>
                             &nbsp;
                             <Typography.Text>
                                 (Còn lại:&nbsp;
-                                <strong>{dayjs(transaction.end_date).diff(dayjs(), 'day')} ngày</strong>)
+                                <strong>{dayjs(transaction.endDate).diff(dayjs(), 'day')} ngày</strong>)
                             </Typography.Text>
                         </div>
                     )}
@@ -71,9 +71,9 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                         </Tag>
                         {transaction.status === 'PENDING' && (
                             <PaymentTransaction
-                                isDeposit={!transaction.to_id}
+                                isDeposit={!transaction.toId}
                                 transactionId={transaction.id}
-                                contractId={transaction.contract_id}
+                                contractId={transaction.contractId}
                             />
                         )}
                     </Flex>

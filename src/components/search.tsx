@@ -33,9 +33,9 @@ const getTitleMoreInfo = ({
 }) => {
     const res = [];
 
-    if (bedroom) res.push(`${bedroom} phòng ngủ`);
+    if (bedroom) res.push(`${bedroom} ngủ`);
 
-    if (bathroom) res.push(`${bathroom} phòng tắm`);
+    if (bathroom) res.push(`${bathroom} tắm`);
 
     if (furniture) res.push(furniture);
 
@@ -45,8 +45,8 @@ const getTitleMoreInfo = ({
 };
 
 const fieldNames = {
-    label: 'attribute_name',
-    value: 'attribute_name',
+    label: 'name',
+    value: 'name',
 };
 
 const SearchComponent = () => {
@@ -218,8 +218,8 @@ const SearchComponent = () => {
         const [minPrice, maxPrice] = priceRange;
 
         if (minPrice + maxPrice > 0) {
-            searchParams.min_price = minPrice;
-            searchParams.max_price = maxPrice;
+            searchParams.minPrice = minPrice;
+            searchParams.maxPrice = maxPrice;
         }
 
         if (selectedAttributes.length) searchParams['amenities[]'] = selectedAttributes;

@@ -17,7 +17,7 @@ const CancelBeforeDeposit = ({
             const newContract = await cancelContractBeforeDeposit(contractId);
 
             setContracts((prev) =>
-                prev.map((contract) => (contract.contract_id === contractId ? newContract : contract)),
+                prev.map((contract) => (contract.contractId === contractId ? newContract : contract)),
             );
             toast.success('Huỷ hợp đồng thành công');
         } catch (error) {

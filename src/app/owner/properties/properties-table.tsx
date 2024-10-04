@@ -166,13 +166,13 @@ const PropertiesTable = () => {
             },
             {
                 title: 'Ngày tạo',
-                dataIndex: 'created_at',
+                dataIndex: 'createdAt',
                 width: 170,
                 render: formatDateTime,
             },
             {
                 title: 'Ngày cập nhật',
-                dataIndex: 'updated_at',
+                dataIndex: 'updatedAt',
                 width: 170,
                 render: formatDateTime,
             },
@@ -404,22 +404,22 @@ const PropertiesTable = () => {
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item name="deposit_from" label="Tiền đặt cọc từ">
+                        <Form.Item name="depositFrom" label="Tiền đặt cọc từ">
                             <PriceInput max={Number.MAX_SAFE_INTEGER} placeholder="Nhập tiền đặt cọc từ" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item name="deposit_to" label="Tiền đặt cọc đến">
+                        <Form.Item name="depositTo" label="Tiền đặt cọc đến">
                             <PriceInput max={Number.MAX_SAFE_INTEGER} placeholder="Nhập tiền đặt cọc đến" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item name="price_from" label="Giá từ">
+                        <Form.Item name="priceFrom" label="Giá từ">
                             <PriceInput max={Number.MAX_SAFE_INTEGER} placeholder="Nhập giá từ" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>
-                        <Form.Item name="price_to" label="Giá đến">
+                        <Form.Item name="priceTo" label="Giá đến">
                             <PriceInput max={Number.MAX_SAFE_INTEGER} placeholder="Nhập giá đến" />
                         </Form.Item>
                     </Col>

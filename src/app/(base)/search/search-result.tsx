@@ -21,8 +21,8 @@ const SearchResult = ({ count }: { count: number }) => {
     const { page, pageSize } = usePagination();
     const searchParams = useSearchParams();
     const q = searchParams.get('q');
-    const min_price = searchParams.get('min_price');
-    const max_price = searchParams.get('max_price');
+    const minPrice = searchParams.get('minPrice');
+    const maxPrice = searchParams.get('maxPrice');
     const amenities = JSON.stringify(searchParams.getAll('amenities[]'));
     const bedroom = searchParams.get('bedroom');
     const bathroom = searchParams.get('bathroom');
@@ -45,8 +45,8 @@ const SearchResult = ({ count }: { count: number }) => {
         const amenitiesArr = JSON.parse(amenities);
 
         if (q) searchParams.q = q;
-        if (min_price) searchParams.min_price = min_price;
-        if (max_price) searchParams.max_price = max_price;
+        if (minPrice) searchParams.minPrice = minPrice;
+        if (maxPrice) searchParams.maxPrice = maxPrice;
         if (amenitiesArr.length) searchParams['amenities[]'] = amenitiesArr;
         if (bedroom) searchParams.bedroom = bedroom;
         if (bathroom) searchParams.bathroom = bathroom;
@@ -57,7 +57,7 @@ const SearchResult = ({ count }: { count: number }) => {
         if (sort) searchParams.sort = sort;
 
         return searchParams;
-    }, [amenities, bathroom, bedroom, city, district, furniture, max_price, min_price, page, pageSize, q, sort, ward]);
+    }, [amenities, bathroom, bedroom, city, district, furniture, maxPrice, minPrice, page, pageSize, q, sort, ward]);
 
     const handleChangeSort = (value: string) => {
         const { skip, take, ...searchParams } = getSearchParams();

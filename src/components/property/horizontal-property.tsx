@@ -38,12 +38,12 @@ const HorizontalProperty = ({ property }: { property: IProperty }) => {
                         </Typography.Title>
                         {bedroom && (
                             <Typography.Title className="!mt-0" level={5}>
-                                {bedroom} phòng ngủ
+                                {bedroom} ngủ
                             </Typography.Title>
                         )}
                         {bathroom && (
                             <Typography.Title className="!mt-0" level={5}>
-                                {bathroom} phòng tắm
+                                {bathroom} tắm
                             </Typography.Title>
                         )}
                     </Flex>
