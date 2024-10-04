@@ -39,8 +39,8 @@ const ContractModal = ({
                 createContract({
                     ...contract,
                     contractTerms: content,
-                    ownerUserId: contract.ownerId,
-                    renterUserId: contract.renterId,
+                    ownerId: contract.ownerId,
+                    renterId: contract.renterId,
                 }),
             ]);
 
