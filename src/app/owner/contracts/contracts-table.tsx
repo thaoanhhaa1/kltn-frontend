@@ -23,7 +23,7 @@ const ContractsTable = () => {
         () => [
             {
                 title: '#',
-                dataIndex: 'contract_id',
+                dataIndex: 'contractId',
                 width: 50,
                 render: (_: any, __: any, index: number) => index + 1,
             },
@@ -39,25 +39,25 @@ const ContractsTable = () => {
             },
             {
                 title: 'Ngày bắt đầu',
-                dataIndex: 'start_date',
+                dataIndex: 'startDate',
                 width: 170,
                 render: formatDate,
             },
             {
                 title: 'Ngày kết thúc',
-                dataIndex: 'end_date',
+                dataIndex: 'endDate',
                 width: 170,
                 render: formatDate,
             },
             {
                 title: 'Giá',
-                dataIndex: 'monthly_rent',
+                dataIndex: 'monthlyRent',
                 width: 170,
                 render: (value) => formatCurrency(value, true),
             },
             {
                 title: 'Tiền cọc',
-                dataIndex: 'deposit_amount',
+                dataIndex: 'depositAmount',
                 width: 170,
                 render: (value) => formatCurrency(value, true),
             },
@@ -71,13 +71,13 @@ const ContractsTable = () => {
             },
             {
                 title: 'Ngày tạo',
-                dataIndex: 'created_at',
+                dataIndex: 'createdAt',
                 width: 170,
                 render: formatDateTime,
             },
             {
                 title: 'Ngày cập nhật',
-                dataIndex: 'updated_at',
+                dataIndex: 'updatedAt',
                 width: 170,
                 render: formatDateTime,
             },
@@ -92,7 +92,7 @@ const ContractsTable = () => {
                             <Button type="text" icon={<Eye className="w-5 h-5" />} />
                         </Tooltip>
                         {(contract.status === 'WAITING' && (
-                            <CancelBeforeDeposit contractId={contract.contract_id} setContracts={setContracts} />
+                            <CancelBeforeDeposit contractId={contract.contractId} setContracts={setContracts} />
                         )) || (
                             <Tooltip title="Huỷ hợp đồng">
                                 <Button
@@ -138,7 +138,7 @@ const ContractsTable = () => {
         <>
             <TablePagination
                 loading={loading}
-                rowKey={(record) => record.contract_id}
+                rowKey={(record) => record.contractId}
                 columns={columns}
                 dataSource={contracts}
                 // pagination={data.pageInfo}
@@ -150,7 +150,7 @@ const ContractsTable = () => {
                 //     onChange: setSelectedRowKeys,
                 // }}
             />
-            <CancelModal contract={cancelContract} onClose={handleCloseCancelContract} />
+            <CancelModal contract={cancelContract} onClose={handleCloseCancelContract} setContracts={setContracts} />
         </>
     );
 };

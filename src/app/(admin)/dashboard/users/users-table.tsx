@@ -5,7 +5,14 @@ import { initDataTable } from '@/constants/init-data';
 import usePagination from '@/hooks/usePagination';
 import { ITable } from '@/interfaces/table';
 import { IUser } from '@/interfaces/user';
-import { formatDateTime, getRoleColor, getUserStatusColor, toSkipTake } from '@/lib/utils';
+import {
+    formatDateTime,
+    getRoleColor,
+    getRoleText,
+    getUserStatusColor,
+    getUserStatusText,
+    toSkipTake,
+} from '@/lib/utils';
 import { getAllUsers } from '@/services/user-service';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
@@ -24,7 +31,7 @@ const UsersTable = () => {
         () => [
             {
                 title: 'ID',
-                dataIndex: 'user_id',
+                dataIndex: 'userId',
                 width: 50,
             },
             {
@@ -39,17 +46,17 @@ const UsersTable = () => {
             },
             {
                 title: 'Số điện thoại',
-                dataIndex: 'phone_number',
+                dataIndex: 'phoneNumber',
                 width: 150,
             },
             {
                 title: 'Loại người dùng',
-                dataIndex: 'user_types',
+                dataIndex: 'userTypes',
                 width: 150,
-                render: (user_types: Role[]) =>
-                    user_types.map((userType) => (
+                render: (userTypes: Role[]) =>
+                    userTypes.map((userType) => (
                         <Tag key={userType} color={getRoleColor(userType)} className="uppercase">
-                            {userType}
+                            {getRoleText(userType)}
                         </Tag>
                     )),
             },
@@ -59,19 +66,19 @@ const UsersTable = () => {
                 width: 100,
                 render: (status: UserStatus) => (
                     <Tag bordered={false} color={getUserStatusColor(status)}>
-                        {status}
+                        {getUserStatusText(status)}
                     </Tag>
                 ),
             },
             {
                 title: 'Ngày tạo',
-                dataIndex: 'created_at',
+                dataIndex: 'createdAt',
                 width: 170,
                 render: formatDateTime,
             },
             {
                 title: 'Ngày cập nhật',
-                dataIndex: 'updated_at',
+                dataIndex: 'updatedAt',
                 width: 170,
                 render: formatDateTime,
             },

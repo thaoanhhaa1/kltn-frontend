@@ -6,7 +6,7 @@ import { initDataTable } from '@/constants/init-data';
 import usePagination from '@/hooks/usePagination';
 import { IProperty, PropertyStatus } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
-import { formatCurrency, formatDateTime, getPropertyStatusColor, toSkipTake } from '@/lib/utils';
+import { formatCurrency, formatDateTime, getPropertyStatusColor, getPropertyStatusText, toSkipTake } from '@/lib/utils';
 import { getAllNotDeletedProperties, updateApprovalProperties } from '@/services/property-service';
 import { Button, Flex, Space, TableProps, Tag, Tooltip } from 'antd';
 import { Check, Eye, Filter, X } from 'lucide-react';
@@ -137,17 +137,19 @@ const PropertiesTable = () => {
                 title: 'Trạng thái',
                 dataIndex: 'status',
                 width: 100,
-                render: (status: PropertyStatus) => <Tag color={getPropertyStatusColor(status)}>{status}</Tag>,
+                render: (status: PropertyStatus) => (
+                    <Tag color={getPropertyStatusColor(status)}>{getPropertyStatusText(status)}</Tag>
+                ),
             },
             {
                 title: 'Ngày tạo',
-                dataIndex: 'created_at',
+                dataIndex: 'createdAt',
                 width: 170,
                 render: formatDateTime,
             },
             {
                 title: 'Ngày cập nhật',
-                dataIndex: 'updated_at',
+                dataIndex: 'updatedAt',
                 width: 170,
                 render: formatDateTime,
             },

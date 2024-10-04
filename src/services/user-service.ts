@@ -29,8 +29,8 @@ export const updateMyInfo = async (data: FormData): Promise<IUser> => {
     return http.put<IUser>('/estate-manager-service/users', data);
 };
 
-export const updateWalletAddress = async (wallet_address: string): Promise<void> => {
-    return http.patch<void>('/estate-manager-service/users/wallet', { wallet_address });
+export const updateWalletAddress = async (walletAddress: string): Promise<void> => {
+    return http.patch<void>('/estate-manager-service/users/wallet', { walletAddress });
 };
 
 export const verifyUser = async (data: FormData): Promise<IUser> => {

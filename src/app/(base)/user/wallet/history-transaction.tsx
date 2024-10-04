@@ -10,7 +10,7 @@ const riseMoneyImage = '/rise-in-value.png';
 
 const HistoryTransaction = ({ transaction }: { transaction: IHistoryTransaction }) => {
     const { user } = useUserStore();
-    const isIncome = transaction.to_id === user?.userId;
+    const isIncome = transaction.toId === user?.userId;
 
     return (
         <Card className="p-4">
@@ -31,7 +31,7 @@ const HistoryTransaction = ({ transaction }: { transaction: IHistoryTransaction 
                 </Flex>
                 <div className="flex-1">
                     <Typography.Title level={5}>{transaction.title}</Typography.Title>
-                    <Typography.Text type="secondary">{formatDateTime(transaction.updated_at)}</Typography.Text>
+                    <Typography.Text type="secondary">{formatDateTime(transaction.updatedAt)}</Typography.Text>
                     <Flex justify="space-between" align="center">
                         <Typography.Text>
                             Số tiền:&nbsp;
@@ -45,7 +45,7 @@ const HistoryTransaction = ({ transaction }: { transaction: IHistoryTransaction 
                             type={isIncome ? 'success' : 'danger'}
                         >
                             {isIncome ? '+' : '-'}&nbsp;
-                            {transaction.amount_eth?.toFixed(4)} ETH
+                            {transaction.amountEth?.toFixed(4)} ETH
                         </Typography.Title>
                     </Flex>
                 </div>

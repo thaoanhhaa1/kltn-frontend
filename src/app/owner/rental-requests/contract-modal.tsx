@@ -22,9 +22,11 @@ const ContractModal = ({
     const [preRender, setPreRender] = useState(true);
     const [loading, setLoading] = useState(false);
     const [contract, setContract] = useState<IGenerateContractResponse | undefined>();
+    const [createLoading, setCreateLoading] = useState(false);
 
     const handleOk = async () => {
         if (!contract) return;
+        setCreateLoading(true);
 
         try {
             const content = editorRef.current.getContent();
@@ -52,6 +54,8 @@ const ContractModal = ({
             } else {
                 toast.error('Có lỗi xảy ra');
             }
+        } finally {
+            setCreateLoading(false);
         }
     };
 
@@ -89,6 +93,7 @@ const ContractModal = ({
             title="Tạo hợp đồng"
             open={open}
             okText="Tạo hợp đồng"
+            confirmLoading={createLoading}
             cancelText="Huỷ"
             width="100%"
             centered

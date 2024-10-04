@@ -1,6 +1,6 @@
 export interface ICreateContractRequest {
-    ownerUserId: string;
-    renterUserId: string;
+    ownerId: string;
+    renterId: string;
     propertyId: string;
     startDate: string;
     endDate: string;
@@ -10,20 +10,30 @@ export interface ICreateContractRequest {
 }
 
 export interface IContract {
-    contract_id: string;
-    owner_user_id: string;
-    renter_user_id: string;
-    property_id: string;
-    start_date: string;
-    end_date: string;
+    contractId: string;
+    ownerId: string;
+    renterId: string;
+    propertyId: string;
+    startDate: string;
+    endDate: string;
     deleted: boolean;
     status: ContractStatus;
-    created_at: string;
-    updated_at: string;
-    monthly_rent: number;
-    deposit_amount: number;
-    contract_terms: string;
-    transaction_hash_contract: string;
+    createdAt: string;
+    updatedAt: string;
+    monthlyRent: number;
+    depositAmount: number;
+    contractTerms: string;
+    transactionHashContract: string;
 }
 
-export type ContractStatus = 'WAITING' | 'DEPOSITED' | 'ONGOING' | 'ENDED' | 'OVERDUE' | 'CANCELLED';
+export type ContractStatus =
+    | 'WAITING'
+    | 'DEPOSITED'
+    | 'ONGOING'
+    | 'ENDED'
+    | 'OVERDUE'
+    | 'CANCELLED'
+    | 'PENDING_CANCELLATION'
+    | 'UNILATERAL_CANCELLATION'
+    | 'APPROVED_CANCELLATION'
+    | 'REJECTED_CANCELLATION';
