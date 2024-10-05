@@ -1,8 +1,7 @@
-import { envConfig } from '@/config/envConfig';
+import TinyEditor from '@/components/tiny-editor';
 import { IGenerateContractResponse, IRentalRequest } from '@/interfaces/rentalRequest';
 import { createContract } from '@/services/contract-service';
 import { generateContract, ownerUpdateRentalRequestStatus } from '@/services/rental-request-service';
-import { Editor } from '@tinymce/tinymce-react';
 import { Flex, Modal, Spin } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -107,44 +106,7 @@ const ContractModal = ({
                 disabled: !contract,
             }}
         >
-            <Editor
-                value={contract?.contractContent}
-                onPostRender={handlePreRender}
-                apiKey={envConfig.NEXT_PUBLIC_TINY_MCE_API_KEY}
-                onInit={(_evt, editor) => (editorRef.current = editor)}
-                init={{
-                    editable_root: false,
-                    resize: false,
-                    height: '80vh',
-                    menubar: false,
-                    plugins: [
-                        'advlist',
-                        'autolink',
-                        'lists',
-                        'link',
-                        'image',
-                        'charmap',
-                        'preview',
-                        'anchor',
-                        'searchreplace',
-                        'visualblocks',
-                        'code',
-                        'fullscreen',
-                        'insertdatetime',
-                        'media',
-                        'table',
-                        'code',
-                        'help',
-                        'wordcount',
-                    ],
-                    toolbar:
-                        'undo redo | blocks | ' +
-                        'bold italic forecolor | alignleft aligncenter ' +
-                        'alignright alignjustify | bullist numlist outdent indent | ' +
-                        'removeformat | help',
-                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                }}
-            />
+            <TinyEditor value={contract?.contractContent} onPostRender={handlePreRender} editorRef={editorRef} />
             {(preRender || loading) && (
                 <Flex
                     justify="center"

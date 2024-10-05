@@ -1,3 +1,5 @@
+import { IBaseUserEmbed } from '@/interfaces/user';
+
 export type ContractCancelRequestStatus =
     | 'PENDING'
     | 'APPROVED'
@@ -12,10 +14,14 @@ export interface IContractCancelRequest {
     requestedBy: string;
     requestedAt: string;
     cancelDate: string;
-    reason: null;
+    reason: string | null;
     deleted: boolean;
     updatedAt: string;
-    status: string;
+    status: ContractCancelRequestStatus;
+}
+
+export interface IContractCancelRequestDetail extends IContractCancelRequest {
+    userRequest: IBaseUserEmbed;
 }
 
 export interface ICreateContractCancelRequest {

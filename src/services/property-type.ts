@@ -1,4 +1,4 @@
-import { IPropertyType } from '@/interfaces/propertyType';
+import { IPropertyType } from '@/interfaces/property-type';
 import http from '@/lib/http';
 
 export const getPropertyTypes = () => {

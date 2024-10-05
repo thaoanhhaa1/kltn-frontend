@@ -7,11 +7,14 @@ export interface IBaseUserEmbed {
     avatar: string | null;
 }
 
-export interface IUser extends IBaseUserEmbed {
+export interface IBaseUser extends IBaseUserEmbed {
     email: string;
+    phoneNumber: string | null;
+}
+
+export interface IUser extends IBaseUser {
     userTypes: Role[];
     status: UserStatus;
-    phoneNumber: string | null;
     walletAddress: `0x${string}` | null;
     isVerified: boolean;
     createdAt: string;

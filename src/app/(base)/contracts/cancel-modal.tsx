@@ -1,4 +1,5 @@
 import { IContract } from '@/interfaces/contract';
+import { ITable } from '@/interfaces/table';
 import { formatCurrency } from '@/lib/utils';
 import { createContractCancelRequest } from '@/services/contract-cancel-request-service';
 import { useUserStore } from '@/stores/user-store';
@@ -6,6 +7,7 @@ import { DatePicker, Form, Modal, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -16,8 +18,9 @@ const CancelModal = ({
 }: {
     contract: IContract | null;
     onClose: () => void;
-    setContracts: Dispatch<SetStateAction<Array<IContract>>>;
+    setContracts?: Dispatch<SetStateAction<ITable<IContract>>>;
 }) => {
+    const router = useRouter();
     const { user } = useUserStore();
     const [form] = useForm();
     const [loading, setLoading] = useState(false);
@@ -37,11 +40,15 @@ const CancelModal = ({
                 reason: values.reason,
             });
 
-            setContracts((contracts) =>
-                contracts.map((c) => (c.contractId === newContract.contractId ? newContract : c)),
-            );
+            if (setContracts)
+                setContracts((contracts) => ({
+                    ...contracts,
+                    data: contracts.data.map((c) => (c.contractId === newContract.contractId ? newContract : c)),
+                }));
             toast.success('Huỷ hợp đồng thành công');
             onClose();
+
+            if (!setContracts) router.refresh();
         } catch (error) {
             console.error(error);
             toast.error((error as Error).message || 'Huỷ hợp đồng thất bại');
