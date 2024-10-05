@@ -3,7 +3,7 @@
 import AttributesForm from '@/app/owner/properties/add/attributes-form';
 import PriceInput from '@/components/input/price-input';
 import { interiorOptions } from '@/constants/init-data';
-import { IPropertyType } from '@/interfaces/propertyType';
+import { IPropertyType } from '@/interfaces/property-type';
 import { getPropertyTypes } from '@/services/property-type';
 import { Col, Form, InputNumber, Row, Select } from 'antd';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';

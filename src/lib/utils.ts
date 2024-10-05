@@ -1,8 +1,9 @@
 import { app } from '@/config/firebase.config';
 import { IChat, IConversation } from '@/interfaces/chat';
 import { ContractStatus } from '@/interfaces/contract';
+import { ContractCancelRequestStatus } from '@/interfaces/contract-cancel-request';
 import { IPagination } from '@/interfaces/pagination';
-import { PropertyStatus } from '@/interfaces/property';
+import { IAddress, PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
 import { TransactionStatus } from '@/interfaces/transaction';
 import { IBaseUserEmbed } from '@/interfaces/user';
@@ -130,11 +131,31 @@ export const getTransactionStatusText = (status: TransactionStatus) => {
     return 'Không xác định';
 };
 
-export const formatDate = (date: string) => {
+export const getCancelRequestColor = (status: ContractCancelRequestStatus) => {
+    if (status === 'PENDING') return 'processing';
+    if (status === 'APPROVED') return 'success';
+    if (status === 'REJECTED') return 'error';
+    if (status === 'CANCELLED') return 'default';
+    if (status === 'CONTINUE') return 'warning';
+    if (status === 'UNILATERAL_CANCELLATION') return 'purple';
+    return 'default';
+};
+
+export const getCancelRequestStatusText = (status: ContractCancelRequestStatus) => {
+    if (status === 'PENDING') return 'Chờ xác nhận';
+    if (status === 'APPROVED') return 'Đã chấp nhận';
+    if (status === 'REJECTED') return 'Đã từ chối';
+    if (status === 'CANCELLED') return 'Đã hủy';
+    if (status === 'CONTINUE') return 'Tiếp tục thuê';
+    if (status === 'UNILATERAL_CANCELLATION') return 'Huỷ một phía';
+    return 'Không xác định';
+};
+
+export const formatDate = (date: string | Date) => {
     return dayjs(date).format('DD/MM/YYYY');
 };
 
-export const formatDateTime = (dateTime: string) => {
+export const formatDateTime = (dateTime: string | Date) => {
     return dayjs(dateTime).format('HH:mm:ss DD/MM/YYYY');
 };
 
@@ -296,4 +317,8 @@ export const uploadFiles = ({
     folder?: string;
 }): Promise<Array<string>> => {
     return Promise.all(files.map((file) => uploadFile({ file, folder })));
+};
+
+export const formatAddress = (address: IAddress) => {
+    return `${address.street}, ${address.ward}, ${address.district}, ${address.city}`;
 };

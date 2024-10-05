@@ -3,17 +3,28 @@
 import CancelModal from '@/app/(base)/contracts/cancel-modal';
 import CancelBeforeDeposit from '@/components/contracts/cancel-before-deposit';
 import TablePagination from '@/components/table-pagination';
+import { initDataTable } from '@/constants/init-data';
+import usePagination from '@/hooks/usePagination';
 import { ContractStatus, IContract } from '@/interfaces/contract';
-import { formatCurrency, formatDate, formatDateTime, getContractColor, getContractStatusText } from '@/lib/utils';
+import { ITable } from '@/interfaces/table';
+import {
+    formatCurrency,
+    formatDate,
+    formatDateTime,
+    getContractColor,
+    getContractStatusText,
+    toSkipTake,
+} from '@/lib/utils';
 import { getContractsByOwner } from '@/services/contract-service';
 import { Button, Space, TableProps, Tag, Tooltip } from 'antd';
 import { Eye, X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const ContractsTable = () => {
-    const [contracts, setContracts] = useState<IContract[]>([]);
+    const [contracts, setContracts] = useState<ITable<IContract>>(initDataTable);
     const [loading, setLoading] = useState(true);
     const [cancelContract, setCancelContract] = useState<IContract | null>(null);
+    const { page, pageSize } = usePagination();
 
     const handleClickCancel = (contract: IContract) => {
         setCancelContract(contract);
@@ -25,7 +36,7 @@ const ContractsTable = () => {
                 title: '#',
                 dataIndex: 'contractId',
                 width: 50,
-                render: (_: any, __: any, index: number) => index + 1,
+                render: (_: any, __: any, index: number) => (page - 1) * pageSize + index + 1,
             },
             {
                 title: 'Tiêu đề',
@@ -89,7 +100,11 @@ const ContractsTable = () => {
                 render: (contract: IContract) => (
                     <Space>
                         <Tooltip title="Xem chi tiết">
-                            <Button type="text" icon={<Eye className="w-5 h-5" />} />
+                            <Button
+                                href={`/contracts/${contract.contractId}`}
+                                type="text"
+                                icon={<Eye className="w-5 h-5" />}
+                            />
                         </Tooltip>
                         {(contract.status === 'WAITING' && (
                             <CancelBeforeDeposit contractId={contract.contractId} setContracts={setContracts} />
@@ -108,31 +123,35 @@ const ContractsTable = () => {
                 ),
             },
         ],
-        [],
+        [page, pageSize],
     );
 
     const handleCloseCancelContract = () => {
         setCancelContract(null);
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
+    const getContracts = useCallback(async ({ page = 1, pageSize = 10 }: { page?: number; pageSize?: number }) => {
+        setLoading(true);
 
-            try {
-                const res = await getContractsByOwner();
-                console.log('🚀 ~ fetchData ~ res:', res);
+        try {
+            const pagination = toSkipTake(page, pageSize);
 
-                setContracts(res);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+            const res = await getContractsByOwner(pagination);
 
-        fetchData();
+            setContracts(res);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     }, []);
+
+    useEffect(() => {
+        getContracts({
+            page,
+            pageSize,
+        });
+    }, [getContracts, page, pageSize]);
 
     return (
         <>
@@ -140,8 +159,8 @@ const ContractsTable = () => {
                 loading={loading}
                 rowKey={(record) => record.contractId}
                 columns={columns}
-                dataSource={contracts}
-                // pagination={data.pageInfo}
+                dataSource={contracts.data}
+                pagination={contracts.pageInfo}
                 // rowSelection={{
                 //     fixed: true,
                 //     type: 'checkbox',

@@ -5,7 +5,7 @@ import BasicInfoForm from '@/app/owner/properties/add/basic-info-form';
 import ImagesForm from '@/app/owner/properties/add/images-form';
 import PropertyInfoForm from '@/app/owner/properties/add/property-info-form';
 import { Card } from '@/components/ui/card';
-import { IPropertyType } from '@/interfaces/propertyType';
+import { IPropertyType } from '@/interfaces/property-type';
 import { OWNER_PROPERTIES } from '@/path';
 import { createProperty } from '@/services/property-service';
 import { Button, Collapse, CollapseProps, Flex, Form } from 'antd';

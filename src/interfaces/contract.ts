@@ -1,3 +1,7 @@
+import { IContractCancelRequest } from '@/interfaces/contract-cancel-request';
+import { IProperty } from '@/interfaces/property';
+import { IBaseUser } from '@/interfaces/user';
+
 export interface ICreateContractRequest {
     ownerId: string;
     renterId: string;
@@ -24,6 +28,13 @@ export interface IContract {
     depositAmount: number;
     contractTerms: string;
     transactionHashContract: string;
+}
+
+export interface IContractDetail extends IContract {
+    owner: IBaseUser;
+    renter: IBaseUser;
+    cancellationRequests: Array<IContractCancelRequest>;
+    property: IProperty;
 }
 
 export type ContractStatus =

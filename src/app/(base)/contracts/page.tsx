@@ -3,18 +3,28 @@
 import CancelModal from '@/app/(base)/contracts/cancel-modal';
 import CancelBeforeDeposit from '@/components/contracts/cancel-before-deposit';
 import TablePagination from '@/components/table-pagination';
+import { initDataTable } from '@/constants/init-data';
+import usePagination from '@/hooks/usePagination';
 import { ContractStatus, IContract } from '@/interfaces/contract';
-import { formatCurrency, formatDate, formatDateTime, getContractColor, getContractStatusText } from '@/lib/utils';
+import { ITable } from '@/interfaces/table';
+import {
+    formatCurrency,
+    formatDate,
+    formatDateTime,
+    getContractColor,
+    getContractStatusText,
+    toSkipTake,
+} from '@/lib/utils';
 import { getContractsByRenter } from '@/services/contract-service';
 import { Button, Space, TableProps, Tag, Tooltip, Typography } from 'antd';
 import { Eye, X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const ContractsPage = () => {
-    const [contracts, setContracts] = useState<IContract[]>([]);
-    console.log('🚀 ~ ContractsPage ~ contracts:', contracts);
+    const [contracts, setContracts] = useState<ITable<IContract>>(initDataTable);
     const [loading, setLoading] = useState(true);
     const [cancelContract, setCancelContract] = useState<IContract | null>(null);
+    const { page, pageSize } = usePagination();
 
     const handleClickCancel = (contract: IContract) => {
         setCancelContract(contract);
@@ -26,7 +36,7 @@ const ContractsPage = () => {
                 title: '#',
                 dataIndex: 'contractId',
                 width: 50,
-                render: (_: any, __: any, index: number) => index + 1,
+                render: (_: any, __: any, index: number) => (page - 1) * pageSize + index + 1,
             },
             {
                 title: 'Tiêu đề',
@@ -109,30 +119,31 @@ const ContractsPage = () => {
                 ),
             },
         ],
-        [],
+        [page, pageSize],
     );
 
     const handleCloseCancelContract = () => {
         setCancelContract(null);
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
+    const fetchData = useCallback(async (page: number, pageSize: number) => {
+        setLoading(true);
 
-            try {
-                const res = await getContractsByRenter();
+        try {
+            const pagination = toSkipTake(page, pageSize);
+            const res = await getContractsByRenter(pagination);
 
-                setContracts(res);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
+            setContracts(res);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
     }, []);
+
+    useEffect(() => {
+        fetchData(page, pageSize);
+    }, [fetchData, page, pageSize]);
 
     return (
         <div className="mt-5">
@@ -148,8 +159,8 @@ const ContractsPage = () => {
                 loading={loading}
                 rowKey={(record) => record.contractId}
                 columns={columns}
-                dataSource={contracts}
-                // pagination={data.pageInfo}
+                dataSource={contracts.data}
+                pagination={contracts.pageInfo}
                 // rowSelection={{
                 //     fixed: true,
                 //     type: 'checkbox',
