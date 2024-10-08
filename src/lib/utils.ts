@@ -239,10 +239,16 @@ export const combineConversations = (
 
         if (!oldConversation) return conversation;
 
+        const newChats = conversation.chats || [];
+        const oldChats = (oldConversation.chats || []).filter(
+            (chat) => !(conversation.chats || []).find((c) => c.chatId === chat.chatId),
+        );
+
         return {
             ...oldConversation,
             ...conversation,
-            lastChat: conversation.lastChat || oldConversation.lastChat,
+            chats: [...oldChats, ...newChats],
+            unreadCount: oldConversation.unreadCount + conversation.unreadCount,
         };
     });
 

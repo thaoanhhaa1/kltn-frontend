@@ -1,6 +1,7 @@
 import AvatarWithName from '@/components/avatar-with-name';
 import { IChat } from '@/interfaces/chat';
 import { cn, getTimeChat } from '@/lib/utils';
+import { useConversationStore } from '@/stores/conversation-store';
 import { useUserStore } from '@/stores/user-store';
 import { Image as AntdImage, Flex } from 'antd';
 import Image from 'next/image';
@@ -8,8 +9,13 @@ import { useState } from 'react';
 
 const ChatItem = ({ chat }: { chat: IChat }) => {
     const { user } = useUserStore();
+    const { selectedConversation } = useConversationStore();
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const isMe = chat.sender.userId === user?.userId;
+    const isMe = chat.senderId === user?.userId;
+
+    if (!selectedConversation) return null;
+
+    const sender = selectedConversation.participants.find((participant) => participant.userId === chat.senderId)!;
 
     return (
         <Flex
@@ -20,7 +26,7 @@ const ChatItem = ({ chat }: { chat: IChat }) => {
             }}
             align="end"
         >
-            <AvatarWithName avatar={chat.sender.avatar || ''} name={chat.sender.name} />
+            <AvatarWithName avatar={sender.avatar || ''} name={sender.name} />
             <div className={cn('flex-1 flex', isMe && 'justify-end')}>
                 <div className="bg-antd-primary bg-opacity-5 rounded px-3 py-1.5 max-w-[70%]">
                     <div>{chat.message}</div>

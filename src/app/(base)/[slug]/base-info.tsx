@@ -37,6 +37,8 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
             participants: [user!, property.owner],
             updatedAt: new Date().toISOString(),
             receiver: property.owner,
+            chats: [],
+            unreadCount: 0,
         };
 
         addConversation(conversation);

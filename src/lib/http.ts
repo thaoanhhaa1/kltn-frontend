@@ -44,8 +44,6 @@ const request = async <Response>(
         body,
     });
 
-    console.log('res: ', res);
-
     const result = await res.json();
 
     if (!res.ok) {

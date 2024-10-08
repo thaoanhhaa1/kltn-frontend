@@ -15,6 +15,7 @@ import {
     getContractStatusText,
     toSkipTake,
 } from '@/lib/utils';
+import { RENTAL_CONTRACTS } from '@/path';
 import { getContractsByOwner } from '@/services/contract-service';
 import { Button, Space, TableProps, Tag, Tooltip } from 'antd';
 import { Eye, X } from 'lucide-react';
@@ -101,7 +102,7 @@ const ContractsTable = () => {
                     <Space>
                         <Tooltip title="Xem chi tiết">
                             <Button
-                                href={`/contracts/${contract.contractId}`}
+                                href={`${RENTAL_CONTRACTS}/${contract.contractId}`}
                                 type="text"
                                 icon={<Eye className="w-5 h-5" />}
                             />

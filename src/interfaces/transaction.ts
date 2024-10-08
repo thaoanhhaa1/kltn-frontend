@@ -6,6 +6,7 @@ export interface ITransaction {
     amount: number;
     amountEth: number | null;
     fee: number | null;
+    feeEth: number | null;
     transactionHash: string | null;
     status: TransactionStatus;
     title: string;
@@ -29,6 +30,7 @@ export interface IHistoryTransaction {
     amount: number;
     amountEth: number | null;
     fee: number | null;
+    feeEth: number | null;
     transactionHash: string | null;
     title: string;
     description: string;

@@ -1,6 +1,7 @@
 'use client';
 
-import { IChat, IConversation } from '@/interfaces/chat';
+import { IConversation } from '@/interfaces/chat';
+import { IConversationSocket } from '@/interfaces/conversation';
 import { getOtherUser } from '@/lib/utils';
 import { useChatStore } from '@/stores/chat-store';
 import { useConversationStore } from '@/stores/conversation-store';
@@ -29,35 +30,35 @@ const Socket = () => {
                 console.log('disconnected');
             });
 
-            socket.on('send-message', (data) => {
+            socket.on('send-message', (data: IConversationSocket) => {
                 console.log('🚀 ~ file: socket.tsx ~ line 47 ~ socket.on ~ data', data);
                 const participants = [data.sender, data.receiver];
                 const receiver = getOtherUser(participants, user?.userId || '')!;
 
                 const conversation: IConversation = {
+                    conversationId: data.conversationId,
                     createdAt: data.createdAt,
-                    updatedAt: data.updatedAt,
-                    conversationId: data.conversation,
-                    deletedBy: [],
+                    updatedAt: data.createdAt,
                     participants,
                     receiver,
-                    lastChat: {
-                        sender: data.sender,
-                        medias: data.medias,
-                        message: data.message,
-                        status: 'RECEIVED',
-                    },
-                };
-                const chat: IChat = {
-                    ...data,
+                    chats: [
+                        {
+                            chatId: data.chatId,
+                            createdAt: data.createdAt,
+                            deletedBy: [],
+                            medias: data.medias,
+                            message: data.message,
+                            savedBy: [],
+                            senderId: data.sender.userId,
+                            status: 'RECEIVED',
+                            updatedAt: data.createdAt,
+                        },
+                    ],
                     deletedBy: [],
-                    savedBy: [],
-                    status: 'RECEIVED',
-                    updatedAt: data.createdAt,
+                    unreadCount: data.sender.userId === user?.userId ? 0 : 1,
                 };
 
                 addConversation(conversation);
-                addChat(receiver.userId, chat);
             });
         }
 

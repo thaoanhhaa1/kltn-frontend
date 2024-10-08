@@ -2,34 +2,33 @@
 
 import Conversation from '@/app/(base)/chat/conversation';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { IPagination } from '@/interfaces/pagination';
-import { getConversationsService } from '@/services/chat-service';
+import { getConversationsByUserServices } from '@/services/conversation-service';
 import { useConversationStore } from '@/stores/conversation-store';
+import { useUserStore } from '@/stores/user-store';
 import { Divider, Typography } from 'antd';
 import { useCallback, useEffect } from 'react';
 
 const Conversations = () => {
-    const { conversations, addConversations } = useConversationStore();
+    const { user } = useUserStore();
+    const { conversations, isFirstLoad, addConversations, setLoading } = useConversationStore();
 
-    const fetchConversations = useCallback(
-        async (pagination: IPagination) => {
-            try {
-                const conversations = await getConversationsService(pagination);
+    const fetchConversations = useCallback(async () => {
+        setLoading(true);
 
-                addConversations(conversations);
-            } catch (error) {
-                console.error(error);
-            }
-        },
-        [addConversations],
-    );
+        try {
+            const conversations = await getConversationsByUserServices(user?.userId!);
+
+            addConversations(conversations);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }, [addConversations, setLoading, user?.userId]);
 
     useEffect(() => {
-        fetchConversations({
-            skip: 0,
-            take: 10,
-        });
-    }, [fetchConversations]);
+        if (isFirstLoad) fetchConversations();
+    }, [fetchConversations, isFirstLoad]);
 
     return (
         <div className="flex flex-col flex-1 mt-3">

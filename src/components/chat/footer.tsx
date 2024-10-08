@@ -24,6 +24,7 @@ const Footer = () => {
     const [imageActive, setImageActive] = useState(false);
     const [message, setMessage] = useState('');
     const [disabled, setDisabled] = useState(false);
+    const receiver = selectedConversation?.participants.find((participant) => participant.userId !== user?.userId)!;
 
     const handleSend = (value: any) => {
         if (!socket || !selectedConversation || !user) return;
@@ -35,11 +36,6 @@ const Footer = () => {
                 url: file.url,
                 type: file.type,
             }));
-        const receiver: IBaseUserEmbed = {
-            avatar: selectedConversation.receiver.avatar,
-            name: selectedConversation.receiver.name,
-            userId: selectedConversation.receiver.userId,
-        };
 
         const socketData = {
             sender: {
@@ -47,7 +43,7 @@ const Footer = () => {
                 name: user?.name,
                 avatar: user?.avatar,
             },
-            receiver: receiver,
+            receiver,
             message,
             medias,
         };

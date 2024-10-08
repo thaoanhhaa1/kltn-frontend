@@ -15,6 +15,7 @@ import {
     getContractStatusText,
     toSkipTake,
 } from '@/lib/utils';
+import { RENTAL_CONTRACTS } from '@/path';
 import { getContractsByRenter } from '@/services/contract-service';
 import { Button, Space, TableProps, Tag, Tooltip, Typography } from 'antd';
 import { Eye, X } from 'lucide-react';
@@ -100,7 +101,11 @@ const ContractsPage = () => {
                 render: (contract: IContract) => (
                     <Space>
                         <Tooltip title="Xem chi tiết">
-                            <Button type="text" icon={<Eye className="w-5 h-5" />} />
+                            <Button
+                                href={`${RENTAL_CONTRACTS}/${contract.contractId}`}
+                                type="text"
+                                icon={<Eye className="w-5 h-5" />}
+                            />
                         </Tooltip>
                         {(contract.status === 'WAITING' && (
                             <CancelBeforeDeposit contractId={contract.contractId} setContracts={setContracts} />
