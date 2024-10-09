@@ -1,4 +1,5 @@
-import { IConversation } from '@/interfaces/chat';
+import { ChatStatus, IConversation } from '@/interfaces/chat';
+import { IReadConversationSocket } from '@/interfaces/conversation';
 import { IPageInfo } from '@/interfaces/pagination';
 import { ITable } from '@/interfaces/table';
 import { combineConversations } from '@/lib/utils';
@@ -15,6 +16,7 @@ export interface IConversationStore {
     addConversations: (conversations: ITable<IConversation>) => void;
     setSelectedConversation: (conversation: IConversation) => void;
     setLoading: (loading: boolean) => void;
+    readConversation: (data: IReadConversationSocket) => void;
 }
 
 const useConversationStore = create<IConversationStore>((set) => ({
@@ -81,6 +83,42 @@ const useConversationStore = create<IConversationStore>((set) => ({
             };
         }),
     setLoading: (loading) => set({ loading }),
+    readConversation: ({ chatId, conversationId }) =>
+        set((prev) => {
+            const newConversations = prev.conversations.map((oldConversation) => {
+                const conversation = { ...oldConversation };
+
+                if (conversation.conversationId === conversationId) {
+                    let index = Infinity;
+
+                    const newChats = conversation.chats.map((chat, i) => {
+                        if (chat.chatId === chatId) index = i;
+                        if (i <= index) {
+                            return {
+                                ...chat,
+                                status: 'READ' as ChatStatus,
+                            };
+                        }
+
+                        return chat;
+                    });
+
+                    return {
+                        ...conversation,
+                        chats: newChats,
+                    };
+                }
+
+                return conversation;
+            });
+
+            return {
+                conversations: newConversations,
+                selectedConversation:
+                    newConversations.find((c) => c.conversationId === prev.selectedConversation?.conversationId) ??
+                    null,
+            };
+        }),
 }));
 
 export { useConversationStore };

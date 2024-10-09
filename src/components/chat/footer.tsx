@@ -1,5 +1,4 @@
 import AvatarWithName from '@/components/avatar-with-name';
-import { IBaseUserEmbed } from '@/interfaces/user';
 import { uploadFile } from '@/lib/utils';
 import { useConversationStore } from '@/stores/conversation-store';
 import { useSocketStore } from '@/stores/socket-store';
@@ -11,6 +10,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { RcFile } from 'antd/es/upload';
 import { ImageIcon, Send } from 'lucide-react';
 import { useEffect, useState, useTransition } from 'react';
+import { v4 } from 'uuid';
 
 const Footer = () => {
     const { socket } = useSocketStore();
@@ -37,6 +37,9 @@ const Footer = () => {
                 type: file.type,
             }));
 
+        const createdAt = new Date();
+        const chatId = `${createdAt.getTime()}-${v4()}`;
+
         const socketData = {
             sender: {
                 userId: user?.userId,
@@ -46,6 +49,8 @@ const Footer = () => {
             receiver,
             message,
             medias,
+            createdAt: createdAt.toISOString(),
+            chatId,
         };
 
         socket.emit('receive-message', socketData);

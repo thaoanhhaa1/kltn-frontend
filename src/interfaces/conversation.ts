@@ -10,3 +10,10 @@ export interface IConversationSocket {
     receiver: IBaseUserEmbed;
     sender: IBaseUserEmbed;
 }
+
+export interface IReadConversationSocket {
+    conversationId: string;
+    time: string;
+    chatId: string;
+    userId: string;
+}

@@ -17,9 +17,11 @@ const Conversation = ({ conversation }: { conversation: IConversation }) => {
         setSelectedConversation(conversation);
 
         if (conversation.unreadCount > 0)
-            socket?.emit('readConversation', {
+            socket?.emit('read-conversation', {
                 conversationId: conversation.conversationId,
                 time: new Date().toISOString(),
+                chatId: lastChat?.chatId,
+                userId: otherUser?.userId,
             });
     };
 

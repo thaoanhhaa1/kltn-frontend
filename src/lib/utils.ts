@@ -1,5 +1,5 @@
 import { app } from '@/config/firebase.config';
-import { IChat, IConversation } from '@/interfaces/chat';
+import { ChatStatus, IChat, IConversation } from '@/interfaces/chat';
 import { ContractStatus } from '@/interfaces/contract';
 import { ContractCancelRequestStatus } from '@/interfaces/contract-cancel-request';
 import { IPagination } from '@/interfaces/pagination';
@@ -148,6 +148,12 @@ export const getCancelRequestStatusText = (status: ContractCancelRequestStatus) 
     if (status === 'CANCELLED') return 'Đã hủy';
     if (status === 'CONTINUE') return 'Tiếp tục thuê';
     if (status === 'UNILATERAL_CANCELLATION') return 'Huỷ một phía';
+    return 'Không xác định';
+};
+
+export const getChatStatusText = (status: ChatStatus) => {
+    if (status === 'RECEIVED') return 'Đã nhận';
+    if (status === 'READ') return 'Đã đọc';
     return 'Không xác định';
 };
 

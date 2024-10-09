@@ -1,7 +1,7 @@
 'use client';
 
 import { IConversation } from '@/interfaces/chat';
-import { IConversationSocket } from '@/interfaces/conversation';
+import { IConversationSocket, IReadConversationSocket } from '@/interfaces/conversation';
 import { getOtherUser } from '@/lib/utils';
 import { useChatStore } from '@/stores/chat-store';
 import { useConversationStore } from '@/stores/conversation-store';
@@ -13,7 +13,7 @@ const Socket = () => {
     const { user } = useUserStore();
     const { socket, disconnect, connect } = useSocketStore();
     const { addChat } = useChatStore();
-    const { addConversation } = useConversationStore();
+    const { selectedConversation, addConversation, readConversation } = useConversationStore();
 
     useEffect(() => {
         if (user) connect();
@@ -34,6 +34,7 @@ const Socket = () => {
                 console.log('🚀 ~ file: socket.tsx ~ line 47 ~ socket.on ~ data', data);
                 const participants = [data.sender, data.receiver];
                 const receiver = getOtherUser(participants, user?.userId || '')!;
+                const isSelected = selectedConversation?.conversationId === data.conversationId;
 
                 const conversation: IConversation = {
                     conversationId: data.conversationId,
@@ -50,15 +51,29 @@ const Socket = () => {
                             message: data.message,
                             savedBy: [],
                             senderId: data.sender.userId,
-                            status: 'RECEIVED',
+                            status: isSelected ? 'READ' : 'RECEIVED',
                             updatedAt: data.createdAt,
                         },
                     ],
                     deletedBy: [],
-                    unreadCount: data.sender.userId === user?.userId ? 0 : 1,
+                    unreadCount: data.sender.userId === user?.userId || isSelected ? 0 : 1,
                 };
 
                 addConversation(conversation);
+
+                if (isSelected && data.sender.userId !== user?.userId)
+                    socket?.emit('read-conversation', {
+                        conversationId: selectedConversation.conversationId,
+                        time: new Date().toISOString(),
+                        chatId: data.chatId,
+                        userId: receiver?.userId,
+                    });
+            });
+
+            socket.on('read-conversation', (data: IReadConversationSocket) => {
+                readConversation(data);
+
+                console.log('🚀 ~ file: socket.tsx ~ read-conversation', data);
             });
         }
 
@@ -67,9 +82,10 @@ const Socket = () => {
                 socket.off('connect');
                 socket.off('disconnect');
                 socket.off('send-message');
+                socket.off('read-conversation');
             }
         };
-    }, [addChat, addConversation, socket, user?.userId]);
+    }, [addChat, addConversation, readConversation, selectedConversation?.conversationId, socket, user?.userId]);
 
     useEffect(() => {
         if (user && socket) socket.emit('online', user.userId);
