@@ -29,7 +29,7 @@ const useConversationStore = create<IConversationStore>((set) => ({
         total: 0,
     },
     isFirstLoad: true,
-    loading: false,
+    loading: true,
     addConversation: (conversation) =>
         set((prev) => {
             const newConversations = combineConversations([conversation], prev.conversations);
@@ -58,6 +58,7 @@ const useConversationStore = create<IConversationStore>((set) => ({
                 isFirstLoad: false,
                 selectedConversation,
                 unreadCount,
+                loading: false,
             };
         }),
     setSelectedConversation: (conversation) =>
