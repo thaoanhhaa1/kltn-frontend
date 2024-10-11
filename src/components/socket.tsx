@@ -34,7 +34,8 @@ const Socket = () => {
                 console.log('🚀 ~ file: socket.tsx ~ line 47 ~ socket.on ~ data', data);
                 const participants = [data.sender, data.receiver];
                 const receiver = getOtherUser(participants, user?.userId || '')!;
-                const isSelected = selectedConversation?.conversationId === data.conversationId;
+                const isSelected =
+                    selectedConversation?.conversationId === data.conversationId && data.sender.userId !== user?.userId;
 
                 const conversation: IConversation = {
                     conversationId: data.conversationId,
@@ -61,7 +62,7 @@ const Socket = () => {
 
                 addConversation(conversation);
 
-                if (isSelected && data.sender.userId !== user?.userId)
+                if (isSelected)
                     socket?.emit('read-conversation', {
                         conversationId: selectedConversation.conversationId,
                         time: new Date().toISOString(),

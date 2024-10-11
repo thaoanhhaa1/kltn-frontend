@@ -35,6 +35,8 @@ const Footer = () => {
             .map((file) => ({
                 url: file.url,
                 type: file.type,
+                name: file.name,
+                key: file.uid,
             }));
 
         const createdAt = new Date();

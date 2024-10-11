@@ -1,4 +1,5 @@
 import { app } from '@/config/firebase.config';
+import { IMAGE, VIDEO } from '@/constants/media-type';
 import { ChatStatus, IChat, IConversation } from '@/interfaces/chat';
 import { ContractStatus } from '@/interfaces/contract';
 import { ContractCancelRequestStatus } from '@/interfaces/contract-cancel-request';
@@ -13,6 +14,7 @@ import { RcFile } from 'antd/es/upload';
 import { type ClassValue, clsx } from 'clsx';
 import dayjs from 'dayjs';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { viewerType } from 'react-documents';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -300,7 +302,7 @@ export const getFileTypeText = (type: string) => {
 const storage = getStorage(app);
 
 export const uploadFile = ({ file, folder = 'general' }: { file: RcFile; folder?: string }): Promise<string> => {
-    const fileName = `${Date.now()}-${file.name.split('.')[0]}.${file.type.split('/')[1]}`;
+    const fileName = `${Date.now()}-${file.name}`;
     const contentType = file.type;
     const metadata = {
         contentType,
@@ -333,4 +335,16 @@ export const uploadFiles = ({
 
 export const formatAddress = (address: IAddress) => {
     return `${address.street}, ${address.ward}, ${address.district}, ${address.city}`;
+};
+
+export const getMediaType = (type: string) => {
+    if (type.startsWith('image/')) return IMAGE;
+    if (type.startsWith('video/')) return VIDEO;
+
+    return 'unknown';
+};
+
+export const officeCanView = (fileName: string): viewerType | undefined => {
+    if (/\.(ppt|pptx|doc|docx|xls|xlsx)$/i.test(fileName)) return 'office';
+    if (/\.(txt|css|html|php|c|cpp|h|hpp|js|pdf)$/.test(fileName)) return 'google';
 };

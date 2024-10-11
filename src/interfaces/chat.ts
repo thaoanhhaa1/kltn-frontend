@@ -1,6 +1,8 @@
 import { IBaseUserEmbed, IUser } from '@/interfaces/user';
 
 export interface IMediaType {
+    key: string;
+    name: string;
     url: string;
     type: string;
 }
