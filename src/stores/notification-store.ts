@@ -13,6 +13,8 @@ export interface INotificationStore {
     updateStatus: (id: string, status: NotificationStatus) => void;
     setCount: (count: number) => void;
     setReadNotificationsIds: (readNotificationsIds: string[]) => void;
+    readNotification: (id: string) => void;
+    readAllNotifications: () => void;
 }
 
 const useNotificationStore = create<INotificationStore>((set) => ({
@@ -44,6 +46,26 @@ const useNotificationStore = create<INotificationStore>((set) => ({
         })),
     setCount: (count) => set({ count }),
     setReadNotificationsIds: (readNotificationsIds: string[]) => set({ readNotificationsIds }),
+    readNotification: (id: string) =>
+        set((state) => ({
+            notifications: {
+                data: state.notifications.data.map((notification) =>
+                    notification.id === id ? { ...notification, status: 'READ' } : notification,
+                ),
+                pageInfo: state.notifications.pageInfo,
+            },
+        })),
+    readAllNotifications: () =>
+        set((prev) => ({
+            notifications: {
+                data: prev.notifications.data.map((notification) => ({
+                    ...notification,
+                    status: 'READ',
+                })),
+                pageInfo: prev.notifications.pageInfo,
+            },
+            count: 0,
+        })),
 }));
 
 export { useNotificationStore };

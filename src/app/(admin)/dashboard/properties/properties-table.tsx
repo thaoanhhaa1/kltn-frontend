@@ -72,7 +72,7 @@ const PropertiesTable = () => {
                 title: '#',
                 dataIndex: 'propertyId',
                 width: 50,
-                render: (_: any, __: any, index: number) => index + 1,
+                render: (_: any, __: any, index: number) => index + 1 + pageSize * (page - 1),
             },
             {
                 title: 'Tiêu đề',

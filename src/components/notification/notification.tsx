@@ -1,14 +1,14 @@
 'use client';
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { INotification, NotificationType } from '@/interfaces/notification';
 import { cn, convertDateToTimeAgo } from '@/lib/utils';
 import { OWNER_REQUESTS, RENTAL_REQUESTS } from '@/path';
+import { updateNotificationStatus } from '@/services/notification-service';
 import { useNotificationStore } from '@/stores/notification-store';
 import { Typography } from 'antd';
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import Markdown from 'react-markdown';
 
 const getLink = (type: NotificationType) => {
     switch (type) {
@@ -22,25 +22,20 @@ const getLink = (type: NotificationType) => {
 };
 
 const Notification = ({ notification }: { notification: INotification }) => {
-    const { updateStatus } = useNotificationStore();
-    const elementRef = useRef(null);
-    const isInView = useIntersectionObserver(elementRef);
+    const { readNotification } = useNotificationStore();
 
-    useEffect(() => {
-        if (isInView && notification.status === 'RECEIVED') {
-            updateStatus(notification.id, 'READ');
+    const handleClick = () => {
+        if (notification.status === 'RECEIVED') {
+            readNotification(notification.id);
+            updateNotificationStatus([notification.id], 'READ').then();
         }
-    }, [isInView, notification.id, notification.status, updateStatus]);
+    };
 
     return (
-        <DropdownMenuItem
-            ref={elementRef}
-            className={cn(notification.status === 'RECEIVED' && 'bg-antd-primary bg-opacity-5')}
-        >
-            <Link href={getLink(notification.type)}>
+        <DropdownMenuItem className={cn(notification.status === 'RECEIVED' && 'bg-antd-primary bg-opacity-5')}>
+            <Link onClick={handleClick} href={getLink(notification.type)}>
                 <Typography.Title level={5}>{notification.title}</Typography.Title>
-                <Typography.Text>{notification.body}</Typography.Text>
-                <br />
+                <Markdown className="!m-0">{notification.body}</Markdown>
                 <Typography.Text type="secondary">
                     {convertDateToTimeAgo(new Date(notification.createdAt))}
                 </Typography.Text>

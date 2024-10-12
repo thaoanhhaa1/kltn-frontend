@@ -1,15 +1,17 @@
 'use client';
 
 import Notification from '@/components/notification/notification';
+import Title from '@/components/title';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { IPagination } from '@/interfaces/pagination';
-import { getNotifications, updateNotificationStatus } from '@/services/notification-service';
+import { getNotifications, readAllNotifications, updateNotificationStatus } from '@/services/notification-service';
 import { useNotificationStore } from '@/stores/notification-store';
-import { Badge, Flex, Spin } from 'antd';
-import { Bell } from 'lucide-react';
-import { useCallback, useEffect } from 'react';
+import { Badge, Button as ButtonAntD, Empty, Flex, Spin } from 'antd';
+import { Bell, CheckCheck } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export function Notifications({ count: countProp }: { count: number }) {
     const {
@@ -21,7 +23,9 @@ export function Notifications({ count: countProp }: { count: number }) {
         setCount,
         setLoading,
         setNotifications,
+        readAllNotifications: readAllNotificationsStore,
     } = useNotificationStore();
+    const [readAllLoading, setReadAllLoading] = useState(false);
 
     const fetchNotifications = useCallback(
         async (pagination: IPagination) => {
@@ -51,6 +55,22 @@ export function Notifications({ count: countProp }: { count: number }) {
         setCount(0);
     };
 
+    const handleReadAllNotifications = async () => {
+        setReadAllLoading(true);
+
+        try {
+            await readAllNotifications();
+
+            readAllNotificationsStore();
+            toast.success('Đã đánh dấu tất cả thông báo là đã đọc');
+        } catch (error) {
+            console.log(error);
+            toast.error('Đã có lỗi xảy ra');
+        } finally {
+            setReadAllLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchNotifications({ take: 10, skip: 0 });
         setCount(countProp);
@@ -66,11 +86,31 @@ export function Notifications({ count: countProp }: { count: number }) {
                 </Badge>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+                <Flex
+                    style={{
+                        paddingInline: '8px',
+                    }}
+                    align="center"
+                    justify="space-between"
+                >
+                    <Title level={4}>Thông báo</Title>
+                    {count ? (
+                        <ButtonAntD
+                            loading={readAllLoading}
+                            onClick={handleReadAllNotifications}
+                            type="text"
+                            icon={<CheckCheck className="w-4 h-4" />}
+                        >
+                            Đánh dấu đã đọc ({countProp})
+                        </ButtonAntD>
+                    ) : null}
+                </Flex>
                 <ScrollArea className="h-[300px] w-[320px] max-w-xs">
                     {notifications.data.map((notification) => (
                         <Notification key={notification.id} notification={notification} />
                     ))}
                     <Flex justify="center">{loading && <Spin />}</Flex>
+                    {!loading && !notifications.data.length && <Empty description="Không có thông báo nào" />}
                 </ScrollArea>
             </DropdownMenuContent>
         </DropdownMenu>
