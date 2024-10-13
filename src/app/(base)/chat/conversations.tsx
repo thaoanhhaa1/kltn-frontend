@@ -1,38 +1,39 @@
 'use client';
 
 import Conversation from '@/app/(base)/chat/conversation';
+import ConversationSkeleton from '@/app/(base)/chat/conversation-skeleton';
+import SkeletonRender from '@/components/skeleton-render';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { IPagination } from '@/interfaces/pagination';
-import { getConversationsService } from '@/services/chat-service';
+import useDebounce from '@/hooks/useDebounce';
 import { useConversationStore } from '@/stores/conversation-store';
-import { Divider, Typography } from 'antd';
-import { useCallback, useEffect } from 'react';
+import { useUserStore } from '@/stores/user-store';
+import { Divider, Input, Typography } from 'antd';
+import { useMemo, useState } from 'react';
 
 const Conversations = () => {
-    const { conversations, addConversations } = useConversationStore();
+    const { user } = useUserStore();
+    const { conversations, isFirstLoad, loading, addConversations, setLoading } = useConversationStore();
+    const [value, setValue] = useState('');
+    const valueDebounce = useDebounce(value, 500);
 
-    const fetchConversations = useCallback(
-        async (pagination: IPagination) => {
-            try {
-                const conversations = await getConversationsService(pagination);
+    const conversationsFiltered = useMemo(() => {
+        if (!valueDebounce) return conversations;
 
-                addConversations(conversations);
-            } catch (error) {
-                console.error(error);
-            }
-        },
-        [addConversations],
-    );
+        return conversations.filter((conversation) =>
+            conversation.participants.some(
+                (participant) =>
+                    participant.name.toLowerCase().includes(valueDebounce.toLowerCase()) &&
+                    participant.userId !== user?.userId!,
+            ),
+        );
+    }, [conversations, user?.userId, valueDebounce]);
 
-    useEffect(() => {
-        fetchConversations({
-            skip: 0,
-            take: 10,
-        });
-    }, [fetchConversations]);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value);
+    };
 
     return (
-        <div className="flex flex-col flex-1 mt-3">
+        <div className="flex flex-col flex-1 mt-3 gap-3">
             <Typography.Title
                 style={{
                     margin: 0,
@@ -43,13 +44,17 @@ const Conversations = () => {
             </Typography.Title>
             <Divider
                 style={{
-                    marginBlock: '12px',
+                    margin: 0,
                 }}
             />
+
+            <Input allowClear value={value} onChange={handleChange} placeholder="Tìm kiếm cuộc trò chuyện..." />
+
             <div className="flex-1 relative">
                 <div className="inset-0 absolute">
                     <ScrollArea className="h-full">
-                        {conversations.map((conversation) => (
+                        {loading && <SkeletonRender vertical controller={ConversationSkeleton} />}
+                        {conversationsFiltered.map((conversation) => (
                             <Conversation key={conversation.conversationId} conversation={conversation} />
                         ))}
                     </ScrollArea>

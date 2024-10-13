@@ -1,15 +1,22 @@
 import AvatarWithName from '@/components/avatar-with-name';
+import ViewMediaChat from '@/components/chat/view-media-chat';
 import { IChat } from '@/interfaces/chat';
 import { cn, getTimeChat } from '@/lib/utils';
+import { useConversationStore } from '@/stores/conversation-store';
 import { useUserStore } from '@/stores/user-store';
 import { Image as AntdImage, Flex } from 'antd';
-import Image from 'next/image';
 import { useState } from 'react';
+import { v4 } from 'uuid';
 
 const ChatItem = ({ chat }: { chat: IChat }) => {
     const { user } = useUserStore();
+    const { selectedConversation } = useConversationStore();
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const isMe = chat.sender.userId === user?.userId;
+    const isMe = chat.senderId === user?.userId;
+
+    if (!selectedConversation) return null;
+
+    const sender = selectedConversation.participants.find((participant) => participant.userId === chat.senderId)!;
 
     return (
         <Flex
@@ -20,24 +27,16 @@ const ChatItem = ({ chat }: { chat: IChat }) => {
             }}
             align="end"
         >
-            <AvatarWithName avatar={chat.sender.avatar || ''} name={chat.sender.name} />
+            <AvatarWithName avatar={sender.avatar || ''} name={sender.name} />
             <div className={cn('flex-1 flex', isMe && 'justify-end')}>
                 <div className="bg-antd-primary bg-opacity-5 rounded px-3 py-1.5 max-w-[70%]">
                     <div>{chat.message}</div>
                     {chat.medias.length ? (
-                        <div>
+                        <Flex vertical gap={8}>
                             {chat.medias.map((media) => (
-                                <Image
-                                    onClick={() => setSelectedImage(media.url)}
-                                    alt=""
-                                    src={media.url}
-                                    key={media.url}
-                                    width={200}
-                                    height={200}
-                                    className="w-[200px] object-cover"
-                                />
+                                <ViewMediaChat media={media} key={v4()} />
                             ))}
-                        </div>
+                        </Flex>
                     ) : null}
                     <div>
                         <span className="text-xs text-antd-primary-6">{getTimeChat(chat.createdAt)}</span>

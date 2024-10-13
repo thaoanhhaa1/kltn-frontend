@@ -1,3 +1,4 @@
+import ChatButton from '@/components/header/chat-button';
 import Search from '@/components/header/search';
 import { ModeToggle } from '@/components/mode-toggle';
 import MyAccount from '@/components/my-account';
@@ -17,7 +18,12 @@ const HeaderRight = ({ user, notificationsCount }: { user?: IUser; notifications
                     <Search />
                 </div>
             </form>
-            {user && <Notifications count={notificationsCount} />}
+            {user && (
+                <>
+                    <ChatButton />
+                    <Notifications count={notificationsCount} />
+                </>
+            )}
             <ModeToggle />
             {user?.userTypes.includes('admin') && (
                 <Button variant="outline" asChild>

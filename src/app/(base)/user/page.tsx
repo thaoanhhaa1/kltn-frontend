@@ -1,6 +1,7 @@
 import UpdatePassword from '@/app/(base)/user/update-password';
 import UserForm from '@/app/(base)/user/user-form';
 import VerifyForm from '@/app/(base)/user/verify-form';
+import Forbidden from '@/components/forbidden';
 import SaveUser from '@/components/save-user';
 import { IUser } from '@/interfaces/user';
 import { SIGN_IN } from '@/path';
@@ -20,6 +21,8 @@ const UserPage = async () => {
     } catch (error) {}
 
     if (!user) return redirect(SIGN_IN);
+
+    if (!user.userTypes.includes('owner') && !user.userTypes.includes('renter')) return <Forbidden />;
 
     const items: TabsProps['items'] = [
         {

@@ -33,9 +33,12 @@ const HistoryTransaction = ({ transaction }: { transaction: IHistoryTransaction 
                     <Typography.Title level={5}>{transaction.title}</Typography.Title>
                     <Typography.Text type="secondary">{formatDateTime(transaction.updatedAt)}</Typography.Text>
                     <Flex justify="space-between" align="center">
-                        <Typography.Text>
+                        <Typography.Text type={isIncome ? 'success' : 'danger'}>
                             Số tiền:&nbsp;
-                            <strong>{formatCurrency(transaction.amount, true)}</strong>
+                            {isIncome ? '+' : '-'}
+                            <strong>
+                                {formatCurrency(transaction.amount + (isIncome ? 0 : transaction.fee || 0), true)}
+                            </strong>
                         </Typography.Text>
                         <Typography.Title
                             style={{
@@ -44,8 +47,8 @@ const HistoryTransaction = ({ transaction }: { transaction: IHistoryTransaction 
                             level={4}
                             type={isIncome ? 'success' : 'danger'}
                         >
-                            {isIncome ? '+' : '-'}&nbsp;
-                            {transaction.amountEth?.toFixed(4)} ETH
+                            {isIncome ? '+' : '-'}
+                            {((transaction.amountEth || 0) + (isIncome ? 0 : transaction.feeEth || 0))?.toFixed(4)} ETH
                         </Typography.Title>
                     </Flex>
                 </div>

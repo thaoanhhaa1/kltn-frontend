@@ -5,6 +5,14 @@ import http from '@/lib/http';
 
 const ENDPOINT = '/contract-service/contracts';
 
+export const createContractAndApproveRequest = async (
+    params: ICreateContractRequest & {
+        requestId: string;
+    },
+) => {
+    return http.post(ENDPOINT, params);
+};
+
 export const createContract = ({
     contractTerms,
     depositAmount,

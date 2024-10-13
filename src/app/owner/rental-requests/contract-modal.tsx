@@ -1,7 +1,7 @@
 import TinyEditor from '@/components/tiny-editor';
 import { IGenerateContractResponse, IRentalRequest } from '@/interfaces/rentalRequest';
-import { createContract } from '@/services/contract-service';
-import { generateContract, ownerUpdateRentalRequestStatus } from '@/services/rental-request-service';
+import { createContractAndApproveRequest } from '@/services/contract-service';
+import { generateContract } from '@/services/rental-request-service';
 import { Flex, Modal, Spin } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -30,18 +30,13 @@ const ContractModal = ({
         try {
             const content = editorRef.current.getContent();
 
-            await Promise.all([
-                ownerUpdateRentalRequestStatus({
-                    requestId: rentalRequest?.requestId!,
-                    status: 'APPROVED',
-                }),
-                createContract({
-                    ...contract,
-                    contractTerms: content,
-                    ownerId: contract.ownerId,
-                    renterId: contract.renterId,
-                }),
-            ]);
+            const { contractContent, ...res } = contract;
+
+            await createContractAndApproveRequest({
+                ...res,
+                contractTerms: content,
+                requestId: rentalRequest?.requestId!,
+            });
 
             toast.success('Tạo hợp đồng thành công');
             await fetchRentalRequests();

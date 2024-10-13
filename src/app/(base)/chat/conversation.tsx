@@ -2,16 +2,27 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IConversation } from '@/interfaces/chat';
 import { cn, getFileTypeText, getNameAvatar, getOtherUser } from '@/lib/utils';
 import { useConversationStore } from '@/stores/conversation-store';
+import { useSocketStore } from '@/stores/socket-store';
 import { useUserStore } from '@/stores/user-store';
-import { Flex, Typography } from 'antd';
+import { Badge, Flex, Typography } from 'antd';
 
 const Conversation = ({ conversation }: { conversation: IConversation }) => {
     const { selectedConversation, setSelectedConversation } = useConversationStore();
     const { user } = useUserStore();
+    const { socket } = useSocketStore();
     const otherUser = getOtherUser(conversation.participants, user?.userId!);
+    const lastChat = (conversation.chats || []).at(-1);
 
     const handleSelectConversation = () => {
         setSelectedConversation(conversation);
+
+        if (conversation.unreadCount > 0)
+            socket?.emit('read-conversation', {
+                conversationId: conversation.conversationId,
+                time: new Date().toISOString(),
+                chatId: lastChat?.chatId,
+                userId: otherUser?.userId,
+            });
     };
 
     return (
@@ -27,17 +38,19 @@ const Conversation = ({ conversation }: { conversation: IConversation }) => {
                     <AvatarImage src={otherUser?.avatar || ''} />
                     <AvatarFallback>{getNameAvatar(otherUser?.name || '')}</AvatarFallback>
                 </Avatar>
-                <div className="flex-1">
-                    <Typography.Title level={5} style={{ margin: 0 }}>
-                        {otherUser?.name}
-                    </Typography.Title>
-                    <Typography.Text type="secondary" style={{ margin: 0 }}>
-                        {conversation.lastChat?.medias[0]?.type &&
-                            getFileTypeText(conversation.lastChat?.medias[0]?.type)}
-                        {conversation.lastChat?.medias[0]?.type && conversation.lastChat?.message && ' - '}
-                        {conversation.lastChat?.message}
-                    </Typography.Text>
-                </div>
+                <Flex flex={1} align="center" gap={8}>
+                    <div className="flex-1">
+                        <Typography.Title level={5} style={{ margin: 0 }}>
+                            {otherUser?.name}
+                        </Typography.Title>
+                        <Typography.Text type="secondary" style={{ margin: 0 }}>
+                            {lastChat?.medias[0]?.type && getFileTypeText(lastChat?.medias[0]?.type)}
+                            {lastChat?.medias[0]?.type && lastChat?.message && ' - '}
+                            {lastChat?.message}
+                        </Typography.Text>
+                    </div>
+                    <Badge count={conversation.unreadCount} />
+                </Flex>
             </Flex>
         </div>
     );

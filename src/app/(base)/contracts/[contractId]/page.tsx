@@ -7,6 +7,7 @@ import Forbidden from '@/components/forbidden';
 import Title from '@/components/title';
 import { CardContent, CardHeader } from '@/components/ui/card';
 import { IContractCancelRequestDetail } from '@/interfaces/contract-cancel-request';
+import { IUser } from '@/interfaces/user';
 import CustomError from '@/lib/error';
 import { formatAddress, formatCurrency, formatDate, getContractColor, getContractStatusText } from '@/lib/utils';
 import { HOME } from '@/path';
@@ -25,7 +26,7 @@ export default async function ContractDetails({ params: { contractId } }: { para
     const cookieStore = cookies();
     const accessToken = cookieStore.get('accessToken')?.value;
     let contract;
-    let user;
+    let user: IUser | null = null;
     let notHandledRequest: IContractCancelRequestDetail | null = null;
     let handledRequests: Array<IContractCancelRequestDetail> = [];
 
@@ -40,6 +41,8 @@ export default async function ContractDetails({ params: { contractId } }: { para
         console.log('🚀 ~ ContractDetails ~ error:', error);
         if (error instanceof CustomError && error.statusCode === 403) return <Forbidden />;
     }
+
+    if (!user || (!user.userTypes.includes('owner') && !user.userTypes.includes('renter'))) return <Forbidden />;
 
     if (!contract)
         return (

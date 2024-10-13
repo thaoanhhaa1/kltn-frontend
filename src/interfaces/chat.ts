@@ -1,6 +1,8 @@
-import { IBaseUserEmbed } from '@/interfaces/user';
+import { IBaseUserEmbed, IUser } from '@/interfaces/user';
 
 export interface IMediaType {
+    key: string;
+    name: string;
     url: string;
     type: string;
 }
@@ -13,26 +15,25 @@ export interface IChatEmbed {
 }
 
 export interface IConversation {
-    participants: Array<IBaseUserEmbed>;
-    receiver: IBaseUserEmbed;
-    lastChat?: IChatEmbed;
     conversationId: string;
     deletedBy: Array<string>;
     createdAt: string;
     updatedAt: string;
+    participants: Array<IBaseUserEmbed>;
+    receiver: IBaseUserEmbed;
+    chats: Array<IChat>;
+    unreadCount: number;
 }
 
 export interface IChat {
-    sender: IBaseUserEmbed;
-    receiver: IBaseUserEmbed;
     chatId: string;
-    conversation: string;
-    message: string;
     medias: Array<IMediaType>;
+    message: string;
+    createdAt: string;
+    senderId: IUser['userId'];
     savedBy: Array<string>;
     deletedBy: Array<string>;
     status: ChatStatus;
-    createdAt: string;
     updatedAt: string;
 }
 

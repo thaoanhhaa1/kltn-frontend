@@ -1,49 +1,42 @@
 import ChatEmpty from '@/components/chat/chat-empty';
 import ChatItem from '@/components/chat/chat-item';
+import Text from '@/components/text';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { getChatsService } from '@/services/chat-service';
-import { useChatStore } from '@/stores/chat-store';
+import { ChatStatus } from '@/interfaces/chat';
+import { getChatStatusText } from '@/lib/utils';
 import { useConversationStore } from '@/stores/conversation-store';
-import { Flex, Spin } from 'antd';
-import { useCallback, useEffect } from 'react';
+import { useUserStore } from '@/stores/user-store';
+import { Flex } from 'antd';
+import { Check, CheckCheck } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+
+const isShowChat = ['READ', 'RECEIVED'] as ChatStatus[];
 
 const Body = () => {
-    const { getChats, loading, firstGet, addChats, setLoading } = useChatStore();
+    const ref = useRef<HTMLDivElement>(null);
+    const { user } = useUserStore();
     const { selectedConversation } = useConversationStore();
-    const chats = selectedConversation?.receiver ? getChats(selectedConversation?.receiver.userId!) : [];
-
-    const fetchChats = useCallback(
-        async (nextChat?: string) => {
-            setLoading(true);
-
-            try {
-                const chats = await getChatsService({
-                    receiver: selectedConversation?.receiver.userId!,
-                    nextChat,
-                });
-
-                addChats(selectedConversation?.receiver.userId!, chats);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        },
-        [addChats, selectedConversation?.receiver.userId, setLoading],
-    );
+    const chats = selectedConversation?.chats || [];
 
     useEffect(() => {
-        if (selectedConversation && !firstGet.includes(selectedConversation?.receiver.userId!) && !loading)
-            fetchChats();
-    }, [fetchChats, firstGet, loading, selectedConversation]);
+        if (ref.current) {
+            const element = ref.current.querySelector('div[data-radix-scroll-area-viewport]');
+
+            if (!element) return;
+
+            element.scrollTop = element.scrollHeight;
+        }
+    }, [selectedConversation?.conversationId, chats.length]);
 
     if (!selectedConversation) return null;
+
+    const lastChat = chats.at(-1);
 
     return (
         <div className="flex-1 relative">
             <div className="absolute inset-0">
-                <ScrollArea className="h-full">
-                    {loading && (
+                <ScrollArea ref={ref} className="h-full pr-2.5">
+                    {/* {loading && (
                         <Flex
                             justify="center"
                             style={{
@@ -52,21 +45,32 @@ const Body = () => {
                         >
                             <Spin />
                         </Flex>
-                    )}
-                    <Flex
-                        vertical
-                        gap={12}
-                        style={{
-                            flexDirection: 'column-reverse',
-                        }}
-                    >
+                    )} */}
+                    <Flex vertical gap={12}>
                         {chats.map((chat) => (
                             <ChatItem chat={chat} key={chat.chatId} />
                         ))}
                     </Flex>
+                    {lastChat && lastChat.senderId === user?.userId && isShowChat.includes(lastChat.status) && (
+                        <Flex
+                            align="center"
+                            gap={2}
+                            justify="flex-end"
+                            style={{
+                                paddingInline: '48px',
+                            }}
+                        >
+                            {lastChat.status === 'RECEIVED' ? (
+                                <Check className="w-4 h-4" />
+                            ) : (
+                                <CheckCheck className="w-4 h-4" />
+                            )}
+                            <Text>{getChatStatusText(lastChat.status)}</Text>
+                        </Flex>
+                    )}
                 </ScrollArea>
             </div>
-            {!loading && chats.length === 0 && (
+            {chats.length === 0 && (
                 <div className="absolute inset-0 flex justify-center items-center">
                     <ChatEmpty />
                 </div>

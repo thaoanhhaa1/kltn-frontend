@@ -6,19 +6,8 @@ export const createRentalRequestSchema = z
         ownerId: z.string({
             required_error: 'Owner ID là bắt buộc',
         }),
-        property: z.object({
-            propertyId: z.string({
-                required_error: 'Property ID là bắt buộc',
-            }),
-            title: z.string({
-                required_error: 'Tiêu đề là bắt buộc',
-            }),
-            images: z.array(
-                z.string({
-                    required_error: 'Ảnh là bắt buộc',
-                }),
-            ),
-            slug: z.string().min(1, { message: 'Slug là bắt buộc' }),
+        propertyId: z.string({
+            required_error: 'Property ID là bắt buộc',
         }),
         rentalPrice: z.coerce.number({
             required_error: 'Giá thuê là bắt buộc',

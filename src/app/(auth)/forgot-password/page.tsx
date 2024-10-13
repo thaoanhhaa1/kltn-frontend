@@ -1,4 +1,4 @@
-import ForgotPasswordContent from '@/app/(base)/forgot-password/forgot-password-content';
+import ForgotPasswordContent from '@/app/(auth)/forgot-password/forgot-password-content';
 import { Card } from '@/components/ui/card';
 
 const ForgotPasswordPage = () => {
