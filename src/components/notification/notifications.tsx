@@ -11,7 +11,6 @@ import { useNotificationStore } from '@/stores/notification-store';
 import { Badge, Button as ButtonAntD, Empty, Flex, Spin } from 'antd';
 import { Bell, CheckCheck } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 
 export function Notifications({ count: countProp }: { count: number }) {
     const {
@@ -51,24 +50,13 @@ export function Notifications({ count: countProp }: { count: number }) {
 
             return;
         }
-
-        setCount(0);
     };
 
-    const handleReadAllNotifications = async () => {
-        setReadAllLoading(true);
-
-        try {
-            await readAllNotifications();
-
-            readAllNotificationsStore();
-            toast.success('Đã đánh dấu tất cả thông báo là đã đọc');
-        } catch (error) {
-            console.log(error);
-            toast.error('Đã có lỗi xảy ra');
-        } finally {
-            setReadAllLoading(false);
-        }
+    const handleReadAllNotifications = () => {
+        readAllNotifications()
+            .then()
+            .catch((error) => console.error(error));
+        readAllNotificationsStore();
     };
 
     useEffect(() => {
@@ -101,7 +89,7 @@ export function Notifications({ count: countProp }: { count: number }) {
                             type="text"
                             icon={<CheckCheck className="w-4 h-4" />}
                         >
-                            Đánh dấu đã đọc ({countProp})
+                            Đánh dấu đã đọc ({count})
                         </ButtonAntD>
                     ) : null}
                 </Flex>

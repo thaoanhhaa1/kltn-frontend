@@ -1,7 +1,7 @@
 'use client';
 
-import StepOne from '@/app/(base)/forgot-password/step-one';
-import StepTwo from '@/app/(base)/forgot-password/step-two';
+import StepOne from '@/app/(auth)/forgot-password/step-one';
+import StepTwo from '@/app/(auth)/forgot-password/step-two';
 import { Steps } from 'antd';
 import { useState } from 'react';
 

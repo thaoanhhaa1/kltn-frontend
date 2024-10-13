@@ -2,6 +2,7 @@
 
 import CancelModal from '@/app/(base)/contracts/cancel-modal';
 import CancelBeforeDeposit from '@/components/contracts/cancel-before-deposit';
+import Forbidden from '@/components/forbidden';
 import TablePagination from '@/components/table-pagination';
 import { initDataTable } from '@/constants/init-data';
 import usePagination from '@/hooks/usePagination';
@@ -17,11 +18,13 @@ import {
 } from '@/lib/utils';
 import { RENTAL_CONTRACTS } from '@/path';
 import { getContractsByRenter } from '@/services/contract-service';
+import { useUserStore } from '@/stores/user-store';
 import { Button, Space, TableProps, Tag, Tooltip, Typography } from 'antd';
 import { Eye, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const ContractsPage = () => {
+    const { user } = useUserStore();
     const [contracts, setContracts] = useState<ITable<IContract>>(initDataTable);
     const [loading, setLoading] = useState(true);
     const [cancelContract, setCancelContract] = useState<IContract | null>(null);
@@ -149,6 +152,8 @@ const ContractsPage = () => {
     useEffect(() => {
         fetchData(page, pageSize);
     }, [fetchData, page, pageSize]);
+
+    if (!user?.userTypes.includes('renter')) return <Forbidden />;
 
     return (
         <div className="mt-5">

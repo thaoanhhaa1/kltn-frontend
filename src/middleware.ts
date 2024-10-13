@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 const authRoutes = ['/sign-in', '/sign-up', '/forgot-password'];
-const privateRoutes = ['/dashboard', '/owner', '/user', '/rental-requests'];
+const privateRoutes = ['/dashboard', '/owner', '/user', '/rental-requests', '/chat', '/contracts', '/payments'];
 
 const checkAuth = ({ isAuth, request }: { isAuth: boolean; request: NextRequest }) => {
     if (isAuth && authRoutes.some((route) => request.nextUrl.pathname.includes(route))) {
@@ -39,5 +39,8 @@ export const config = {
         '/sign-up',
         '/forgot-password',
         '/rental-requests',
+        '/chat',
+        '/contracts',
+        '/payments',
     ],
 };

@@ -1,9 +1,11 @@
 import Header from '@/app/(base)/payments/header';
 import Payment from '@/app/(base)/payments/payment';
 import Forbidden from '@/components/forbidden';
+import { IPayloadJWT } from '@/interfaces/jwt';
 import { ITransaction } from '@/interfaces/transaction';
 import { getTransactionsByRenter } from '@/services/transaction-service';
 import { Col, Row } from 'antd';
+import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
 
 const PaymentsPage = async () => {
@@ -11,6 +13,16 @@ const PaymentsPage = async () => {
     const accessToken = cookiesStore.get('accessToken')?.value;
 
     if (!accessToken) return <Forbidden />;
+
+    try {
+        const payload: IPayloadJWT = jwtDecode(accessToken);
+
+        if (!payload.userTypes.includes('renter')) {
+            return <Forbidden />;
+        }
+    } catch (error) {
+        return <div>Unauthorized</div>;
+    }
 
     let transactions: Array<ITransaction> = [];
 

@@ -54,6 +54,7 @@ const useNotificationStore = create<INotificationStore>((set) => ({
                 ),
                 pageInfo: state.notifications.pageInfo,
             },
+            count: state.count ? state.count - 1 : 0,
         })),
     readAllNotifications: () =>
         set((prev) => ({
