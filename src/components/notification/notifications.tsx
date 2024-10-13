@@ -60,14 +60,15 @@ export function Notifications({ count: countProp }: { count: number }) {
     };
 
     useEffect(() => {
+        if (Number.isInteger(count)) return;
         fetchNotifications({ take: 10, skip: 0 });
         setCount(countProp);
-    }, [countProp, fetchNotifications, setCount]);
+    }, [count, countProp, fetchNotifications, setCount]);
 
     return (
         <DropdownMenu onOpenChange={handleToggleNotifications}>
             <DropdownMenuTrigger asChild>
-                <Badge count={count ?? countProp}>
+                <Badge count={count}>
                     <Button variant="outline" size="icon">
                         <Bell className="w-5 h-5" />
                     </Button>

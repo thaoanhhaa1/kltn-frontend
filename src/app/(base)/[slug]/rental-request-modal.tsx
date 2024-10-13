@@ -130,7 +130,7 @@ const RentalRequestModal = ({
                     <Col span={12}>
                         <Form.Item
                             initialValue={property.price}
-                            label="Tiền cọc"
+                            label="Tiền thuê"
                             name="rentalPrice"
                             rules={[{ required: true, message: 'Nhập số tiền thuê' }]}
                         >
