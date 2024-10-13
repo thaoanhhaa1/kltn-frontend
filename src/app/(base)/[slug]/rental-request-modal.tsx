@@ -49,15 +49,10 @@ const RentalRequestModal = ({
 
             await createRentalRequest({
                 ...rest,
-                property: {
-                    images: property.images,
-                    title: property.title,
-                    propertyId: property.propertyId,
-                    slug: property.slug,
-                },
                 ownerId: property.owner.userId,
                 rentalStartDate: rentalStartDate.format('DD/MM/YYYY'),
                 rentalEndDate: rentalEndDate.format('DD/MM/YYYY'),
+                propertyId: property.propertyId,
             });
 
             toast.success('Yêu cầu thuê nhà đã được gửi');
