@@ -4,13 +4,7 @@ import RentalRequestModal from '@/app/(base)/[slug]/rental-request-modal';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IConversation } from '@/interfaces/chat';
 import { IProperty } from '@/interfaces/property';
-import {
-    convertDateToGMT,
-    convertDateToTimeAgo,
-    createChatConversation,
-    formatCurrency,
-    getNameAvatar,
-} from '@/lib/utils';
+import { convertDateToTimeAgo, createChatConversation, formatCurrency, getNameAvatar } from '@/lib/utils';
 import { CHAT } from '@/path';
 import { useConversationStore } from '@/stores/conversation-store';
 import { useUserStore } from '@/stores/user-store';
@@ -23,7 +17,6 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
     const { user } = useUserStore();
     const { addConversation, setSelectedConversation } = useConversationStore();
     const [openRentalRequest, setOpenRentalRequest] = useState(false);
-    const createdAt = convertDateToGMT(property.createdAt);
 
     const handleOpenRentalRequest = () => {
         setOpenRentalRequest(true);
@@ -48,7 +41,7 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
 
     return (
         <>
-            <Typography.Text type="secondary">{convertDateToTimeAgo(createdAt)}</Typography.Text>
+            <Typography.Text type="secondary">{convertDateToTimeAgo(new Date(property.createdAt))}</Typography.Text>
             <Typography.Title
                 level={2}
                 style={{

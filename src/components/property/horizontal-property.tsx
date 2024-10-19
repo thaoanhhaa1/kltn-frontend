@@ -1,6 +1,6 @@
 import HeartBtn from '@/components/property/heart-btn';
 import { ICondition, IProperty } from '@/interfaces/property';
-import { convertDateToGMT, convertDateToTimeAgo, formatCurrency } from '@/lib/utils';
+import { convertDateToTimeAgo, formatCurrency } from '@/lib/utils';
 import { Flex, Typography } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -52,7 +52,7 @@ const HorizontalProperty = ({ property }: { property: IProperty }) => {
                     </Typography.Title>
                     <Flex align="center" justify="space-between">
                         <Typography.Text type="secondary">
-                            {convertDateToTimeAgo(convertDateToGMT(property.createdAt))}
+                            {convertDateToTimeAgo(new Date(property.createdAt))}
                         </Typography.Text>
                         <HeartBtn />
                     </Flex>

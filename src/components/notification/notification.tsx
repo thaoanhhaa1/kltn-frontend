@@ -2,7 +2,7 @@
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { INotification, NotificationType } from '@/interfaces/notification';
-import { cn, convertDateToGMT, convertDateToTimeAgo } from '@/lib/utils';
+import { cn, convertDateToTimeAgo } from '@/lib/utils';
 import {
     DASHBOARD_PROPERTIES,
     OWNER_CONTRACTS,
@@ -63,7 +63,7 @@ const Notification = ({ notification }: { notification: INotification }) => {
                 <Typography.Title level={5}>{notification.title}</Typography.Title>
                 <Markdown className="!m-0">{notification.body}</Markdown>
                 <Typography.Text type="secondary">
-                    {convertDateToTimeAgo(convertDateToGMT(notification.createdAt))}
+                    {convertDateToTimeAgo(new Date(notification.createdAt))}
                 </Typography.Text>
             </Link>
         </DropdownMenuItem>
