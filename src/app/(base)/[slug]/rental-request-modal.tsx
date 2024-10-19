@@ -39,9 +39,19 @@ const RentalRequestModal = ({
         }
     };
 
-    const handleOk = async () => {
+    const handleValidate = async () => {
         try {
             await form.validateFields();
+
+            return true;
+        } catch (error) {
+            return false;
+        }
+    };
+
+    const handleOk = async () => {
+        try {
+            if (!(await handleValidate())) return;
 
             setConfirmLoading(true);
 
@@ -87,6 +97,8 @@ const RentalRequestModal = ({
             onOk={handleOk}
             confirmLoading={confirmLoading}
             onCancel={handleCancel}
+            okText="Gửi yêu cầu"
+            cancelText="Hủy"
         >
             <Form layout="vertical" form={form}>
                 <Row gutter={8}>
@@ -100,6 +112,7 @@ const RentalRequestModal = ({
                                 {...datePickerProps}
                                 placeholder="Ngày bắt đầu"
                                 // minDate={dayjs().add(1, 'day')} // FIXME: Uncomment this line
+                                minDate={dayjs()} // FIXME: Remove this line
                                 onChange={handleChangeFromDate}
                             />
                         </Form.Item>
