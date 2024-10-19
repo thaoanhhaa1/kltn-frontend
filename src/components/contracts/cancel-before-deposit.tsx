@@ -19,7 +19,15 @@ const CancelBeforeDeposit = ({
 
             setContracts((prev) => ({
                 ...prev,
-                data: prev.data.map((c) => (c.contractId === newContract.contractId ? newContract : c)),
+                data: prev.data.map((c) =>
+                    c.contractId === newContract.contractId
+                        ? {
+                              ...c,
+                              status: newContract.status,
+                              updatedAt: newContract.updatedAt,
+                          }
+                        : c,
+                ),
             }));
             toast.success('Huỷ hợp đồng thành công');
         } catch (error) {

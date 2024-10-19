@@ -65,12 +65,14 @@ const ContractsTable = () => {
                 title: 'Giá',
                 dataIndex: 'monthlyRent',
                 width: 170,
+                align: 'right',
                 render: (value) => formatCurrency(value, true),
             },
             {
                 title: 'Tiền cọc',
                 dataIndex: 'depositAmount',
                 width: 170,
+                align: 'right',
                 render: (value) => formatCurrency(value, true),
             },
             {
