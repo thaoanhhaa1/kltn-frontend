@@ -2,6 +2,7 @@ import ChatButton from '@/components/header/chat-button';
 import Search from '@/components/header/search';
 import { ModeToggle } from '@/components/mode-toggle';
 import MyAccount from '@/components/my-account';
+import NotificationCount from '@/components/notification/notification-count';
 import { Notifications } from '@/components/notification/notifications';
 import { Button } from '@/components/ui/button';
 import { IUser } from '@/interfaces/user';
@@ -21,7 +22,8 @@ const HeaderRight = ({ user, notificationsCount }: { user?: IUser; notifications
             {user && (
                 <>
                     <ChatButton />
-                    <Notifications count={notificationsCount} />
+                    <NotificationCount count={notificationsCount} />
+                    <Notifications />
                 </>
             )}
             <ModeToggle />

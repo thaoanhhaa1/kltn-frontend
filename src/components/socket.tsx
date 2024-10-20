@@ -2,9 +2,11 @@
 
 import { IConversation } from '@/interfaces/chat';
 import { IConversationSocket, IReadConversationSocket } from '@/interfaces/conversation';
+import { INotification } from '@/interfaces/notification';
 import { getOtherUser } from '@/lib/utils';
 import { useChatStore } from '@/stores/chat-store';
 import { useConversationStore } from '@/stores/conversation-store';
+import { useNotificationStore } from '@/stores/notification-store';
 import { useSocketStore } from '@/stores/socket-store';
 import { useUserStore } from '@/stores/user-store';
 import { useEffect } from 'react';
@@ -14,6 +16,7 @@ const Socket = () => {
     const { socket, disconnect, connect } = useSocketStore();
     const { addChat } = useChatStore();
     const { selectedConversation, addConversation, readConversation } = useConversationStore();
+    const { addNotification } = useNotificationStore();
 
     useEffect(() => {
         if (user) connect();
@@ -76,6 +79,12 @@ const Socket = () => {
 
                 console.log('🚀 ~ file: socket.tsx ~ read-conversation', data);
             });
+
+            socket.on('create-notification', (data: INotification) => {
+                console.log('🚀 ~ file: socket.tsx ~ create-notification', data);
+
+                addNotification(data);
+            });
         }
 
         return () => {
@@ -84,9 +93,18 @@ const Socket = () => {
                 socket.off('disconnect');
                 socket.off('send-message');
                 socket.off('read-conversation');
+                socket.off('create-notification');
             }
         };
-    }, [addChat, addConversation, readConversation, selectedConversation?.conversationId, socket, user?.userId]);
+    }, [
+        addChat,
+        addConversation,
+        addNotification,
+        readConversation,
+        selectedConversation?.conversationId,
+        socket,
+        user?.userId,
+    ]);
 
     useEffect(() => {
         if (user && socket) socket.emit('online', user.userId);

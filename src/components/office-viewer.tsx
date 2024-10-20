@@ -11,6 +11,7 @@ import { Download, X } from 'lucide-react';
 import { DocumentViewer, viewerType } from 'react-documents';
 
 const OfficeViewer = ({
+    viewer,
     media,
     onClose = () => {},
 }: {
@@ -32,13 +33,15 @@ const OfficeViewer = ({
             <div className="fixed flex flex-col inset-0 bg-white z-50">
                 <div className="relative flex-1">
                     <DocumentViewer
-                        // viewer={viewer}
-                        overrideLocalhost={envConfig.NEXT_PUBLIC_DOC_VIEWER}
+                        viewer={viewer}
+                        // overrideLocalhost={envConfig.NEXT_PUBLIC_DOC_VIEWER}
                         queryParams="hl=Nl"
                         url={media.url}
                         loaded={() => {
                             stopLoading();
                         }}
+                        googleCheckContentLoaded
+                        viewerUrl={envConfig.NEXT_PUBLIC_DOC_VIEWER}
                     />
 
                     {loading ? (
@@ -56,8 +59,8 @@ const OfficeViewer = ({
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Button icon={<Download />} onClick={download} />
-                        <Button icon={<X />} onClick={onClose} />
+                        <Button icon={<Download className="w-5 h-5" />} onClick={download} />
+                        <Button icon={<X className="w-5 h-5" />} onClick={onClose} />
                     </div>
                 </div>
             </div>

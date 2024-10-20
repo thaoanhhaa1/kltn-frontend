@@ -6,7 +6,7 @@ import { IUser } from '@/interfaces/user';
 import { useConversationStore } from '@/stores/conversation-store';
 import { useEffect } from 'react';
 
-const SaveNotifications = ({ conversations, user }: { conversations: ITable<IConversation>; user?: IUser }) => {
+const SaveConversations = ({ conversations, user }: { conversations: ITable<IConversation>; user?: IUser }) => {
     const { addConversations } = useConversationStore();
 
     useEffect(() => {
@@ -32,4 +32,4 @@ const SaveNotifications = ({ conversations, user }: { conversations: ITable<ICon
     return null;
 };
 
-export default SaveNotifications;
+export default SaveConversations;
