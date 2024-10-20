@@ -3,10 +3,13 @@ import CancelContractButton from '@/app/(base)/contracts/[contractId]/cancel-con
 import CancellationRequest from '@/app/(base)/contracts/[contractId]/cancellation-request';
 import ViewContractButton from '@/app/(base)/contracts/[contractId]/view-contract-button';
 import AvatarWithName from '@/components/avatar-with-name';
+import Extension from '@/components/extension';
+import ExtensionRequests from '@/components/extension-request/extension-requests';
 import Forbidden from '@/components/forbidden';
 import Title from '@/components/title';
 import { CardContent, CardHeader } from '@/components/ui/card';
 import { IContractCancelRequestDetail } from '@/interfaces/contract-cancel-request';
+import { IExtensionRequest } from '@/interfaces/contract-extension-request';
 import { IUser } from '@/interfaces/user';
 import CustomError from '@/lib/error';
 import { formatAddress, formatCurrency, formatDate, getContractColor, getContractStatusText } from '@/lib/utils';
@@ -15,6 +18,7 @@ import {
     getHandledContractCancelRequest,
     getNotHandledContractCancelRequest,
 } from '@/services/contract-cancel-request-service';
+import { getExtensionRequestByContractId } from '@/services/contract-extension-request-service';
 import { getContractDetail } from '@/services/contract-service';
 import { getMe } from '@/services/user-service';
 import { Button, Card, Col, Flex, Result, Row, Tag } from 'antd';
@@ -29,13 +33,18 @@ export default async function ContractDetails({ params: { contractId } }: { para
     let user: IUser | null = null;
     let notHandledRequest: IContractCancelRequestDetail | null = null;
     let handledRequests: Array<IContractCancelRequestDetail> = [];
+    let extensionRequests: Array<IExtensionRequest> = [];
 
     try {
-        [contract, user, notHandledRequest, handledRequests] = await Promise.all([
+        [contract, user, notHandledRequest, handledRequests, extensionRequests] = await Promise.all([
             getContractDetail(contractId, accessToken!),
             getMe(accessToken!),
             getNotHandledContractCancelRequest(contractId, accessToken!),
             getHandledContractCancelRequest(contractId, accessToken!),
+            getExtensionRequestByContractId({
+                contractId,
+                accessToken: accessToken!,
+            }),
         ]);
     } catch (error) {
         console.log('🚀 ~ ContractDetails ~ error:', error);
@@ -69,10 +78,17 @@ export default async function ContractDetails({ params: { contractId } }: { para
                     <Title>Chi tiết hợp đồng</Title>
                     <Tag color={getContractColor(contract.status)}>{getContractStatusText(contract.status)}</Tag>
                 </div>
-                <div className="space-x-2">
+                <Flex gap={8}>
                     <CancelContractButton contract={contract} />
+                    {isOwner || (
+                        <Extension
+                            contractId={contractId}
+                            endDate={new Date(contract.endDate)}
+                            type="EXTEND_CONTRACT"
+                        />
+                    )}
                     <ViewContractButton contractContent={contract.contractTerms} />
-                </div>
+                </Flex>
             </header>
             <Row gutter={[12, 12]}>
                 <Col span={12}>
@@ -158,7 +174,6 @@ export default async function ContractDetails({ params: { contractId } }: { para
                                 </div>
                             </CardContent>
                         </Card>
-
                         <Card>
                             <CardHeader>
                                 <Title level={3}>Thông tin hợp đồng</Title>
@@ -178,6 +193,14 @@ export default async function ContractDetails({ params: { contractId } }: { para
                                         <strong>Tiền cọc:</strong> {formatCurrency(contract.depositAmount, true)}
                                     </p>
                                 </div>
+                            </CardContent>
+                        </Card>
+                        <Card className="col-span-2">
+                            <CardHeader>
+                                <Title level={3}>Yêu cầu gia hạn</Title>
+                            </CardHeader>
+                            <CardContent>
+                                <ExtensionRequests isOwner={isOwner} extensionRequests={extensionRequests} />
                             </CardContent>
                         </Card>
                     </Flex>

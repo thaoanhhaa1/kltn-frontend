@@ -3,6 +3,7 @@ import { IMAGE, VIDEO } from '@/constants/media-type';
 import { ChatStatus, IChat, IConversation } from '@/interfaces/chat';
 import { ContractStatus } from '@/interfaces/contract';
 import { ContractCancelRequestStatus } from '@/interfaces/contract-cancel-request';
+import { ContractExtensionRequestStatus, ContractExtensionRequestType } from '@/interfaces/contract-extension-request';
 import { IPagination } from '@/interfaces/pagination';
 import { IAddress, PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
@@ -157,6 +158,28 @@ export const getChatStatusText = (status: ChatStatus) => {
     if (status === 'RECEIVED') return 'Đã nhận';
     if (status === 'READ') return 'Đã đọc';
     return 'Không xác định';
+};
+
+export const getExtensionRequestTypeText = (type: ContractExtensionRequestType) => {
+    if (type === 'EXTEND_CONTRACT') return 'Gia hạn hợp đồng';
+    if (type === 'EXTEND_PAYMENT') return 'Gia hạn thanh toán';
+    return 'Không xác định';
+};
+
+export const getExtensionRequestStatusText = (status: ContractExtensionRequestStatus) => {
+    if (status === 'PENDING') return 'Chờ xác nhận';
+    if (status === 'APPROVED') return 'Đã chấp nhận';
+    if (status === 'REJECTED') return 'Đã từ chối';
+    if (status === 'CANCELLED') return 'Đã hủy';
+    return 'Không xác định';
+};
+
+export const getExtensionRequestStatusColor = (status: ContractExtensionRequestStatus) => {
+    if (status === 'PENDING') return 'processing';
+    if (status === 'APPROVED') return 'success';
+    if (status === 'REJECTED') return 'error';
+    if (status === 'CANCELLED') return 'default';
+    return 'default';
 };
 
 export const formatDate = (date: string | Date) => {
