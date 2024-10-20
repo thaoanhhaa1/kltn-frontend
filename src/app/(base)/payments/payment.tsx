@@ -1,10 +1,11 @@
-'use client';
-
 import PaymentTransaction from '@/app/(base)/payments/payment-transaction';
+import Extension from '@/components/extension';
+import Text from '@/components/text';
+import Title from '@/components/title';
 import { Card } from '@/components/ui/card';
 import { ITransaction } from '@/interfaces/transaction';
 import { formatCurrency, formatDate, formatDateTime, getTransactionColor, getTransactionStatusText } from '@/lib/utils';
-import { Flex, Tag, Typography } from 'antd';
+import { Flex, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { ReceiptText } from 'lucide-react';
 import Markdown from 'react-markdown';
@@ -15,17 +16,16 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
             <Flex align="center" gap={16}>
                 <ReceiptText size={30} className="text-antd-primary" />
                 <div>
-                    <Typography.Title level={5}>{transaction.title}</Typography.Title>
+                    <Title level={5}>{transaction.title}</Title>
                     {transaction.description && (
-                        <Typography.Text>
+                        <Text>
                             <Markdown>{transaction.description}</Markdown>
-                        </Typography.Text>
+                        </Text>
                     )}
                     {transaction.transactionHash && (
                         <div>
-                            <Typography.Text>Mã giao dịch:</Typography.Text>
-                            &nbsp;
-                            <Typography.Text
+                            <Text>Mã giao dịch: </Text>
+                            <Text
                                 strong
                                 style={{
                                     wordBreak: 'break-all',
@@ -36,27 +36,27 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                                 }}
                             >
                                 {transaction.transactionHash}
-                            </Typography.Text>
+                            </Text>
                         </div>
                     )}
                     <Flex gap={4}>
-                        <Typography.Text>Số tiền cần thanh toán:</Typography.Text>
-                        <Typography.Text strong>{formatCurrency(transaction.amount, true)}</Typography.Text>
+                        <Text>Số tiền cần thanh toán:</Text>
+                        <Text strong>{formatCurrency(transaction.amount, true)}</Text>
                     </Flex>
                     <Flex gap={4}>
-                        <Typography.Text>Thời gian tạo:</Typography.Text>
-                        <Typography.Text strong>{formatDate(transaction.createdAt)}</Typography.Text>
+                        <Text>Thời gian tạo:</Text>
+                        <Text strong>{formatDate(transaction.createdAt)}</Text>
                     </Flex>
                     {transaction.endDate && transaction.status === 'PENDING' && (
                         <div>
-                            <Typography.Text>Hạn thanh toán:</Typography.Text>
+                            <Text>Hạn thanh toán:</Text>
                             &nbsp;
-                            <Typography.Text strong>{formatDateTime(transaction.endDate)}</Typography.Text>
+                            <Text strong>{formatDateTime(transaction.endDate)}</Text>
                             &nbsp;
-                            <Typography.Text>
+                            <Text>
                                 (Còn lại:&nbsp;
                                 <strong>{dayjs(transaction.endDate).diff(dayjs(), 'day')} ngày</strong>)
-                            </Typography.Text>
+                            </Text>
                         </div>
                     )}
                     <Flex
@@ -70,11 +70,19 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                             {getTransactionStatusText(transaction.status)}
                         </Tag>
                         {transaction.status === 'PENDING' && (
-                            <PaymentTransaction
-                                isDeposit={!transaction.toId}
-                                transactionId={transaction.id}
-                                contractId={transaction.contractId}
-                            />
+                            <Flex gap={8}>
+                                <Extension
+                                    endDate={new Date(transaction.endDate!)}
+                                    contractId={transaction.contractId}
+                                    transactionId={transaction.id}
+                                    type="EXTEND_PAYMENT"
+                                />
+                                <PaymentTransaction
+                                    isDeposit={!transaction.toId}
+                                    transactionId={transaction.id}
+                                    contractId={transaction.contractId}
+                                />
+                            </Flex>
                         )}
                     </Flex>
                 </div>

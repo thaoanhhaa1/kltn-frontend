@@ -20,6 +20,7 @@ export interface IContract {
     propertyId: string;
     startDate: string;
     endDate: string;
+    endDateActual: string;
     deleted: boolean;
     status: ContractStatus;
     createdAt: string;

@@ -3,6 +3,7 @@ import { IMAGE, VIDEO } from '@/constants/media-type';
 import { ChatStatus, IChat, IConversation } from '@/interfaces/chat';
 import { ContractStatus } from '@/interfaces/contract';
 import { ContractCancelRequestStatus } from '@/interfaces/contract-cancel-request';
+import { ContractExtensionRequestStatus, ContractExtensionRequestType } from '@/interfaces/contract-extension-request';
 import { IPagination } from '@/interfaces/pagination';
 import { IAddress, PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
@@ -159,6 +160,28 @@ export const getChatStatusText = (status: ChatStatus) => {
     return 'Không xác định';
 };
 
+export const getExtensionRequestTypeText = (type: ContractExtensionRequestType) => {
+    if (type === 'EXTEND_CONTRACT') return 'Gia hạn hợp đồng';
+    if (type === 'EXTEND_PAYMENT') return 'Gia hạn thanh toán';
+    return 'Không xác định';
+};
+
+export const getExtensionRequestStatusText = (status: ContractExtensionRequestStatus) => {
+    if (status === 'PENDING') return 'Chờ xác nhận';
+    if (status === 'APPROVED') return 'Đã chấp nhận';
+    if (status === 'REJECTED') return 'Đã từ chối';
+    if (status === 'CANCELLED') return 'Đã hủy';
+    return 'Không xác định';
+};
+
+export const getExtensionRequestStatusColor = (status: ContractExtensionRequestStatus) => {
+    if (status === 'PENDING') return 'processing';
+    if (status === 'APPROVED') return 'success';
+    if (status === 'REJECTED') return 'error';
+    if (status === 'CANCELLED') return 'default';
+    return 'default';
+};
+
 export const formatDate = (date: string | Date) => {
     return dayjs(date).format('DD/MM/YYYY');
 };
@@ -210,7 +233,7 @@ export function convertCurrencyToText(number: number): string {
 
 export const convertDateToTimeAgo = (date: Date) => {
     const now = new Date();
-    const diff = now.getTime() - date.getTime() + 7 * 60 * 60 * 1000;
+    const diff = now.getTime() - date.getTime();
 
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
@@ -345,6 +368,6 @@ export const getMediaType = (type: string) => {
 };
 
 export const officeCanView = (fileName: string): viewerType | undefined => {
-    if (/\.(ppt|pptx|doc|docx|xls|xlsx)$/i.test(fileName)) return 'office';
-    if (/\.(txt|css|html|php|c|cpp|h|hpp|js|pdf)$/.test(fileName)) return 'google';
+    // if (/\.(ppt|pptx|doc|docx|xls|xlsx)$/i.test(fileName)) return 'office';
+    if (/\.(txt|css|html|php|c|cpp|h|hpp|js|pdf|doc|docx|xls|xlsx)$/.test(fileName)) return 'google';
 };

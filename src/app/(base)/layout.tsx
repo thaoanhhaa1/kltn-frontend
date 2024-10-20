@@ -1,6 +1,6 @@
 import Chatbot from '@/components/chatbot/chatbot';
 import Header from '@/components/header/header';
-import SaveNotifications from '@/components/save-notifications';
+import SaveConversations from '@/components/save-notifications';
 import SaveUser from '@/components/save-user';
 import { initDataTable } from '@/constants/init-data';
 import { IConversation } from '@/interfaces/chat';
@@ -36,7 +36,7 @@ export default async function BaseLayout({ children }: { children: React.ReactNo
     return (
         <main className="h-screen flex flex-col">
             <SaveUser user={user} />
-            <SaveNotifications conversations={conversations} user={user} />
+            <SaveConversations conversations={conversations} user={user} />
             <Header user={user} notificationsCount={notificationsCount ?? 0} />
             <div className="max-w-6xl w-full mx-auto px-6 flex-1">{children}</div>
             <Chatbot user={user} />

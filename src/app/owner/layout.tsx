@@ -1,5 +1,7 @@
+import LoadChat from '@/components/chat/load-chat';
 import Forbidden from '@/components/forbidden';
 import ManageLayout from '@/components/manage-layout';
+import LoadNotification from '@/components/notification/load-notification';
 import { INavItem } from '@/components/sidebar/nav-item';
 import { IPayloadJWT } from '@/interfaces/jwt';
 import { ADD_PROPERTY, OWNER, OWNER_PROPERTIES, OWNER_REQUESTS, OWNER_USERS } from '@/path';
@@ -54,7 +56,13 @@ const Layout = async ({ children }: { children: ReactNode }) => {
         return <div>Unauthorized</div>;
     }
 
-    return <ManageLayout topNavList={topNavList}>{children}</ManageLayout>;
+    return (
+        <>
+            <ManageLayout topNavList={topNavList}>{children}</ManageLayout>
+            <LoadChat />
+            <LoadNotification />
+        </>
+    );
 };
 
 export default Layout;

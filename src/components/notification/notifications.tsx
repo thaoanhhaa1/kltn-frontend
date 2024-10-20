@@ -12,7 +12,7 @@ import { Badge, Button as ButtonAntD, Empty, Flex, Spin } from 'antd';
 import { Bell, CheckCheck } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
-export function Notifications({ count: countProp }: { count: number }) {
+export function Notifications() {
     const {
         loading,
         notifications,
@@ -24,7 +24,7 @@ export function Notifications({ count: countProp }: { count: number }) {
         setNotifications,
         readAllNotifications: readAllNotificationsStore,
     } = useNotificationStore();
-    const [readAllLoading, setReadAllLoading] = useState(false);
+    const [readAllLoading] = useState(false);
 
     const fetchNotifications = useCallback(
         async (pagination: IPagination) => {
@@ -62,8 +62,7 @@ export function Notifications({ count: countProp }: { count: number }) {
     useEffect(() => {
         if (Number.isInteger(count)) return;
         fetchNotifications({ take: 10, skip: 0 });
-        setCount(countProp);
-    }, [count, countProp, fetchNotifications, setCount]);
+    }, [count, fetchNotifications, setCount]);
 
     return (
         <DropdownMenu onOpenChange={handleToggleNotifications}>

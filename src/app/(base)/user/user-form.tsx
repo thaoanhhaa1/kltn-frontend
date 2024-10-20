@@ -139,6 +139,20 @@ const UserForm = ({ user }: { user: IUser }) => {
                         <Form.Item
                             rules={[
                                 {
+                                    required: true,
+                                },
+                            ]}
+                            initialValue={user.email}
+                            name="email"
+                            label="Email"
+                        >
+                            <Input disabled placeholder="Nhập email" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            rules={[
+                                {
                                     type: 'regexp',
                                     validator(_rule, value, _callback) {
                                         if (!value) {

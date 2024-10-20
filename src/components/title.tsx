@@ -2,18 +2,16 @@
 
 import { Typography } from 'antd';
 import { TitleProps } from 'antd/es/typography/Title';
-import { ReactNode } from 'react';
 
-const Title = ({ level, children }: { level?: TitleProps['level']; children: ReactNode }) => {
+const Title = (props: TitleProps) => {
     return (
         <Typography.Title
+            {...props}
             style={{
                 margin: 0,
+                ...props.style,
             }}
-            level={level}
-        >
-            {children}
-        </Typography.Title>
+        />
     );
 };
 

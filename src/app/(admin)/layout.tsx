@@ -1,5 +1,6 @@
 import Forbidden from '@/components/forbidden';
 import ManageLayout from '@/components/manage-layout';
+import LoadNotification from '@/components/notification/load-notification';
 import { IPayloadJWT } from '@/interfaces/jwt';
 import { DASHBOARD, DASHBOARD_ANALYTICS, DASHBOARD_PROPERTIES, DASHBOARD_SETTINGS, DASHBOARD_USERS } from '@/path';
 import { DashboardIcon } from '@radix-ui/react-icons';
@@ -57,8 +58,11 @@ export default async function BaseLayout({ children }: { children: React.ReactNo
     }
 
     return (
-        <ManageLayout topNavList={topNavList} bottomNavList={bottomNavList}>
-            {children}
-        </ManageLayout>
+        <>
+            <ManageLayout topNavList={topNavList} bottomNavList={bottomNavList}>
+                {children}
+            </ManageLayout>
+            <LoadNotification />
+        </>
     );
 }

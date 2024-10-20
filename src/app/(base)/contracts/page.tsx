@@ -50,7 +50,7 @@ const ContractsPage = () => {
             {
                 title: 'Chủ nhà',
                 dataIndex: ['owner', 'name'],
-                width: 170,
+                width: 200,
             },
             {
                 title: 'Ngày bắt đầu',
@@ -60,7 +60,7 @@ const ContractsPage = () => {
             },
             {
                 title: 'Ngày kết thúc',
-                dataIndex: 'endDate',
+                dataIndex: 'endDateActual',
                 width: 170,
                 render: formatDate,
             },
@@ -68,12 +68,14 @@ const ContractsPage = () => {
                 title: 'Giá',
                 dataIndex: 'monthlyRent',
                 width: 170,
+                align: 'right',
                 render: (value) => formatCurrency(value, true),
             },
             {
                 title: 'Tiền cọc',
                 dataIndex: 'depositAmount',
                 width: 170,
+                align: 'right',
                 render: (value) => formatCurrency(value, true),
             },
             {
