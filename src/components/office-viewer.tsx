@@ -33,10 +33,12 @@ const OfficeViewer = ({
                 <div className="relative flex-1">
                     <DocumentViewer
                         // viewer={viewer}
+                        overrideLocalhost={envConfig.NEXT_PUBLIC_DOC_VIEWER}
                         queryParams="hl=Nl"
                         url={media.url}
-                        overrideLocalhost={envConfig.NEXT_PUBLIC_DOC_VIEWER}
-                        loaded={stopLoading}
+                        loaded={() => {
+                            stopLoading();
+                        }}
                     />
 
                     {loading ? (

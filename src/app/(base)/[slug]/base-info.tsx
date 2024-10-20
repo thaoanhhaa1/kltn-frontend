@@ -17,6 +17,7 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
     const { user } = useUserStore();
     const { addConversation, setSelectedConversation } = useConversationStore();
     const [openRentalRequest, setOpenRentalRequest] = useState(false);
+    const disabled = !user || user.userId === property.owner?.userId || !user.userTypes.includes('renter');
 
     const handleOpenRentalRequest = () => {
         setOpenRentalRequest(true);
@@ -80,10 +81,10 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
                 }}
                 gap={12}
             >
-                <Button type="primary" ghost disabled={!user} onClick={handleConnectOwner}>
+                <Button type="primary" ghost disabled={disabled} onClick={handleConnectOwner}>
                     Liên hệ chủ nhà
                 </Button>
-                <Button type="primary" disabled={!user} onClick={handleOpenRentalRequest}>
+                <Button type="primary" disabled={disabled} onClick={handleOpenRentalRequest}>
                     Gửi yêu cầu thuê
                 </Button>
             </Flex>

@@ -47,7 +47,7 @@ const ContractsTable = () => {
             {
                 title: 'Người thuê',
                 dataIndex: ['renter', 'name'],
-                width: 170,
+                width: 200,
             },
             {
                 title: 'Ngày bắt đầu',
@@ -57,7 +57,7 @@ const ContractsTable = () => {
             },
             {
                 title: 'Ngày kết thúc',
-                dataIndex: 'endDate',
+                dataIndex: 'endDateActual',
                 width: 170,
                 render: formatDate,
             },

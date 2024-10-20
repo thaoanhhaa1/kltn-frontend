@@ -184,7 +184,7 @@ export default async function ContractDetails({ params: { contractId } }: { para
                                         <strong>Ngày bắt đầu thuê:</strong> {formatDate(contract.startDate)}
                                     </p>
                                     <p>
-                                        <strong>Ngày kết thúc:</strong> {formatDate(contract.endDate)}
+                                        <strong>Ngày kết thúc:</strong> {formatDate(contract.endDateActual)}
                                     </p>
                                     <p>
                                         <strong>Tiền thuê:</strong> {formatCurrency(contract.monthlyRent, true)}/tháng
@@ -196,7 +196,7 @@ export default async function ContractDetails({ params: { contractId } }: { para
                             </CardContent>
                         </Card>
                         <Card className="col-span-2">
-                            <CardHeader>
+                            <CardHeader className="pb-0">
                                 <Title level={3}>Yêu cầu gia hạn</Title>
                             </CardHeader>
                             <CardContent>
