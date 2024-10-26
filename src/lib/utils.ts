@@ -367,6 +367,8 @@ export const getMediaType = (type: string) => {
     return 'unknown';
 };
 
+export const isImage = (fileName: string) => /\.(jpe?g|png|gif|bmp)$/i.test(fileName.split('?')[0]);
+
 export const officeCanView = (fileName: string): viewerType | undefined => {
     // if (/\.(ppt|pptx|doc|docx|xls|xlsx)$/i.test(fileName)) return 'office';
     if (/\.(txt|css|html|php|c|cpp|h|hpp|js|pdf|doc|docx|xls|xlsx)$/.test(fileName)) return 'google';

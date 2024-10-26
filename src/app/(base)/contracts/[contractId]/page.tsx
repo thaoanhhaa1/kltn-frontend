@@ -6,10 +6,12 @@ import AvatarWithName from '@/components/avatar-with-name';
 import Extension from '@/components/extension';
 import ExtensionRequests from '@/components/extension-request/extension-requests';
 import Forbidden from '@/components/forbidden';
+import Review from '@/components/review/review';
 import Title from '@/components/title';
 import { CardContent, CardHeader } from '@/components/ui/card';
 import { IContractCancelRequestDetail } from '@/interfaces/contract-cancel-request';
 import { IExtensionRequest } from '@/interfaces/contract-extension-request';
+import { IReview } from '@/interfaces/review';
 import { IUser } from '@/interfaces/user';
 import CustomError from '@/lib/error';
 import { formatAddress, formatCurrency, formatDate, getContractColor, getContractStatusText } from '@/lib/utils';
@@ -20,8 +22,9 @@ import {
 } from '@/services/contract-cancel-request-service';
 import { getExtensionRequestByContractId } from '@/services/contract-extension-request-service';
 import { getContractDetail } from '@/services/contract-service';
+import { getReviewByContractId } from '@/services/review-service';
 import { getMe } from '@/services/user-service';
-import { Button, Card, Col, Flex, Result, Row, Tag } from 'antd';
+import { Button, Card, Col, Empty, Flex, Result, Row, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { CalendarIcon, Mail, MapPin, MessageCircle } from 'lucide-react';
 import { cookies } from 'next/headers';
@@ -34,9 +37,10 @@ export default async function ContractDetails({ params: { contractId } }: { para
     let notHandledRequest: IContractCancelRequestDetail | null = null;
     let handledRequests: Array<IContractCancelRequestDetail> = [];
     let extensionRequests: Array<IExtensionRequest> = [];
+    let review: IReview | null = null;
 
     try {
-        [contract, user, notHandledRequest, handledRequests, extensionRequests] = await Promise.all([
+        [contract, user, notHandledRequest, handledRequests, extensionRequests, review] = await Promise.all([
             getContractDetail(contractId, accessToken!),
             getMe(accessToken!),
             getNotHandledContractCancelRequest(contractId, accessToken!),
@@ -45,6 +49,7 @@ export default async function ContractDetails({ params: { contractId } }: { para
                 contractId,
                 accessToken: accessToken!,
             }),
+            getReviewByContractId(contractId, accessToken!),
         ]);
     } catch (error) {
         console.log('🚀 ~ ContractDetails ~ error:', error);
@@ -204,6 +209,25 @@ export default async function ContractDetails({ params: { contractId } }: { para
                             </CardContent>
                         </Card>
                     </Flex>
+                </Col>
+                <Col span={24}>
+                    <Card className="col-span-2">
+                        <CardHeader className="pb-0">
+                            <Title level={3}>Đánh giá</Title>
+                        </CardHeader>
+                        <CardContent>
+                            {review === null && <Empty description="Chưa có đánh giá" />}
+                            {(contract.status === 'ENDED' || contract.status === 'CANCELLED') && (
+                                <Review
+                                    review={review}
+                                    ownerId={contract.ownerId}
+                                    contractId={contractId}
+                                    propertyId={contract.propertyId}
+                                    isAddReview
+                                />
+                            )}
+                        </CardContent>
+                    </Card>
                 </Col>
             </Row>
         </div>

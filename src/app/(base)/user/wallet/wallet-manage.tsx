@@ -29,8 +29,7 @@ const WalletManage = ({ address }: { address: `0x${string}` }) => {
     const [transactions, setTransactions] = useState<Array<IHistoryTransaction>>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [type, setType] = useState<ITransactionType>('ALL');
-
-    const { data } = useBalance({
+    const { data, isLoading } = useBalance({
         address,
         chainId: 1337,
     });
@@ -69,18 +68,7 @@ const WalletManage = ({ address }: { address: `0x${string}` }) => {
                     Quản lý ví
                 </Typography.Title>
             </div>
-            {data ? (
-                <Typography.Title
-                    style={{
-                        textAlign: 'center',
-                    }}
-                    level={1}
-                >
-                    {(Number(data?.value) / Math.pow(10, data?.decimals)).toFixed(4)}
-                    &nbsp;
-                    {data?.symbol}
-                </Typography.Title>
-            ) : (
+            {isLoading ? (
                 <Flex justify="center">
                     <Skeleton.Input
                         rootClassName="mb-[19px]"
@@ -90,6 +78,17 @@ const WalletManage = ({ address }: { address: `0x${string}` }) => {
                         }}
                     />
                 </Flex>
+            ) : (
+                <Typography.Title
+                    style={{
+                        textAlign: 'center',
+                    }}
+                    level={1}
+                >
+                    {(Number(data?.value) / Math.pow(10, data?.decimals ?? 1)).toFixed(4)}
+                    &nbsp;
+                    {data?.symbol}
+                </Typography.Title>
             )}
             <Flex justify="center" align="center" gap={4}>
                 <Typography.Title
