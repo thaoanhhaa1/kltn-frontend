@@ -22,8 +22,7 @@ const chains = [sepolia] as const;
 export const config = defaultWagmiConfig({
     connectors: [metaMask()],
     chains: [
-        // (process.env.NODE_ENV === 'development' && {
-        (false && {
+        (process.env.NODE_ENV === 'development' && {
             // FIXME
             id: 1337,
             name: 'Localhost',
