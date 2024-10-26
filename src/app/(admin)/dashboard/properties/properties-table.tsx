@@ -178,7 +178,7 @@ const PropertiesTable = () => {
                 ),
             },
         ],
-        [handleApprove, handleReject],
+        [handleApprove, handleReject, page, pageSize],
     );
 
     const handleToggleFilter = () => setActiveFilter((prev) => !prev);
