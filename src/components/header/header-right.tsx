@@ -1,4 +1,5 @@
 import ChatButton from '@/components/header/chat-button';
+import HeartButton from '@/components/header/heart-button';
 import Search from '@/components/header/search';
 import { ModeToggle } from '@/components/mode-toggle';
 import MyAccount from '@/components/my-account';
@@ -19,6 +20,7 @@ const HeaderRight = ({ user, notificationsCount }: { user?: IUser; notifications
                     <Search />
                 </div>
             </form>
+            {user?.userTypes.includes('renter') && <HeartButton />}
             {user && (
                 <>
                     <ChatButton />

@@ -63,14 +63,14 @@ const PropertyDetailPage = async ({ params: { slug } }: { params: { slug: string
                 >
                     Đánh giá
                 </Title>
-                {property.ratingCount && property.rating && (
+                {property.ratingCount > 0 && property.rating > 0 && (
                     <Flex align="center">
                         <Rating rating={property.rating / 2} />
                         <Text style={{ marginLeft: '8px' }}>Có {property.ratingCount} đánh giá</Text>
                     </Flex>
                 )}
             </Flex>
-            {!reviews?.length && <Empty description="Chưa có đánh giá" />}
+            {reviews?.length === 0 && <Empty description="Chưa có đánh giá" />}
             {reviews?.map((review) => (
                 <Review
                     key={review.id}
