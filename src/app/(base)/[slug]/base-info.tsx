@@ -1,22 +1,26 @@
 'use client';
 
 import RentalRequestModal from '@/app/(base)/[slug]/rental-request-modal';
+import HeartBtn from '@/components/property/heart-btn';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IConversation } from '@/interfaces/chat';
 import { IProperty } from '@/interfaces/property';
+import { IPropertyInteraction } from '@/interfaces/property-interaction';
 import { convertDateToTimeAgo, createChatConversation, formatCurrency, getNameAvatar } from '@/lib/utils';
 import { CHAT } from '@/path';
+import { getFavoriteBySlug } from '@/services/property-interaction-service';
 import { useConversationStore } from '@/stores/conversation-store';
 import { useUserStore } from '@/stores/user-store';
 import { Button, Flex, Typography } from 'antd';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const BaseInfo = ({ property }: { property: IProperty }) => {
     const router = useRouter();
     const { user } = useUserStore();
     const { addConversation, setSelectedConversation } = useConversationStore();
     const [openRentalRequest, setOpenRentalRequest] = useState(false);
+    const [interaction, setInteraction] = useState<IPropertyInteraction | undefined>();
     const disabled = !user || user.userId === property.owner?.userId || !user.userTypes.includes('renter');
 
     const handleOpenRentalRequest = () => {
@@ -39,6 +43,20 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
         setSelectedConversation(conversation);
         router.push(CHAT);
     };
+
+    useEffect(() => {
+        if (!user) return;
+
+        const fetch = async () => {
+            try {
+                const interaction = await getFavoriteBySlug(property.slug);
+
+                setInteraction(interaction);
+            } catch (error) {}
+        };
+
+        fetch();
+    }, [property.slug, user]);
 
     return (
         <>
@@ -87,6 +105,7 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
                 <Button type="primary" disabled={disabled} onClick={handleOpenRentalRequest}>
                     Gửi yêu cầu thuê
                 </Button>
+                <HeartBtn propertyId={property.propertyId} isFavorite={interaction?.interactionType === 'FAVORITED'} />
             </Flex>
             <RentalRequestModal property={property} open={openRentalRequest} setOpen={setOpenRentalRequest} />
         </>

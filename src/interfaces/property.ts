@@ -37,6 +37,7 @@ export interface IProperty {
     owner: Pick<IUser, 'userId' | 'name' | 'phoneNumber' | 'avatar' | 'email'>;
     rating: number;
     ratingCount: number;
+    isFavorite: boolean;
 }
 
 export type IFiterProperty = {

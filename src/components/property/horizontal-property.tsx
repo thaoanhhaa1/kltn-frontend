@@ -21,13 +21,17 @@ const HorizontalProperty = ({ property }: { property: IProperty }) => {
     return (
         <Link href={`/${property.slug}`} className="rounded-md shadow-lg border-t">
             <Flex className="rounded-md overflow-hidden">
-                <Image
-                    alt={property.title}
-                    src={property.images[0]}
-                    width={250}
-                    height={250}
-                    className="aspect-square object-cover w-auto h-auto"
-                />
+                <div className="relative w-[250px] flex-shrink-0">
+                    <div className="absolute inset-0">
+                        <Image
+                            alt={property.title}
+                            src={property.images[0]}
+                            width={250}
+                            height={250}
+                            className="object-cover w-full h-full"
+                        />
+                    </div>
+                </div>
                 <div className="p-4 w-full">
                     <Title level={4}>{property.title}</Title>
                     <Paragraph className="line-clamp-3 whitespace-pre-wrap" type="secondary">
@@ -54,10 +58,10 @@ const HorizontalProperty = ({ property }: { property: IProperty }) => {
                     <Title type="danger" level={4}>
                         {formatCurrency(property.price, true)}
                     </Title>
-                    <Rating rating={property.rating / 2} />
+                    {property.ratingCount > 0 && <Rating rating={property.rating / 2} />}
                     <Flex align="center" justify="space-between">
                         <Text type="secondary">{convertDateToTimeAgo(new Date(property.createdAt))}</Text>
-                        <HeartBtn />
+                        <HeartBtn propertyId={property.propertyId} isFavorite={property.isFavorite} />
                     </Flex>
                 </div>
             </Flex>

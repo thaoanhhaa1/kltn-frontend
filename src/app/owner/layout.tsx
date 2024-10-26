@@ -1,5 +1,6 @@
 import LoadChat from '@/components/chat/load-chat';
 import Forbidden from '@/components/forbidden';
+import LoadFavorite from '@/components/load-favorite';
 import ManageLayout from '@/components/manage-layout';
 import LoadNotification from '@/components/notification/load-notification';
 import { INavItem } from '@/components/sidebar/nav-item';
@@ -61,6 +62,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
             <ManageLayout topNavList={topNavList}>{children}</ManageLayout>
             <LoadChat />
             <LoadNotification />
+            <LoadFavorite />
         </>
     );
 };
