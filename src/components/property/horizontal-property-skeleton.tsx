@@ -86,6 +86,15 @@ const HorizontalPropertySkeleton = () => {
                             marginBottom: '10px',
                         }}
                     />
+                    <Skeleton.Input
+                        active
+                        block
+                        style={{
+                            height: '32px',
+                            width: '55px',
+                            marginBottom: '10px',
+                        }}
+                    />
                     <Flex align="center" justify="space-between">
                         <Skeleton.Input
                             active

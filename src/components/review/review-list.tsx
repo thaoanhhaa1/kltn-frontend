@@ -9,10 +9,12 @@ const ReviewList = ({
     review,
     isCollapse = false,
     ownerId,
+    contractId,
 }: {
     review: IReview;
     isCollapse?: boolean;
     ownerId: string;
+    contractId?: string;
 }) => {
     const [collapsed, setCollapsed] = useState<boolean>(true);
 
@@ -32,7 +34,7 @@ const ReviewList = ({
                 reviewId={review.id}
                 review={review}
                 user={review.renter}
-                contractId={review.contractId}
+                contractId={contractId}
                 propertyId={review.propertyId}
                 ownerId={ownerId}
             />
@@ -43,7 +45,7 @@ const ReviewList = ({
                         reviewId={review.id}
                         review={child}
                         user={child.userId === review.renter.userId ? review.renter : review.owner}
-                        contractId={review.contractId}
+                        contractId={contractId}
                         propertyId={review.propertyId}
                         ownerId={ownerId}
                     />

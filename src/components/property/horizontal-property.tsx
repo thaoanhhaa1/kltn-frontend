@@ -1,7 +1,11 @@
+import Paragraph from '@/components/paragraph';
 import HeartBtn from '@/components/property/heart-btn';
+import Rating from '@/components/rating';
+import Text from '@/components/text';
+import Title from '@/components/title';
 import { ICondition, IProperty } from '@/interfaces/property';
 import { convertDateToTimeAgo, formatCurrency } from '@/lib/utils';
-import { Flex, Typography } from 'antd';
+import { Flex } from 'antd';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -25,35 +29,34 @@ const HorizontalProperty = ({ property }: { property: IProperty }) => {
                     className="aspect-square object-cover w-auto h-auto"
                 />
                 <div className="p-4 w-full">
-                    <Typography.Title level={4}>{property.title}</Typography.Title>
-                    <Typography.Paragraph className="line-clamp-3 whitespace-pre-wrap" type="secondary">
+                    <Title level={4}>{property.title}</Title>
+                    <Paragraph className="line-clamp-3 whitespace-pre-wrap" type="secondary">
                         {property.description}
-                    </Typography.Paragraph>
-                    <Typography.Text>
+                    </Paragraph>
+                    <Text>
                         {property.address.district}, {property.address.city}
-                    </Typography.Text>
+                    </Text>
                     <Flex gap={24} className="mt-5">
-                        <Typography.Title className="!mt-0" level={5}>
+                        <Title className="!mt-0" level={5}>
                             {acreage.replace('m2', '')} m²
-                        </Typography.Title>
+                        </Title>
                         {bedroom && (
-                            <Typography.Title className="!mt-0" level={5}>
+                            <Title className="!mt-0" level={5}>
                                 {bedroom} ngủ
-                            </Typography.Title>
+                            </Title>
                         )}
                         {bathroom && (
-                            <Typography.Title className="!mt-0" level={5}>
+                            <Title className="!mt-0" level={5}>
                                 {bathroom} tắm
-                            </Typography.Title>
+                            </Title>
                         )}
                     </Flex>
-                    <Typography.Title type="danger" level={4}>
+                    <Title type="danger" level={4}>
                         {formatCurrency(property.price, true)}
-                    </Typography.Title>
+                    </Title>
+                    <Rating rating={property.rating / 2} />
                     <Flex align="center" justify="space-between">
-                        <Typography.Text type="secondary">
-                            {convertDateToTimeAgo(new Date(property.createdAt))}
-                        </Typography.Text>
+                        <Text type="secondary">{convertDateToTimeAgo(new Date(property.createdAt))}</Text>
                         <HeartBtn />
                     </Flex>
                 </div>

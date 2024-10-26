@@ -223,6 +223,7 @@ export default async function ContractDetails({ params: { contractId } }: { para
                                     ownerId={contract.ownerId}
                                     contractId={contractId}
                                     propertyId={contract.propertyId}
+                                    isAddReview
                                 />
                             )}
                         </CardContent>

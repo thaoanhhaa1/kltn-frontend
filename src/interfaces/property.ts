@@ -35,6 +35,8 @@ export interface IProperty {
     price: number;
     type: IPropertyType;
     owner: Pick<IUser, 'userId' | 'name' | 'phoneNumber' | 'avatar' | 'email'>;
+    rating: number;
+    ratingCount: number;
 }
 
 export type IFiterProperty = {

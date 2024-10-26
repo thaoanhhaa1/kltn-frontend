@@ -5,18 +5,22 @@ import { IReview } from '@/interfaces/review';
 const Review = ({
     review,
     ownerId,
-    contractId,
+    contractId = '',
     propertyId,
+    isAddReview,
 }: {
     review: IReview | null;
     ownerId: string;
-    contractId: string;
+    contractId?: string;
     propertyId: string;
+    isAddReview?: boolean;
 }) => {
     return (
         <div>
-            {review && <ReviewList review={review} ownerId={ownerId} />}
-            <ReviewFooter ownerId={ownerId} isFirst={!review} contractId={contractId} propertyId={propertyId} />
+            {review && <ReviewList review={review} ownerId={ownerId} contractId={contractId} />}
+            {isAddReview && (
+                <ReviewFooter ownerId={ownerId} isFirst={!review} contractId={contractId} propertyId={propertyId} />
+            )}
         </div>
     );
 };

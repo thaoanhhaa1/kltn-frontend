@@ -26,7 +26,7 @@ const ReviewItem = ({
     review,
     user,
     reviewId,
-    contractId,
+    contractId = '',
     ownerId,
     propertyId,
 }: {
@@ -35,7 +35,7 @@ const ReviewItem = ({
     reviewId: string;
     ownerId: string;
     propertyId: string;
-    contractId: string;
+    contractId?: string;
 }) => {
     const { user: me } = useUserStore();
     const router = useRouter();
@@ -103,7 +103,7 @@ const ReviewItem = ({
                         ))}
                     </Flex>
                 </Flex>
-                {isMe && (
+                {isMe && contractId && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button icon={<MoreHorizontal className="w-5 h-5" />} type="text" />
