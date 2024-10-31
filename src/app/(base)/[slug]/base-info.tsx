@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 const BaseInfo = ({ property }: { property: IProperty }) => {
     const router = useRouter();
     const { user } = useUserStore();
-    const { addConversation, setSelectedConversation } = useConversationStore();
+    const { addConversation, setSelectedConversation, conversations } = useConversationStore();
     const [openRentalRequest, setOpenRentalRequest] = useState(false);
     const [interaction, setInteraction] = useState<IPropertyInteraction | undefined>();
     const disabled = !user || user.userId === property.owner?.userId || !user.userTypes.includes('renter');
@@ -28,7 +28,8 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
     };
 
     const handleConnectOwner = () => {
-        const conversation: IConversation = {
+        const conversationId = createChatConversation(user?.userId || '', property.owner.userId);
+        const conversation: IConversation = conversations.find((c) => c.conversationId === conversationId) || {
             conversationId: createChatConversation(user?.userId || '', property.owner.userId),
             createdAt: new Date().toISOString(),
             deletedBy: [],
@@ -38,6 +39,8 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
             chats: [],
             unreadCount: 0,
         };
+
+        if (!conversation) return;
 
         addConversation(conversation);
         setSelectedConversation(conversation);

@@ -8,17 +8,19 @@ const hFullStyle = {
 
 const ChatPage = () => {
     return (
-        <Row style={hFullStyle}>
-            <Col span={8}>
-                <Flex style={hFullStyle}>
-                    <Conversations />
-                    <Divider style={hFullStyle} type="vertical" />
-                </Flex>
-            </Col>
-            <Col span={16}>
-                <Chat />
-            </Col>
-        </Row>
+        <div className="h-[calc(100vh-4rem)]">
+            <Row style={hFullStyle}>
+                <Col span={8}>
+                    <Flex style={hFullStyle}>
+                        <Conversations />
+                        <Divider style={hFullStyle} type="vertical" />
+                    </Flex>
+                </Col>
+                <Col span={16}>
+                    <Chat />
+                </Col>
+            </Row>
+        </div>
     );
 };
 
