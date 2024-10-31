@@ -1,5 +1,6 @@
 'use client';
 
+import GetOTPBtn from '@/app/(auth)/sign-up/get-otp-btn';
 import { ButtonLoading } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -79,6 +80,8 @@ const SignUpForm = () => {
             try {
                 await sendRegisterOTP(email);
                 toast.success('Mã OTP đã được gửi thành công');
+
+                return true;
             } catch (error) {
                 if (error instanceof EntryError) {
                     error.details.forEach((detail) => {
@@ -183,9 +186,7 @@ const SignUpForm = () => {
                             )}
                         />
                     </div>
-                    <ButtonLoading type="button" onClick={handleGetOtp} variant="secondary">
-                        Lấy mã OTP
-                    </ButtonLoading>
+                    <GetOTPBtn onClick={handleGetOtp} />
                 </div>
                 <ButtonLoading loading={loading} type="submit" className="w-full">
                     Đăng ký

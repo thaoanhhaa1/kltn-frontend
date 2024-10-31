@@ -1,6 +1,7 @@
 'use client';
 
 import CancelModal from '@/app/(base)/contracts/cancel-modal';
+import ButtonLink from '@/components/button/button-link';
 import CancelBeforeDeposit from '@/components/contracts/cancel-before-deposit';
 import Forbidden from '@/components/forbidden';
 import TablePagination from '@/components/table-pagination';
@@ -106,11 +107,9 @@ const ContractsPage = () => {
                 render: (contract: IContract) => (
                     <Space>
                         <Tooltip title="Xem chi tiết">
-                            <Button
-                                href={`${RENTAL_CONTRACTS}/${contract.contractId}`}
-                                type="text"
-                                icon={<Eye className="w-5 h-5" />}
-                            />
+                            <ButtonLink href={`${RENTAL_CONTRACTS}/${contract.contractId}`}>
+                                <Eye className="w-5 h-5" />
+                            </ButtonLink>
                         </Tooltip>
                         {(contract.status === 'WAITING' && (
                             <CancelBeforeDeposit contractId={contract.contractId} setContracts={setContracts} />

@@ -7,7 +7,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import useDebounce from '@/hooks/useDebounce';
 import { useConversationStore } from '@/stores/conversation-store';
 import { useUserStore } from '@/stores/user-store';
-import { Divider, Input, Typography } from 'antd';
+import { Divider, Empty, Input, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 
 const Conversations = () => {
@@ -57,6 +57,9 @@ const Conversations = () => {
                         {conversationsFiltered.map((conversation) => (
                             <Conversation key={conversation.conversationId} conversation={conversation} />
                         ))}
+                        {!loading && conversationsFiltered.length === 0 && (
+                            <Empty description="Không có cuộc trò chuyện nào" />
+                        )}
                     </ScrollArea>
                 </div>
             </div>
