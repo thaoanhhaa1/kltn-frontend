@@ -1,20 +1,30 @@
-'use client';
+import OwnerBreadcrumb from '@/app/owner/owner-breadcrumb';
+import Overview from '@/components/overview/overview';
+import Title from '@/components/title';
+import { IOverviewByOwnerRes } from '@/interfaces/dashboard';
+import { getOverviewByOwner } from '@/services/dashboard-service';
+import { cookies } from 'next/headers';
 
-import useBreadcrumb from '@/context/breadcrumb';
-import { useEffect } from 'react';
+const OwnerPage = async () => {
+    const cookieStore = cookies();
+    const accessToken = cookieStore.get('accessToken')?.value;
+    let overview: IOverviewByOwnerRes | null = null;
 
-const OwnerPage = () => {
-    const { setBreadcrumb } = useBreadcrumb();
+    try {
+        overview = await getOverviewByOwner(accessToken!);
+    } catch (error) {
+        console.log(error);
+    }
 
-    useEffect(() => {
-        setBreadcrumb([
-            {
-                title: 'Owner',
-            },
-        ]);
-    }, [setBreadcrumb]);
+    console.log('🚀 ~ OwnerPage ~ overview:', overview);
 
-    return <div>Owner Page</div>;
+    return (
+        <div>
+            <OwnerBreadcrumb />
+            <Title level={2}>Tóm tắt</Title>
+            {overview && <Overview overview={overview} />}
+        </div>
+    );
 };
 
 export default OwnerPage;
