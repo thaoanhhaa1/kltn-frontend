@@ -47,6 +47,7 @@
         "react-nl2br": "^1.0.4",
         "react-player": "^2.16.0",
         "react-toastify": "^10.0.5",
+        "recharts": "^2.13.2",
         "sharp": "^0.33.5",
         "socket.io-client": "^4.8.0",
         "tailwind-merge": "^2.4.0",

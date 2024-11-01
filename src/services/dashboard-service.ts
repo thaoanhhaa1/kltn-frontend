@@ -1,4 +1,9 @@
-import { IContractOverviewByOwnerRes, IOverviewByOwnerRes, IPropertyOverviewByOwnerRes } from '@/interfaces/dashboard';
+import {
+    IContractOverviewByOwnerRes,
+    IIncomeExpenditure,
+    IOverviewByOwnerRes,
+    IPropertyOverviewByOwnerRes,
+} from '@/interfaces/dashboard';
 import http from '@/lib/http';
 
 export const getOverviewByOwner = async (accessToken: string): Promise<IOverviewByOwnerRes> => {
@@ -19,4 +24,12 @@ export const getOverviewByOwner = async (accessToken: string): Promise<IOverview
         ...propertyOverview,
         ...contractOverview,
     };
+};
+
+export const getIncomeExpenditureByOwner = async (accessToken: string): Promise<IIncomeExpenditure[]> => {
+    return http.get<IIncomeExpenditure[]>('/contract-service/dashboard/owner/income-expenditure', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
 };

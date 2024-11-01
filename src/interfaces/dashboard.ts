@@ -14,3 +14,9 @@ export interface IContractOverviewByOwnerRes {
 }
 
 export type IOverviewByOwnerRes = IPropertyOverviewByOwnerRes & IContractOverviewByOwnerRes;
+
+export interface IIncomeExpenditure {
+    month: string;
+    income: number;
+    expenditure: number;
+}
