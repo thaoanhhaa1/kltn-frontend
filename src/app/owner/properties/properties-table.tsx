@@ -100,7 +100,7 @@ const PropertiesTable = () => {
                 title: '#',
                 dataIndex: 'propertyId',
                 width: 50,
-                render: (_: any, __: any, index: number) => index + 1,
+                render: (_: any, __: any, index: number) => (page - 1) * pageSize + index + 1,
             },
             {
                 title: 'Tiêu đề',
@@ -204,7 +204,7 @@ const PropertiesTable = () => {
                 ),
             },
         ],
-        [handleSoftDeleteProperties],
+        [handleSoftDeleteProperties, page, pageSize],
     );
 
     const getCheckboxProps = useCallback((record: IProperty) => {
