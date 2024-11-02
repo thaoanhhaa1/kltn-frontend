@@ -5,7 +5,7 @@ import { OWNER_CONTRACTS, OWNER_PROPERTIES, OWNER_REQUESTS, WALLET } from '@/pat
 
 const Overview = ({ overview }: { overview: IOverviewByOwnerRes }) => {
     return (
-        <div className="grid grid-cols-3 gap-4 mt-4">
+        <div className="grid grid-cols-3 gap-4">
             <OverviewItem title="Tổng số căn hộ" value={overview.countProperties} href={OWNER_PROPERTIES} />
             <OverviewItem title="Đang cho thuê" value={overview.countUnavailableProperties} href={OWNER_CONTRACTS} />
             <OverviewItem title="Doanh thu trung bình" value={formatCurrency(overview.avgRevenue.VND)} href={WALLET} />

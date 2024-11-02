@@ -13,6 +13,7 @@ import { IIncomeExpenditure } from '@/interfaces/dashboard';
 import { formatCurrency } from '@/lib/utils';
 import { useMemo } from 'react';
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
+import { ValueType } from 'recharts/types/component/DefaultTooltipContent';
 
 const chartConfig = {
     expenditure: {
@@ -39,65 +40,27 @@ const IncomeExpenditure = ({ incomeExpenditures }: { incomeExpenditures: IIncome
         [incomeExpenditures],
     );
 
+    const tickXFormatter = (value: string) => `Tháng ${value}`;
+    const tickYFormatter = (value: number) => formatCurrency(value);
+    const chartTooltipFormatter = (value: ValueType) => formatCurrency(Number(value));
+
     return (
-        <div className="mt-4">
-            <Card>
-                <CardContent>
-                    <ChartContainer className="h-[400px] w-full pt-4" config={chartConfig}>
-                        <LineChart
-                            accessibilityLayer
-                            data={data}
-                            margin={{
-                                left: 12,
-                                right: 12,
-                            }}
-                        >
-                            <CartesianGrid vertical={false} />
-                            <XAxis
-                                dataKey="month"
-                                tickLine={false}
-                                axisLine={false}
-                                tickMargin={8}
-                                tickFormatter={(value) => `Tháng ${value}`}
-                            />
-                            <YAxis
-                                width={80}
-                                tickLine={false}
-                                axisLine={false}
-                                tickMargin={8}
-                                tickFormatter={(value) => formatCurrency(value)}
-                            />
-                            <ChartTooltip
-                                cursor={false}
-                                content={<ChartTooltipContent format={(value) => formatCurrency(Number(value))} />}
-                            />
-                            <ChartLegend content={<ChartLegendContent />} />
-                            <Line
-                                dataKey="expenditure"
-                                type="monotone"
-                                stroke="var(--color-expenditure)"
-                                strokeWidth={2}
-                                dot={false}
-                            />
-                            <Line
-                                dataKey="income"
-                                type="monotone"
-                                stroke="var(--color-income)"
-                                strokeWidth={2}
-                                dot={false}
-                            />
-                            <Line
-                                dataKey="netIncome"
-                                type="monotone"
-                                stroke="var(--color-netIncome)"
-                                strokeWidth={2}
-                                dot={false}
-                            />
-                        </LineChart>
-                    </ChartContainer>
-                </CardContent>
-            </Card>
-        </div>
+        <Card>
+            <CardContent>
+                <ChartContainer className="h-[400px] w-full pt-4" config={chartConfig}>
+                    <LineChart accessibilityLayer data={data}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" tickFormatter={tickXFormatter} />
+                        <YAxis width={80} tickFormatter={tickYFormatter} />
+                        <ChartTooltip cursor={false} content={<ChartTooltipContent format={chartTooltipFormatter} />} />
+                        <ChartLegend content={<ChartLegendContent />} />
+                        <Line dataKey="expenditure" type="monotone" stroke="var(--color-expenditure)" strokeWidth={2} />
+                        <Line dataKey="income" type="monotone" stroke="var(--color-income)" strokeWidth={2} />
+                        <Line dataKey="netIncome" type="monotone" stroke="var(--color-netIncome)" strokeWidth={2} />
+                    </LineChart>
+                </ChartContainer>
+            </CardContent>
+        </Card>
     );
 };
 
