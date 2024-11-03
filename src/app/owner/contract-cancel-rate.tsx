@@ -84,7 +84,7 @@ const ContractCancelRate = ({ data }: { data: Array<IGetContractCancellationRate
             <CardContent>
                 <ChartContainer
                     config={chartConfig}
-                    className="mx-auto mt-6 aspect-square max-h-[400px] [&_.recharts-text]:fill-background"
+                    className="mx-auto mt-6 aspect-square h-[400px] [&_.recharts-text]:fill-background"
                 >
                     <PieChart>
                         <ChartTooltip

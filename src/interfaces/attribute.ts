@@ -1,9 +1,14 @@
 export interface IAttribute {
-    name: string;
+    id: string;
     type: string;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+    deleted: boolean;
 }
 
-export interface IAttributeCbb {
-    id: string;
-    name: string;
-}
+export type IAttributeCbb = Pick<IAttribute, 'id' | 'name'>;
+
+export type ICreateAttribute = Pick<IAttribute, 'type' | 'name'>;
+
+export type IUpdateAttribute = Pick<IAttribute, 'id' | 'type' | 'name'>;

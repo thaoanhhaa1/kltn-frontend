@@ -29,7 +29,7 @@ const TenantDistribution = ({ data }: { data: Array<IGetTenantDistributionByOwne
     return (
         <Card className="flex-1">
             <CardContent className="flex items-center h-full">
-                <ChartContainer config={chartConfig} className="mx-auto mt-6 max-h-[400px]">
+                <ChartContainer config={chartConfig} className="mx-auto mt-6 h-[400px]">
                     <PieChart>
                         <ChartTooltip
                             content={<ChartTooltipContent nameKey="count" labelFormat={() => `Số lượng`} hideLabel />}

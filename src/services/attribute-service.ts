@@ -1,6 +1,28 @@
-import { IAttributeCbb } from '@/interfaces/attribute';
+import { IAttribute, IAttributeCbb, ICreateAttribute, IUpdateAttribute } from '@/interfaces/attribute';
 import http from '@/lib/http';
 
-export const getAllAttributesCbb = async () => {
-    return http.get<Array<IAttributeCbb>>('/estate-manager-service/attributes/cbb');
+const ENDPOINT = '/estate-manager-service/attributes';
+
+export const getAllAttributesCbb = () => {
+    return http.get<Array<IAttributeCbb>>(`${ENDPOINT}/cbb`);
+};
+
+export const getAllAttributes = (accessToken: string) => {
+    return http.get<Array<IAttribute>>(ENDPOINT, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+};
+
+export const deleteAttribute = (id: string) => {
+    return http.delete(`${ENDPOINT}/${id}`, {});
+};
+
+export const createAttribute = (data: ICreateAttribute) => {
+    return http.post<IAttribute>(ENDPOINT, data);
+};
+
+export const updateAttribute = ({ id, ...data }: IUpdateAttribute) => {
+    return http.put<IAttribute>(`${ENDPOINT}/${id}`, data);
 };

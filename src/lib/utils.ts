@@ -182,6 +182,13 @@ export const getExtensionRequestStatusColor = (status: ContractExtensionRequestS
     return 'default';
 };
 
+export const getAttributeTypeColor = (type: string) => {
+    if (type === 'Amenity') return 'success';
+    if (type === 'Highlight') return 'warning';
+    if (type === 'Facility') return 'purple';
+    return 'default';
+};
+
 export const formatDate = (date: string | Date) => {
     return dayjs(date).format('DD/MM/YYYY');
 };
