@@ -1,20 +1,18 @@
 'use client';
 
-import { initAttribute, types } from '@/constants/attribute';
-import { IAttribute } from '@/interfaces/attribute';
-import { formatDateTime, getAttributeTypeColor } from '@/lib/utils';
-import { createAttribute, deleteAttribute, updateAttribute } from '@/services/attribute-service';
-import { Button, Flex, Form, Input, Select, Space, Table, TableProps, Tag } from 'antd';
+import { initAttribute } from '@/constants/attribute';
+import { IPropertyTypeDetail } from '@/interfaces/property-type';
+import { formatDateTime } from '@/lib/utils';
+import { createPropertyType, deletePropertyType, updatePropertyType } from '@/services/property-type';
+import { Button, Flex, Form, Input, Space, Table, TableProps } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { Edit2, Plus, Save, Trash, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const attributeOptions = Object.keys(types).map((key) => ({ label: types[key as keyof typeof types], value: key }));
-
-const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
-    const [data, setData] = useState<Array<IAttribute>>(attributes);
+const PropertyTypesTable = ({ types }: { types: Array<IPropertyTypeDetail> }) => {
+    const [data, setData] = useState<Array<IPropertyTypeDetail>>(types);
     const [loading, setLoading] = useState(false);
     const [editIndex, setEditIndex] = useState<number>(-1);
     const [isAdd, setIsAdd] = useState(false);
@@ -39,12 +37,12 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
     const handleDelete = useCallback(
         async (id: string) => {
             try {
-                await deleteAttribute(id);
+                await deletePropertyType(id);
 
-                toast.success('Xóa tiện ích thành công');
+                toast.success('Xóa loại bất động sản thành công');
                 router.refresh();
             } catch (error) {
-                toast.error((error as any).message || 'Xóa tiện ích thất bại');
+                toast.error((error as any).message || 'Xóa loại bất động sản thất bại');
             }
         },
         [router],
@@ -59,24 +57,29 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
 
     const handleSave = useCallback(async () => {
         await form.validateFields();
+
         try {
             setLoading(true);
             const values = await form.getFieldsValue();
 
-            await (isAdd ? createAttribute(values) : updateAttribute({ id: data[editIndex].id, ...values }));
+            await (isAdd ? createPropertyType(values) : updatePropertyType({ id: data[editIndex].id, ...values }));
 
             setEditIndex(-1);
             setIsAdd(false);
-            toast.success(isAdd ? 'Thêm tiện ích thành công' : 'Cập nhật tiện ích thành công');
+            toast.success(isAdd ? 'Thêm loại bất động sản thành công' : 'Cập nhật loại bất động sản thành công');
             router.refresh();
         } catch (error) {
-            toast.error((error as any).message || isAdd ? 'Thêm tiện ích thất bại' : 'Cập nhật tiện ích thất bại');
+            toast.error(
+                (error as any).message || isAdd
+                    ? 'Thêm loại bất động sản thất bại'
+                    : 'Cập nhật loại bất động sản thất bại',
+            );
         } finally {
             setLoading(false);
         }
     }, [data, editIndex, form, isAdd, router]);
 
-    const columns: TableProps<IAttribute>['columns'] = useMemo(
+    const columns: TableProps<IPropertyTypeDetail>['columns'] = useMemo(
         () => [
             {
                 title: 'ID',
@@ -85,7 +88,7 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
                 render: (value) => value || '-',
             },
             {
-                title: 'Tên tiện ích',
+                title: 'Loại bất động sản',
                 dataIndex: 'name',
                 width: 150,
                 render: (value, _, index) => {
@@ -100,46 +103,15 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Tên tiện ích không được để trống',
+                                        message: 'Loại bất động sản không được để trống',
                                     },
                                 ]}
                             >
-                                <Input placeholder="Tên tiện ích" />
+                                <Input placeholder="Loại bất động sản" />
                             </Form.Item>
                         );
 
                     return <span>{value}</span>;
-                },
-            },
-            {
-                title: 'Loai tiện ích',
-                dataIndex: 'type',
-                width: 150,
-                render: (type: string, _, index) => {
-                    if ((isAdd && index === 0) || editIndex === index)
-                        return (
-                            <Form.Item
-                                name="type"
-                                initialValue={isAdd ? undefined : type}
-                                style={{
-                                    margin: 0,
-                                }}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Loại tiện ích không được để trống',
-                                    },
-                                ]}
-                            >
-                                <Select options={attributeOptions} placeholder="Loại tiện ích" />
-                            </Form.Item>
-                        );
-
-                    return (
-                        <Tag key={type} color={getAttributeTypeColor(type)} className="uppercase">
-                            {types[type as keyof typeof types]}
-                        </Tag>
-                    );
                 },
             },
             {
@@ -188,8 +160,8 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
     );
 
     useEffect(() => {
-        setData(attributes);
-    }, [attributes]);
+        setData(types);
+    }, [types]);
 
     return (
         <>
@@ -208,4 +180,4 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
     );
 };
 
-export default AttributesTable;
+export default PropertyTypesTable;
