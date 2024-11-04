@@ -182,6 +182,13 @@ export const getExtensionRequestStatusColor = (status: ContractExtensionRequestS
     return 'default';
 };
 
+export const getAttributeTypeColor = (type: string) => {
+    if (type === 'Amenity') return 'success';
+    if (type === 'Highlight') return 'warning';
+    if (type === 'Facility') return 'purple';
+    return 'default';
+};
+
 export const formatDate = (date: string | Date) => {
     return dayjs(date).format('DD/MM/YYYY');
 };
@@ -372,4 +379,13 @@ export const isImage = (fileName: string) => /\.(jpe?g|png|gif|bmp)$/i.test(file
 export const officeCanView = (fileName: string): viewerType | undefined => {
     // if (/\.(ppt|pptx|doc|docx|xls|xlsx)$/i.test(fileName)) return 'office';
     if (/\.(txt|css|html|php|c|cpp|h|hpp|js|pdf|doc|docx|xls|xlsx)$/.test(fileName)) return 'google';
+};
+
+export const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 };

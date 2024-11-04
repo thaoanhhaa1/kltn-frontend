@@ -57,7 +57,7 @@ const WalletManage = ({ address }: { address: `0x${string}` }) => {
     }, [fetchTransactions]);
 
     return (
-        <div>
+        <div className="pb-6">
             <div className="mt-6">
                 <Typography.Title
                     style={{

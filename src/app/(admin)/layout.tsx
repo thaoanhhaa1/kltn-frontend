@@ -2,10 +2,18 @@ import Forbidden from '@/components/forbidden';
 import ManageLayout from '@/components/manage-layout';
 import LoadNotification from '@/components/notification/load-notification';
 import { IPayloadJWT } from '@/interfaces/jwt';
-import { DASHBOARD, DASHBOARD_ANALYTICS, DASHBOARD_PROPERTIES, DASHBOARD_SETTINGS, DASHBOARD_USERS } from '@/path';
+import {
+    DASHBOARD,
+    DASHBOARD_ANALYTICS,
+    DASHBOARD_ATTRIBUTES,
+    DASHBOARD_PROPERTIES,
+    DASHBOARD_SETTINGS,
+    DASHBOARD_TYPES,
+    DASHBOARD_USERS,
+} from '@/path';
 import { DashboardIcon } from '@radix-ui/react-icons';
 import { jwtDecode } from 'jwt-decode';
-import { House, LineChart, Settings, Users2 } from 'lucide-react';
+import { House, LineChart, Option, Settings, Tv, Users2 } from 'lucide-react';
 import { cookies } from 'next/headers';
 
 const topNavList = [
@@ -28,6 +36,16 @@ const topNavList = [
         link: DASHBOARD_ANALYTICS,
         title: 'Thống kê',
         icon: <LineChart className="w-5 h-5" />,
+    },
+    {
+        link: DASHBOARD_ATTRIBUTES,
+        title: 'Tiện ích',
+        icon: <Tv className="w-5 h-5" />,
+    },
+    {
+        link: DASHBOARD_TYPES,
+        title: 'Loại',
+        icon: <Option className="w-5 h-5" />,
     },
 ];
 

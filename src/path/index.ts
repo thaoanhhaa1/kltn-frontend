@@ -7,6 +7,8 @@ export const DASHBOARD_PROPERTIES = '/dashboard/properties';
 export const DASHBOARD_USERS = '/dashboard/users';
 export const DASHBOARD_ANALYTICS = '/dashboard/analytics';
 export const DASHBOARD_SETTINGS = '/dashboard/settings';
+export const DASHBOARD_ATTRIBUTES = '/dashboard/attributes';
+export const DASHBOARD_TYPES = '/dashboard/property-types';
 
 export const ADD_PROPERTY = '/owner/properties/add';
 export const OWNER_PROPERTIES = '/owner/properties';

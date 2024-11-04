@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
-import { ValueType } from 'recharts/types/component/DefaultTooltipContent';
+import { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent';
 
 import { cn } from '@/lib/utils';
 
@@ -102,6 +102,7 @@ const ChartTooltipContent = React.forwardRef<
             nameKey?: string;
             labelKey?: string;
             format?: (value: ValueType) => string;
+            labelFormat?: (value: NameType | undefined) => string;
         }
 >(
     (
@@ -120,6 +121,7 @@ const ChartTooltipContent = React.forwardRef<
             nameKey,
             labelKey,
             format,
+            labelFormat,
         },
         ref,
     ) => {
@@ -215,7 +217,9 @@ const ChartTooltipContent = React.forwardRef<
                                             <div className="grid gap-1.5">
                                                 {nestLabel ? tooltipLabel : null}
                                                 <span className="text-muted-foreground">
-                                                    {itemConfig?.label || item.name}
+                                                    {itemConfig?.label ||
+                                                        (labelFormat && labelFormat(item.name)) ||
+                                                        item.name}
                                                 </span>
                                             </div>
                                             {item.value && (
@@ -244,8 +248,9 @@ const ChartLegendContent = React.forwardRef<
         Pick<RechartsPrimitive.LegendProps, 'payload' | 'verticalAlign'> & {
             hideIcon?: boolean;
             nameKey?: string;
+            classNameItem?: string;
         }
->(({ className, hideIcon = false, payload, verticalAlign = 'bottom', nameKey }, ref) => {
+>(({ className, hideIcon = false, payload, verticalAlign = 'bottom', nameKey, classNameItem = '' }, ref) => {
     const { config } = useChart();
 
     if (!payload?.length) {
@@ -270,6 +275,7 @@ const ChartLegendContent = React.forwardRef<
                         key={item.value}
                         className={cn(
                             'flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground',
+                            classNameItem,
                         )}
                     >
                         {itemConfig?.icon && !hideIcon ? (

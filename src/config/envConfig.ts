@@ -22,6 +22,7 @@ const envSchema = z.object({
     NEXT_PUBLIC_SOCKET_ENDPOINT: z.string(),
     NEXT_PUBLIC_DOC_VIEWER: z.string(),
     NEXT_PUBLIC_OTP_EXPIRATION: z.coerce.number(),
+    NEXT_PUBLIC_GOONG_API_KEY: z.string(),
 });
 
 const envParser = envSchema.safeParse({
@@ -46,6 +47,7 @@ const envParser = envSchema.safeParse({
     NEXT_PUBLIC_SOCKET_ENDPOINT: process.env.NEXT_PUBLIC_SOCKET_ENDPOINT!,
     NEXT_PUBLIC_DOC_VIEWER: process.env.NEXT_PUBLIC_DOC_VIEWER!,
     NEXT_PUBLIC_OTP_EXPIRATION: process.env.NEXT_PUBLIC_OTP_EXPIRATION!,
+    NEXT_PUBLIC_GOONG_API_KEY: process.env.NEXT_PUBLIC_GOONG_API_KEY!,
 });
 
 if (!envParser.success) {

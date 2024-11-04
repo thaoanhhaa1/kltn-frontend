@@ -61,3 +61,15 @@ export const countAvailableProperties = () =>
 
 export const getPropertyBySlug = (slug: string) =>
     http.get<IProperty>(`/estate-manager-service/properties/slug/${slug}`);
+
+export const getPropertyById = (id: string, accessToken: string) => {
+    return http.get<IProperty>(`/estate-manager-service/properties/${id}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+};
+
+export const updateProperty = (propertyId: string, formData: FormData) => {
+    return http.put<IProperty>(`/estate-manager-service/properties/${propertyId}`, formData);
+};

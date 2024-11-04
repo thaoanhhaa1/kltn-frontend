@@ -20,3 +20,23 @@ export interface IIncomeExpenditure {
     income: number;
     expenditure: number;
 }
+
+export interface IGetContractCancellationRateByOwner {
+    month: number;
+    year: number;
+    count: number;
+}
+
+export interface IGetRentalRequestRatingByOwner {
+    month: number;
+    year: number;
+    APPROVED: number;
+    PENDING: number;
+    REJECTED: number;
+}
+
+export interface IGetTenantDistributionByOwner {
+    city: string;
+    district: string;
+    count: number;
+}

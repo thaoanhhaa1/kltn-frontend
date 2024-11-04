@@ -13,12 +13,13 @@ import {
     getUserStatusText,
     toSkipTake,
 } from '@/lib/utils';
-import { getAllUsers } from '@/services/user-service';
+import { blockUser, getAllUsers } from '@/services/user-service';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
-import { Button, Space, TableProps, Tag } from 'antd';
-import { Edit2, Trash } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { Button, Flex, TableProps, Tag, Tooltip } from 'antd';
+import { CircleMinus } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
 
 type IUsersTable = ITable<IUser>;
 
@@ -26,6 +27,26 @@ const UsersTable = () => {
     const [users, setUsers] = useState<IUsersTable>(initDataTable);
     const [loading, setLoading] = useState(false);
     const { page, pageSize } = usePagination();
+
+    const handleBlockUser = useCallback(async (userId: string) => {
+        setLoading(true);
+
+        try {
+            const user = await blockUser(userId);
+
+            toast.success(`Đã chặn người dùng ${user.name}`);
+            setUsers((prev) => ({
+                ...prev,
+                data: prev.data.map((u) => (u.userId === user.userId ? user : u)),
+            }));
+        } catch (error) {
+            console.error(error);
+
+            toast.error('Đã xảy ra lỗi, vui lòng thử lại sau');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
     const columns: TableProps<IUser>['columns'] = useMemo(
         () => [
@@ -86,15 +107,22 @@ const UsersTable = () => {
                 title: 'Hành động',
                 fixed: 'right',
                 width: 110,
-                render: () => (
-                    <Space>
-                        <Button type="text" icon={<Edit2 className="w-5 h-5" />} />
-                        <Button danger type="text" icon={<Trash className="w-5 h-5" />} />
-                    </Space>
+                render: (_, record) => (
+                    <Flex justify="center">
+                        {/* <Button type="text" icon={<Edit2 className="w-5 h-5" />} /> */}
+                        <Tooltip title="Chặn người dùng">
+                            <Button
+                                danger
+                                type="text"
+                                icon={<CircleMinus className="w-5 h-5" />}
+                                onClick={() => handleBlockUser(record.userId)}
+                            />
+                        </Tooltip>
+                    </Flex>
                 ),
             },
         ],
-        [],
+        [handleBlockUser],
     );
 
     useEffect(() => {
