@@ -1,6 +1,7 @@
 'use client';
 
 import { IAddressName } from '@/app/owner/properties/add/add-property-form';
+import ButtonLink from '@/components/button/button-link';
 import PriceInput from '@/components/input/price-input';
 import TableFilter from '@/components/table-filter';
 import TablePagination from '@/components/table-pagination';
@@ -183,7 +184,9 @@ const PropertiesTable = () => {
                 width: 110,
                 render: (property: IProperty) => (
                     <Space>
-                        <Button type="text" icon={<Eye className="w-5 h-5" />} />
+                        <ButtonLink href={`/owner/properties/${property.propertyId}`}>
+                            <Eye className="w-5 h-5" />
+                        </ButtonLink>
                         <Popconfirm
                             title="Xoá bất động sản?"
                             description="Bạn có chắc chắn muốn xóa bất động sản này?"
