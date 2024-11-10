@@ -18,11 +18,13 @@ import {
     OWNER,
     OWNER_CONTRACTS,
     OWNER_PROPERTIES,
+    OWNER_REPORTS,
     OWNER_REQUESTS,
     PROFILE,
     RENTAL_CONTRACTS,
     RENTAL_REQUESTS,
     RENTER_PAYMENTS,
+    REPORTS,
     SIGN_IN,
     WALLET,
 } from '@/path';
@@ -55,6 +57,10 @@ const MyAccount = ({ user }: { user: IUser }) => {
                 title: 'Quản lý hợp đồng',
                 onClick: () => router.push(OWNER_CONTRACTS),
             },
+            {
+                title: 'Quản lý báo cáo',
+                onClick: () => router.push(OWNER_REPORTS),
+            },
         ],
         [router],
     );
@@ -79,6 +85,13 @@ const MyAccount = ({ user }: { user: IUser }) => {
                 title: 'Thanh toán hoá đơn',
                 onClick: () => {
                     router.push(RENTER_PAYMENTS);
+                    router.refresh();
+                },
+            },
+            {
+                title: 'Báo cáo của tôi',
+                onClick: () => {
+                    router.push(REPORTS);
                     router.refresh();
                 },
             },

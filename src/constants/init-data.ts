@@ -73,4 +73,26 @@ export const priorityReportOptions = [
     },
 ];
 
+export const statusReportAdminOptions = [
+    {
+        label: 'Chờ xử lý',
+        value: 'pending',
+    },
+    {
+        label: 'Xử lý gấp',
+        value: 'urgent',
+    },
+];
+
+export const statusReportOwnerOptions = [
+    {
+        label: 'Chờ xử lý',
+        value: 'pending',
+    },
+    {
+        label: 'Đã xử lý',
+        value: 'resolved',
+    },
+];
+
 export const DEFAULT_SORT_PROPERTY = 'normal';

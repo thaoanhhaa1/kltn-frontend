@@ -1,4 +1,4 @@
-import { IReport, IReportChild, IReportDetail } from '@/interfaces/report';
+import { IReport, IReportChild, IReportDetail, IReportFilterByAdmin, IReportFilterByOwner } from '@/interfaces/report';
 import http from '@/lib/http';
 
 const ENDPOINT = '/contract-service/reports';
@@ -59,4 +59,20 @@ export const renterCompleteReport = (reportId: number) => {
 
 export const ownerNotResolveReport = (reportId: number) => {
     return http.post<IReportChild>(`${ENDPOINT}/renter/owner-not-resolve`, { reportId });
+};
+
+export const getAllReportsByAdmin = (data: IReportFilterByAdmin) => {
+    return http.get<Array<IReport>>(`${ENDPOINT}/admin`, {
+        params: data,
+    });
+};
+
+export const getReportByRenter = () => {
+    return http.get<Array<IReport>>(`${ENDPOINT}/renter`);
+};
+
+export const getReportByOwner = (data: IReportFilterByOwner) => {
+    return http.get<Array<IReport>>(`${ENDPOINT}/owner`, {
+        params: data,
+    });
 };
