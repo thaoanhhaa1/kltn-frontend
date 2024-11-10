@@ -23,5 +23,6 @@ export type NotificationType =
     | 'CONTRACT_DETAIL'
     | 'RENTER_PAYMENT'
     | 'OWNER_PROPERTY'
-    | 'ADMIN_PROPERTY';
+    | 'ADMIN_PROPERTY'
+    | 'REPORT';
 export type NotificationStatus = 'RECEIVED' | 'READ' | 'DELETED';

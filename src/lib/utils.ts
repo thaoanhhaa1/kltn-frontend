@@ -7,6 +7,7 @@ import { ContractExtensionRequestStatus, ContractExtensionRequestType } from '@/
 import { IPagination } from '@/interfaces/pagination';
 import { IAddress, PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
+import { ReportPriority, ReportStatus, ReportType } from '@/interfaces/report';
 import { TransactionStatus } from '@/interfaces/transaction';
 import { IBaseUserEmbed } from '@/interfaces/user';
 import { Role } from '@/types/role';
@@ -187,6 +188,66 @@ export const getAttributeTypeColor = (type: string) => {
     if (type === 'Highlight') return 'warning';
     if (type === 'Facility') return 'purple';
     return 'default';
+};
+
+export const getReportStatusColor = (status: ReportStatus) => {
+    if (status === 'pending_owner') return 'processing';
+    if (status === 'pending_renter') return 'processing';
+    if (status === 'owner_proposed') return 'processing';
+    if (status === 'owner_accepted') return 'success';
+    if (status === 'renter_accepted') return 'success';
+    if (status === 'renter_rejected') return 'error';
+    if (status === 'admin_processing') return 'processing';
+    if (status === 'admin_resolved') return 'success';
+    if (status === 'in_progress') return 'processing';
+    if (status === 'owner_completed') return 'success';
+    if (status === 'renter_completed') return 'success';
+    if (status === 'owner_not_resolved') return 'error';
+    if (status === 'cancelled') return 'default';
+    return 'default';
+};
+
+export const getReportStatusText = (status: ReportStatus) => {
+    if (status === 'pending_owner') return 'Chờ xác nhận chủ nhà';
+    if (status === 'pending_renter') return 'Chờ xác nhận người thuê';
+    if (status === 'owner_proposed') return 'Chủ nhà đề xuất';
+    if (status === 'owner_accepted') return 'Chủ nhà chấp nhận';
+    if (status === 'renter_accepted') return 'Người thuê chấp nhận';
+    if (status === 'renter_rejected') return 'Người thuê từ chối';
+    if (status === 'admin_processing') return 'Admin xử lý';
+    if (status === 'admin_resolved') return 'Admin đã giải quyết';
+    if (status === 'in_progress') return 'Đang xử lý';
+    if (status === 'owner_completed') return 'Chủ nhà đã hoàn thành';
+    if (status === 'renter_completed') return 'Người thuê đã hoàn thành';
+    if (status === 'owner_not_resolved') return 'Chủ nhà chưa giải quyết';
+    if (status === 'cancelled') return 'Đã hủy';
+    return 'Không xác định';
+};
+
+export const getReportTypeColor = (type: ReportType) => {
+    if (type === 'incident') return 'error';
+    if (type === 'violation') return 'warning';
+    return 'default';
+};
+
+export const getReportTypeText = (type: ReportType) => {
+    if (type === 'incident') return 'Sự cố';
+    if (type === 'violation') return 'Vi phạm';
+    return 'Không xác định';
+};
+
+export const getReportPriorityColor = (priority: ReportPriority) => {
+    if (priority === 'low') return 'success';
+    if (priority === 'medium') return 'warning';
+    if (priority === 'high') return 'error';
+    return 'default';
+};
+
+export const getReportPriorityText = (priority: ReportPriority) => {
+    if (priority === 'low') return 'Thấp';
+    if (priority === 'medium') return 'Trung bình';
+    if (priority === 'high') return 'Cao';
+    return 'Không xác định';
 };
 
 export const formatDate = (date: string | Date) => {
