@@ -21,3 +21,7 @@ export const rentPayment = (data: IDepositTransaction) => {
 export const getHistoryTransactions = (type: ITransactionType) => {
     return http.get<ITable<ITransaction>>(`/contract-service/transactions?type=${type}`);
 };
+
+export const getTransactionsByContract = (contractId: string) => {
+    return http.get<Array<ITransaction>>(`/contract-service/contracts/${contractId}/transactions`);
+};
