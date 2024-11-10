@@ -27,3 +27,4 @@ export const PROFILE = '/user';
 export const WALLET = '/user/wallet';
 export const CHAT = '/chat';
 export const FAVORITE = '/favorite';
+export const REPORTS = '/reports';

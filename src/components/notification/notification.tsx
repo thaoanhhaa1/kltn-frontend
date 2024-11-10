@@ -11,6 +11,7 @@ import {
     RENTAL_CONTRACTS,
     RENTAL_REQUESTS,
     RENTER_PAYMENTS,
+    REPORTS,
 } from '@/path';
 import { updateNotificationStatus } from '@/services/notification-service';
 import { useNotificationStore } from '@/stores/notification-store';
@@ -46,6 +47,7 @@ const Notification = ({ notification }: { notification: INotification }) => {
     const { readNotification } = useNotificationStore();
     const url = useMemo(() => {
         if (notification.type === 'CONTRACT_DETAIL') return `${RENTAL_CONTRACTS}/${notification.docId}`;
+        if (notification.type === 'REPORT') return `${REPORTS}/${notification.docId}`;
 
         return getLink(notification.type);
     }, [notification.docId, notification.type]);

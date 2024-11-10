@@ -47,4 +47,30 @@ export const sortPropertyOptions = [
     },
 ];
 
+export const typeReportOptions = [
+    {
+        label: 'Sự cố',
+        value: 'incident',
+    },
+    {
+        label: 'Vi phạm',
+        value: 'violation',
+    },
+];
+
+export const priorityReportOptions = [
+    {
+        label: 'Thấp',
+        value: 'low',
+    },
+    {
+        label: 'Trung bình',
+        value: 'medium',
+    },
+    {
+        label: 'Cao',
+        value: 'high',
+    },
+];
+
 export const DEFAULT_SORT_PROPERTY = 'normal';

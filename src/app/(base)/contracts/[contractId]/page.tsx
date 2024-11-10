@@ -1,6 +1,7 @@
 import BackButton from '@/app/(base)/contracts/[contractId]/back-button';
 import CancelContractButton from '@/app/(base)/contracts/[contractId]/cancel-contract-button';
 import CancellationRequest from '@/app/(base)/contracts/[contractId]/cancellation-request';
+import Report from '@/app/(base)/contracts/[contractId]/report';
 import ViewContractButton from '@/app/(base)/contracts/[contractId]/view-contract-button';
 import AvatarWithName from '@/components/avatar-with-name';
 import Extension from '@/components/extension';
@@ -73,6 +74,8 @@ export default async function ContractDetails({ params: { contractId } }: { para
         );
 
     const isOwner = user?.userId === contract.ownerId;
+    const isRenter = user?.userId === contract.renterId;
+    const isAdmin = user?.userTypes.includes('admin');
     const otherUser = isOwner ? contract.renter : contract.owner;
 
     return (
@@ -209,6 +212,16 @@ export default async function ContractDetails({ params: { contractId } }: { para
                             </CardContent>
                         </Card>
                     </Flex>
+                </Col>
+                <Col span={24}>
+                    <Card className="col-span-2">
+                        <CardHeader className="pb-0">
+                            <Title level={3}>Báo cáo sự cố & vi phạm</Title>
+                        </CardHeader>
+                        <CardContent>
+                            <Report isAdmin={isAdmin} isOwner={isOwner} isRenter={isRenter} contractId={contractId} />
+                        </CardContent>
+                    </Card>
                 </Col>
                 <Col span={24}>
                     <Card className="col-span-2">
