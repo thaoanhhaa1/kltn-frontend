@@ -58,7 +58,7 @@ const Extension = ({
             <Button onClick={handleOpenModal}>Gia hạn</Button>
             <Modal
                 open={open}
-                title={`${typeText} ${transactionId}`}
+                title={`${typeText} ${transactionId || contractId}`}
                 okText="Gia hạn"
                 cancelText="Huỷ"
                 onCancel={handleCloseModal}
@@ -82,7 +82,7 @@ const Extension = ({
                             }}
                             format="DD/MM/YYYY"
                             minDate={dayjs(endDate).add(1, 'day')}
-                            maxDate={dayjs(endDate).add(5, 'days')}
+                            maxDate={(transactionId && dayjs(endDate).add(5, 'days')) || undefined}
                             placeholder="Chọn ngày gia hạn"
                         />
                     </Form.Item>

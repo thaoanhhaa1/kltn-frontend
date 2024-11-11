@@ -1,3 +1,4 @@
+import { Report } from '@/assets/svgs/icons';
 import Forbidden from '@/components/forbidden';
 import ManageLayout from '@/components/manage-layout';
 import LoadNotification from '@/components/notification/load-notification';
@@ -7,6 +8,7 @@ import {
     DASHBOARD_ANALYTICS,
     DASHBOARD_ATTRIBUTES,
     DASHBOARD_PROPERTIES,
+    DASHBOARD_REPORTS,
     DASHBOARD_SETTINGS,
     DASHBOARD_TYPES,
     DASHBOARD_USERS,
@@ -33,6 +35,11 @@ const topNavList = [
         icon: <Users2 className="w-5 h-5" />,
     },
     {
+        link: DASHBOARD_REPORTS,
+        title: 'Báo cáo',
+        icon: <Report className="w-5 h-5" />,
+    },
+    {
         link: DASHBOARD_ANALYTICS,
         title: 'Thống kê',
         icon: <LineChart className="w-5 h-5" />,
@@ -44,7 +51,7 @@ const topNavList = [
     },
     {
         link: DASHBOARD_TYPES,
-        title: 'Loại',
+        title: 'Loại bất động sản',
         icon: <Option className="w-5 h-5" />,
     },
 ];

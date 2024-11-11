@@ -2,6 +2,7 @@ import BackButton from '@/app/(base)/contracts/[contractId]/back-button';
 import CancelContractButton from '@/app/(base)/contracts/[contractId]/cancel-contract-button';
 import CancellationRequest from '@/app/(base)/contracts/[contractId]/cancellation-request';
 import Report from '@/app/(base)/contracts/[contractId]/report';
+import Transactions from '@/app/(base)/contracts/[contractId]/transactions';
 import ViewContractButton from '@/app/(base)/contracts/[contractId]/view-contract-button';
 import AvatarWithName from '@/components/avatar-with-name';
 import Extension from '@/components/extension';
@@ -96,6 +97,7 @@ export default async function ContractDetails({ params: { contractId } }: { para
                         />
                     )}
                     <ViewContractButton contractContent={contract.contractTerms} />
+                    <Transactions contractId={contractId} />
                 </Flex>
             </header>
             <Row gutter={[12, 12]}>

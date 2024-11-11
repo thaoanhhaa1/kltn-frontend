@@ -98,3 +98,17 @@ export interface IAdminResolveReport {
     compensation?: number;
     resolvedAt?: string;
 }
+
+export type ReportFilterStatus = 'pending' | 'resolved' | 'urgent' | 'all';
+export type ReportSort = 'newest' | 'priority_asc' | 'priority_desc' | 'all';
+
+export interface IReportFilterByAdmin {
+    status: ReportFilterStatus;
+    type: ReportType;
+}
+
+export interface IReportFilterByOwner {
+    status: ReportFilterStatus;
+    type: ReportType;
+    sort: ReportSort;
+}
