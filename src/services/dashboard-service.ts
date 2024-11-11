@@ -7,8 +7,10 @@ import {
     ICountRentalRequestByDay,
     ICountRentalRequestByMonth,
     ICountRentalRequestByWeek,
+    ICountTransactionsByStatusAndMonth,
     IGetContractCancellationRateByOwner,
     IGetRentalRequestRatingByOwner,
+    IGetRevenueAndFeeByMonth,
     IGetTenantDistributionByOwner,
     IIncomeExpenditure,
     IOverviewByAdminRes,
@@ -147,4 +149,23 @@ export const countRentalRequestByMonth = (accessToken: string) => {
             Authorization: `Bearer ${accessToken}`,
         },
     });
+};
+
+export const getRevenueAndFeeByMonth = (accessToken: string) => {
+    return http.get<Array<IGetRevenueAndFeeByMonth>>('/contract-service/dashboard/admin/revenue-and-fee', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+};
+
+export const countTransactionsByStatusAndMonth = (accessToken: string) => {
+    return http.get<Array<ICountTransactionsByStatusAndMonth>>(
+        '/contract-service/dashboard/admin/transactions-by-month-and-status',
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        },
+    );
 };

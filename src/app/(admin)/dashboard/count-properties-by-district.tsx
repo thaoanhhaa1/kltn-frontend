@@ -3,7 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { ICountPropertyByDistrict } from '@/interfaces/dashboard';
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 const chartConfig = {} as ChartConfig;
 
@@ -22,6 +22,7 @@ const CountPropertiesByDistrict = ({ data }: { data: Array<ICountPropertyByDistr
                     >
                         <CartesianGrid vertical={false} />
                         <XAxis dataKey="district" tickLine={false} axisLine={false} tickMargin={8} minTickGap={32} />
+                        <YAxis tickLine={false} axisLine={false} />
                         <ChartTooltip
                             content={
                                 <ChartTooltipContent

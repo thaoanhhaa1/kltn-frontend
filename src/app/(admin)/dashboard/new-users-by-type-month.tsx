@@ -3,7 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { ICountNewUserByTypeAndMonth } from '@/interfaces/dashboard';
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 const chartConfig = {
     owner: {
@@ -30,6 +30,7 @@ const NewUsersByTypeAndMonth = ({ data }: { data: Array<ICountNewUserByTypeAndMo
                             axisLine={false}
                             tickFormatter={(value) => `Tháng ${value}`}
                         />
+                        <YAxis tickLine={false} axisLine={false} />
                         <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
                         <Bar dataKey="owner" fill="var(--color-owner)" radius={4} />
                         <Bar dataKey="renter" fill="var(--color-renter)" radius={4} />

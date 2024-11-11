@@ -2,9 +2,11 @@ import CountPropertiesByDistrict from '@/app/(admin)/dashboard/count-properties-
 import CountPropertiesByRevenue from '@/app/(admin)/dashboard/count-properties-by-revenue';
 import CountPropertiesByType, { ICountPropertyByTypeChart } from '@/app/(admin)/dashboard/count-properties-by-type';
 import CountRentalRequest from '@/app/(admin)/dashboard/count-rental-requests';
+import CountTransactionsByStatusAndMonth from '@/app/(admin)/dashboard/count-transactions-by-status-and-month';
 import DashboardBreadcrumb from '@/app/(admin)/dashboard/dashboard-breadcrumb';
 import NewUsersByTypeAndMonth from '@/app/(admin)/dashboard/new-users-by-type-month';
 import Overview from '@/app/(admin)/dashboard/overview';
+import RevenueAndFee from '@/app/(admin)/dashboard/revenue-and-fee';
 import Item from '@/app/owner/item';
 import Forbidden from '@/components/forbidden';
 import { ChartConfig } from '@/components/ui/chart';
@@ -15,6 +17,8 @@ import {
     ICountRentalRequestByDay,
     ICountRentalRequestByMonth,
     ICountRentalRequestByWeek,
+    ICountTransactionsByStatusAndMonth,
+    IGetRevenueAndFeeByMonth,
     IOverviewByAdminRes,
 } from '@/interfaces/dashboard';
 import { getRandomColor } from '@/lib/utils';
@@ -25,7 +29,9 @@ import {
     countRentalRequestByDay,
     countRentalRequestByMonth,
     countRentalRequestByWeek,
+    countTransactionsByStatusAndMonth,
     getOverviewByAdmin,
+    getRevenueAndFeeByMonth,
 } from '@/services/dashboard-service';
 import { Col, Flex, Row } from 'antd';
 import { cookies } from 'next/headers';
@@ -60,6 +66,8 @@ const DashboardPage = async () => {
     let rentalRequestByDay: Array<ICountRentalRequestByDay> = [];
     let rentalRequestByWeek: Array<ICountRentalRequestByWeek> = [];
     let rentalRequestByMonth: Array<ICountRentalRequestByMonth> = [];
+    let revenueAndFeeByMonth: Array<IGetRevenueAndFeeByMonth> = [];
+    let transactionsByStatusAndMonth: Array<ICountTransactionsByStatusAndMonth> = [];
 
     try {
         [
@@ -70,6 +78,8 @@ const DashboardPage = async () => {
             rentalRequestByDay,
             rentalRequestByWeek,
             rentalRequestByMonth,
+            revenueAndFeeByMonth,
+            transactionsByStatusAndMonth,
         ] = await Promise.all([
             getOverviewByAdmin(accessToken),
             countNewUsersByTypeAndMonth(accessToken),
@@ -78,6 +88,8 @@ const DashboardPage = async () => {
             countRentalRequestByDay(accessToken),
             countRentalRequestByWeek(accessToken),
             countRentalRequestByMonth(accessToken),
+            getRevenueAndFeeByMonth(accessToken),
+            countTransactionsByStatusAndMonth(accessToken),
         ]);
     } catch (error) {
         console.log('🚀 ~ DashboardPage ~ error:', error);
@@ -121,6 +133,13 @@ const DashboardPage = async () => {
                         weekData={rentalRequestByWeek}
                         monthData={rentalRequestByMonth}
                     />
+                </Item>
+                {/* countTransactionsByStatusAndMonth */}
+                <Item title="Số lượng giao dịch theo trạng thái và tháng">
+                    <CountTransactionsByStatusAndMonth data={transactionsByStatusAndMonth} />
+                </Item>
+                <Item title="Doanh thu và phí">
+                    <RevenueAndFee data={revenueAndFeeByMonth} />
                 </Item>
             </Flex>
         </div>

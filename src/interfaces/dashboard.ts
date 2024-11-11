@@ -118,3 +118,16 @@ export interface ICountRentalRequestByMonth {
     month: number;
     count: number;
 }
+
+export interface IGetRevenueAndFeeByMonth {
+    month: string;
+    revenue: number;
+    fee: number;
+}
+
+export interface ICountTransactionsByStatusAndMonth {
+    month: number;
+    PENDING: number;
+    COMPLETED: number;
+    CANCELLED: number;
+}

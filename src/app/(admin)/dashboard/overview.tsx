@@ -6,7 +6,7 @@ const Overview = ({ overview }: { overview: IOverviewByAdminRes }) => {
     const [firstUserByType, secondUserByType] = overview.usersByType;
 
     return (
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid grid-cols-4 gap-4">
             <OverviewItem title="Chủ nhà" value={firstUserByType.count} />
             <OverviewItem title="Người thuê" value={secondUserByType.count} />
             <OverviewItem title="Người dùng mới" value={overview.newUsersInMonth} />

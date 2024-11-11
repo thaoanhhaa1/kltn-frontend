@@ -40,11 +40,6 @@ const topNavList = [
         icon: <Report className="w-5 h-5" />,
     },
     {
-        link: DASHBOARD_ANALYTICS,
-        title: 'Thống kê',
-        icon: <LineChart className="w-5 h-5" />,
-    },
-    {
         link: DASHBOARD_ATTRIBUTES,
         title: 'Tiện ích',
         icon: <Tv className="w-5 h-5" />,
