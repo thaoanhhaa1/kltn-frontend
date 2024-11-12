@@ -4,10 +4,12 @@ import FormPopover from '@/components/form-popover';
 import { interiorOptions } from '@/constants/init-data';
 import { inputNumberProps, selectProps } from '@/constants/init-props';
 import { IAttributeCbb } from '@/interfaces/attribute';
+import { IPropertyType } from '@/interfaces/property-type';
 import { convertCurrencyToText, convertObjectToParams, formatCurrency } from '@/lib/utils';
 import { SEARCH } from '@/path';
 import { getCities, getDistricts, getWards, IAddress } from '@/services/address-service';
 import { getAllAttributesCbb } from '@/services/attribute-service';
+import { getPropertyTypes } from '@/services/property-type';
 import { Col, Flex, Form, Input, InputNumber, Row, Select, Slider, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { RotateCcw, Search } from 'lucide-react';
@@ -23,15 +25,19 @@ const getAddress = ({ city, district, ward }: { city: string; district: string; 
 };
 
 const getTitleMoreInfo = ({
+    type,
     bedroom,
     bathroom,
     furniture,
 }: {
+    type: string;
     bedroom: number;
     bathroom: number;
     furniture: string;
 }) => {
     const res = [];
+
+    if (type) res.push(type);
 
     if (bedroom) res.push(`${bedroom} ngủ`);
 
@@ -67,10 +73,14 @@ const SearchComponent = () => {
     const [attributes, setAttributes] = useState<IAttributeCbb[]>([]);
     const [loadingAttributes, setLoadingAttributes] = useState(false);
     const [selectedAttributes, setSelectedAttributes] = useState<string[]>([]);
+    const [types, setTypes] = useState<IPropertyType[]>([]);
+    const [typeLoading, setTypeLoading] = useState(false);
     const [moreInfo, setMoreInfo] = useState({
         bedroom: 0,
         bathroom: 0,
         furniture: '',
+        type: '',
+        typeId: '',
     });
 
     const handleCityChange = async (cityId: string) => {
@@ -202,7 +212,17 @@ const SearchComponent = () => {
             bedroom: 0,
             bathroom: 0,
             furniture: '',
+            type: '',
+            typeId: '',
         });
+    };
+
+    const handleChangeType = (value: string, res: any) => {
+        setMoreInfo((prev) => ({
+            ...prev,
+            type: res.name,
+            typeId: value,
+        }));
     };
 
     const handleSearch = (values: ISearchInput) => {
@@ -235,6 +255,7 @@ const SearchComponent = () => {
         if (city) searchParams.city = city;
         if (district) searchParams.district = district;
         if (ward) searchParams.ward = ward;
+        if (moreInfo.type) searchParams.type = moreInfo.type;
 
         router.push(`${SEARCH}?${convertObjectToParams(searchParams)}`);
     };
@@ -261,6 +282,15 @@ const SearchComponent = () => {
         };
 
         fetchAttributes();
+
+        const fetchTypes = async () => {
+            setTypeLoading(true);
+            const data = await getPropertyTypes();
+            setTypes(data);
+            setTypeLoading(false);
+        };
+
+        fetchTypes();
     }, []);
 
     return (
@@ -380,6 +410,19 @@ const SearchComponent = () => {
                                 title={getTitleMoreInfo(moreInfo)}
                                 onReset={handleResetMoreInfo}
                             >
+                                <Typography.Text className="flex-1">Loại nhà</Typography.Text>
+                                <Form.Item className="!my-2 w-full" name="type">
+                                    <Select
+                                        loading={typeLoading}
+                                        onChange={handleChangeType}
+                                        placeholder="Chọn loại nhà"
+                                        options={types}
+                                        fieldNames={{
+                                            label: 'name',
+                                            value: 'id',
+                                        }}
+                                    />
+                                </Form.Item>
                                 <Typography.Text className="flex-1">Số phòng ngủ</Typography.Text>
                                 <Form.Item className="!my-2 w-full" name="bedroom">
                                     <InputNumber

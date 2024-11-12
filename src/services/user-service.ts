@@ -56,3 +56,7 @@ export const blockUser = (userId: string) => {
         id: userId,
     });
 };
+
+export const getAllRentersCbb = (): Promise<IUser[]> => {
+    return http.get<IUser[]>(`${ENDPOINT}/renters/cbb`);
+};

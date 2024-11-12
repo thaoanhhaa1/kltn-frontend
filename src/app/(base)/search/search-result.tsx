@@ -31,6 +31,7 @@ const SearchResult = ({ count }: { count: number }) => {
     const district = searchParams.get('district');
     const ward = searchParams.get('ward');
     const sort = searchParams.get('sort');
+    const type = searchParams.get('type');
 
     const getSearchParams = useCallback(() => {
         const { skip, take } = toSkipTake(page, pageSize);
@@ -55,9 +56,25 @@ const SearchResult = ({ count }: { count: number }) => {
         if (district) searchParams.district = district;
         if (ward) searchParams.ward = ward;
         if (sort) searchParams.sort = sort;
+        if (type) searchParams.type = type;
 
         return searchParams;
-    }, [amenities, bathroom, bedroom, city, district, furniture, maxPrice, minPrice, page, pageSize, q, sort, ward]);
+    }, [
+        amenities,
+        bathroom,
+        bedroom,
+        city,
+        district,
+        furniture,
+        maxPrice,
+        minPrice,
+        page,
+        pageSize,
+        q,
+        sort,
+        type,
+        ward,
+    ]);
 
     const handleChangeSort = (value: string) => {
         const { skip, take, ...searchParams } = getSearchParams();

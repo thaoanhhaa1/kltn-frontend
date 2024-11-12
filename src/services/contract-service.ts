@@ -1,4 +1,10 @@
-import { IContract, IContractDetail, ICreateContractRequest } from '@/interfaces/contract';
+import {
+    IContract,
+    IContractDetail,
+    ICreateContractRequest,
+    IGenerateContract,
+    IGenerateContractRes,
+} from '@/interfaces/contract';
 import { IPagination } from '@/interfaces/pagination';
 import { ITable } from '@/interfaces/table';
 import http from '@/lib/http';
@@ -59,4 +65,8 @@ export const getContractDetail = (contractId: string, token: string) => {
             Authorization: `Bearer ${token}`,
         },
     });
+};
+
+export const generateContractService = (data: IGenerateContract) => {
+    return http.post<IGenerateContractRes>(`${ENDPOINT}/generate`, data);
 };

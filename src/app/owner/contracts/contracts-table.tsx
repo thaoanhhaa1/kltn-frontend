@@ -1,6 +1,7 @@
 'use client';
 
 import CancelModal from '@/app/(base)/contracts/cancel-modal';
+import AddContractModal from '@/app/owner/contracts/add-contract-modal';
 import ButtonLink from '@/components/button/button-link';
 import CancelBeforeDeposit from '@/components/contracts/cancel-before-deposit';
 import TablePagination from '@/components/table-pagination';
@@ -18,8 +19,8 @@ import {
 } from '@/lib/utils';
 import { RENTAL_CONTRACTS } from '@/path';
 import { getContractsByOwner } from '@/services/contract-service';
-import { Button, Space, TableProps, Tag, Tooltip } from 'antd';
-import { Eye, X } from 'lucide-react';
+import { Button, Flex, Space, TableProps, Tag, Tooltip } from 'antd';
+import { Eye, Plus, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const ContractsTable = () => {
@@ -27,6 +28,7 @@ const ContractsTable = () => {
     const [loading, setLoading] = useState(true);
     const [cancelContract, setCancelContract] = useState<IContract | null>(null);
     const { page, pageSize } = usePagination();
+    const [showAddModal, setShowAddModal] = useState(false);
 
     const handleClickCancel = (contract: IContract) => {
         setCancelContract(contract);
@@ -132,6 +134,10 @@ const ContractsTable = () => {
         setCancelContract(null);
     };
 
+    const handleShowAddModal = () => {
+        setShowAddModal(true);
+    };
+
     const getContracts = useCallback(async ({ page = 1, pageSize = 10 }: { page?: number; pageSize?: number }) => {
         setLoading(true);
 
@@ -148,6 +154,13 @@ const ContractsTable = () => {
         }
     }, []);
 
+    const refresh = () => {
+        getContracts({
+            page: 1,
+            pageSize,
+        });
+    };
+
     useEffect(() => {
         getContracts({
             page,
@@ -157,6 +170,10 @@ const ContractsTable = () => {
 
     return (
         <>
+            <Flex gap="small" justify="flex-end" wrap className="my-4">
+                <Button icon={<Plus className="w-5 h-5" />} onClick={handleShowAddModal} />
+            </Flex>
+            <AddContractModal open={showAddModal} setOpen={setShowAddModal} refresh={refresh} />
             <TablePagination
                 loading={loading}
                 rowKey={(record) => record.contractId}

@@ -11,13 +11,13 @@ const CancelBeforeDeposit = ({
     setContracts,
 }: {
     contractId: string;
-    setContracts: Dispatch<SetStateAction<ITable<IContract>>>;
+    setContracts?: Dispatch<SetStateAction<ITable<IContract>>>;
 }) => {
     const handleClickCancelBeforeDeposit = async () => {
         try {
             const newContract = await cancelContractBeforeDeposit(contractId);
 
-            setContracts((prev) => ({
+            setContracts?.((prev) => ({
                 ...prev,
                 data: prev.data.map((c) =>
                     c.contractId === newContract.contractId
