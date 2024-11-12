@@ -49,3 +49,23 @@ export type ContractStatus =
     | 'UNILATERAL_CANCELLATION'
     | 'APPROVED_CANCELLATION'
     | 'REJECTED_CANCELLATION';
+
+export interface IGenerateContract {
+    renterId: string;
+    propertyId: string;
+    rentalPrice: number;
+    rentalDeposit: number;
+    rentalStartDate: string;
+    rentalEndDate: string;
+}
+
+export interface IGenerateContractRes {
+    contractContent: string;
+    ownerId: string;
+    renterId: string;
+    propertyId: string;
+    startDate: string;
+    endDate: string;
+    monthlyRent: number;
+    depositAmount: number;
+}

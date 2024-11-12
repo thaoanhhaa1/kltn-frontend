@@ -73,3 +73,7 @@ export const getPropertyById = (id: string, accessToken: string) => {
 export const updateProperty = (propertyId: string, formData: FormData) => {
     return http.put<IProperty>(`/estate-manager-service/properties/${propertyId}`, formData);
 };
+
+export const getAllPropertiesCbbForOwner = () => {
+    return http.get<IProperty[]>('/estate-manager-service/properties/owner/cbb');
+};
