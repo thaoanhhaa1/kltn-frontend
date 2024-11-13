@@ -11,6 +11,7 @@ export interface ICreateContractRequest {
     contractTerms: string;
     monthlyRent: number;
     depositAmount: number;
+    signature: string;
 }
 
 export interface IContract {

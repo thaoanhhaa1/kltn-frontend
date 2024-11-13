@@ -1,5 +1,8 @@
 import TinyEditor from '@/components/tiny-editor';
+import useSignMessageCustom from '@/hooks/useSignMessageCustom';
+import { ICreateContractRequest } from '@/interfaces/contract';
 import { IGenerateContractResponse, IRentalRequest } from '@/interfaces/rentalRequest';
+import { getOwnerCreateContractMessage } from '@/lib/utils';
 import { createContractAndApproveRequest } from '@/services/contract-service';
 import { generateContract } from '@/services/rental-request-service';
 import { Flex, Modal, Spin } from 'antd';
@@ -22,6 +25,7 @@ const ContractModal = ({
     const [loading, setLoading] = useState(false);
     const [contract, setContract] = useState<IGenerateContractResponse | undefined>();
     const [createLoading, setCreateLoading] = useState(false);
+    const { handleSign } = useSignMessageCustom();
 
     const handleOk = async () => {
         if (!contract) return;
@@ -32,9 +36,20 @@ const ContractModal = ({
 
             const { contractContent, ...res } = contract;
 
-            await createContractAndApproveRequest({
+            const data: ICreateContractRequest = {
                 ...res,
                 contractTerms: content,
+                signature: '',
+                startDate: res.startDate.substring(0, 10),
+                endDate: res.endDate.substring(0, 10),
+            };
+
+            const message = getOwnerCreateContractMessage(data);
+            const signature = await handleSign({ message });
+
+            await createContractAndApproveRequest({
+                ...data,
+                signature,
                 requestId: rentalRequest?.requestId!,
             });
 
@@ -55,6 +70,15 @@ const ContractModal = ({
 
     const handlePreRender = () => {
         setPreRender(false);
+    };
+
+    const handleEditorChange = (value: string) => {
+        if (contract) {
+            setContract({
+                ...contract,
+                contractContent: value,
+            });
+        }
     };
 
     useEffect(() => {
@@ -101,7 +125,12 @@ const ContractModal = ({
                 disabled: !contract,
             }}
         >
-            <TinyEditor value={contract?.contractContent} onPostRender={handlePreRender} editorRef={editorRef} />
+            <TinyEditor
+                value={contract?.contractContent}
+                onPostRender={handlePreRender}
+                editorRef={editorRef}
+                onEditorChange={handleEditorChange}
+            />
             {(preRender || loading) && (
                 <Flex
                     justify="center"

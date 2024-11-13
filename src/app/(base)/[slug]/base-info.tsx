@@ -2,11 +2,10 @@
 
 import RentalRequestModal from '@/app/(base)/[slug]/rental-request-modal';
 import HeartBtn from '@/components/property/heart-btn';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { IConversation } from '@/interfaces/chat';
 import { IProperty } from '@/interfaces/property';
 import { IPropertyInteraction } from '@/interfaces/property-interaction';
-import { convertDateToTimeAgo, createChatConversation, formatCurrency, getNameAvatar } from '@/lib/utils';
+import { convertDateToTimeAgo, createChatConversation, formatCurrency } from '@/lib/utils';
 import { CHAT } from '@/path';
 import { getFavoriteBySlug } from '@/services/property-interaction-service';
 import { useConversationStore } from '@/stores/conversation-store';
@@ -72,11 +71,11 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
             >
                 {property.title}
             </Typography.Title>
-            <div className="flex items-center gap-4">
-                <Avatar>
+            <div className="flex items-center gap-4 mb-[15px]">
+                {/* <Avatar>
                     <AvatarImage src={property.owner.avatar || ''} alt={property.owner.name} />
                     <AvatarFallback>{getNameAvatar(property.owner.name)}</AvatarFallback>
-                </Avatar>
+                </Avatar> */}
                 <div>
                     <Typography.Title level={5}>Chủ nhà: {property.owner.name}</Typography.Title>
                     {property.owner.phoneNumber && (
