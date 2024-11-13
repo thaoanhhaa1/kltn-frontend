@@ -19,26 +19,8 @@ export const createContractAndApproveRequest = async (
     return http.post(ENDPOINT, params);
 };
 
-export const createContract = ({
-    contractTerms,
-    depositAmount,
-    endDate,
-    monthlyRent,
-    ownerId,
-    propertyId,
-    renterId,
-    startDate,
-}: ICreateContractRequest) => {
-    return http.post(ENDPOINT, {
-        ownerId,
-        renterId,
-        propertyId,
-        startDate,
-        endDate,
-        contractTerms,
-        monthlyRent,
-        depositAmount,
-    });
+export const createContract = (data: ICreateContractRequest) => {
+    return http.post(ENDPOINT, data);
 };
 
 export const getContractsByRenter = (pagination: IPagination) => {

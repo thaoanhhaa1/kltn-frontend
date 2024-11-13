@@ -1,6 +1,27 @@
 import { envConfig } from '@/config/envConfig';
 import { Editor, IAllProps } from '@tinymce/tinymce-react';
 
+const pluginsInit = [
+    'advlist',
+    'autolink',
+    'lists',
+    'link',
+    'image',
+    'charmap',
+    'preview',
+    'anchor',
+    'searchreplace',
+    'visualblocks',
+    'code',
+    'fullscreen',
+    'insertdatetime',
+    'media',
+    'table',
+    'code',
+    'help',
+    'wordcount',
+];
+
 const TinyEditor = ({
     editableRoot = false,
     editorRef,
@@ -18,27 +39,7 @@ const TinyEditor = ({
                 resize: false,
                 height: '80vh',
                 menubar: false,
-                plugins: [
-                    'advlist',
-                    'autolink',
-                    'lists',
-                    'link',
-                    'image',
-                    'charmap',
-                    'preview',
-                    'anchor',
-                    'searchreplace',
-                    'visualblocks',
-                    'code',
-                    'fullscreen',
-                    'insertdatetime',
-                    'media',
-                    'table',
-                    'code',
-                    'help',
-                    'wordcount',
-                    // 'noneditable',
-                ],
+                plugins: pluginsInit,
                 toolbar:
                     'undo redo | blocks | ' +
                     'bold italic forecolor | alignleft aligncenter ' +

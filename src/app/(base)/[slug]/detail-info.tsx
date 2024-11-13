@@ -21,21 +21,25 @@ const DetailInfo = ({ property }: { property: IProperty }) => {
                     </Col>
                 ))}
             </Row>
-            <Typography.Title
-                style={{
-                    marginTop: '36px',
-                }}
-                level={2}
-            >
-                Tiện ích
-            </Typography.Title>
-            <Row>
-                {property.attributes.map((attribute, index) => (
-                    <Col span={6} key={index}>
-                        <Typography.Text>{attribute.name}</Typography.Text>
-                    </Col>
-                ))}
-            </Row>
+            {property.attributes.length > 0 && (
+                <>
+                    <Typography.Title
+                        style={{
+                            marginTop: '36px',
+                        }}
+                        level={2}
+                    >
+                        Tiện ích
+                    </Typography.Title>
+                    <Row>
+                        {property.attributes.map((attribute, index) => (
+                            <Col span={6} key={index}>
+                                <Typography.Text>{attribute.name}</Typography.Text>
+                            </Col>
+                        ))}
+                    </Row>
+                </>
+            )}
         </div>
     );
 };

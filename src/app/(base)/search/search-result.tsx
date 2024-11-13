@@ -4,11 +4,13 @@ import HorizontalProperty from '@/components/property/horizontal-property';
 import HorizontalPropertySkeleton from '@/components/property/horizontal-property-skeleton';
 import SkeletonRender from '@/components/skeleton-render';
 import { DEFAULT_SORT_PROPERTY, sortPropertyOptions } from '@/constants/init-data';
+import useBoolean from '@/hooks/useBoolean';
 import usePagination from '@/hooks/usePagination';
 import { IProperty } from '@/interfaces/property';
-import { convertObjectToParams, formatCurrency, toSkipTake } from '@/lib/utils';
+import { cn, convertObjectToParams, formatCurrency, toSkipTake } from '@/lib/utils';
 import { searchProperties } from '@/services/property-service';
-import { Flex, Pagination, Select, Typography } from 'antd';
+import { Button, Flex, Pagination, Select, Typography } from 'antd';
+import { Grid } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -17,8 +19,9 @@ const SearchResult = ({ count }: { count: number }) => {
     const [properties, setProperties] = useState<IProperty[]>([]);
     const [loading, setLoading] = useState(true);
     const [total, setTotal] = useState(0);
+    const { value: isGrid, toggle } = useBoolean(false);
 
-    const { page, pageSize } = usePagination();
+    const { page, pageSize } = usePagination(20);
     const searchParams = useSearchParams();
     const q = searchParams.get('q');
     const minPrice = searchParams.get('minPrice');
@@ -119,7 +122,7 @@ const SearchResult = ({ count }: { count: number }) => {
                 <Typography.Title level={3}>Các tin đăng bất động sản</Typography.Title>
                 <Typography.Text type="secondary">Hiện có {formatCurrency(count, false)} bất động sản</Typography.Text>
             </div>
-            <Flex className="mb-4 mt-6" justify="flex-end">
+            <Flex className="mb-4 mt-6" justify="flex-end" gap={8}>
                 <Select
                     value={sort || DEFAULT_SORT_PROPERTY}
                     variant="filled"
@@ -130,11 +133,17 @@ const SearchResult = ({ count }: { count: number }) => {
                     options={sortPropertyOptions}
                     onChange={handleChangeSort}
                 />
+                <Button
+                    color="primary"
+                    icon={<Grid className="w-5 h-5" />}
+                    variant={isGrid ? 'outlined' : undefined}
+                    onClick={toggle}
+                />
             </Flex>
-            <Flex gap={24} vertical>
+            <div className={cn('gap-6 grid', isGrid ? 'grid-cols-2' : 'grid-cols-1')}>
                 {loading ||
                     properties.map((property) => <HorizontalProperty property={property} key={property.propertyId} />)}
-            </Flex>
+            </div>
             {loading && <SkeletonRender controller={HorizontalPropertySkeleton} className="gap-6 mt-6" vertical />}
             <Pagination
                 style={{

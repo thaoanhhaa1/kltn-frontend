@@ -1,14 +1,14 @@
 import { app } from '@/config/firebase.config';
 import { IMAGE, VIDEO } from '@/constants/media-type';
 import { ChatStatus, IChat, IConversation } from '@/interfaces/chat';
-import { ContractStatus } from '@/interfaces/contract';
+import { ContractStatus, ICreateContractRequest } from '@/interfaces/contract';
 import { ContractCancelRequestStatus } from '@/interfaces/contract-cancel-request';
 import { ContractExtensionRequestStatus, ContractExtensionRequestType } from '@/interfaces/contract-extension-request';
 import { IPagination } from '@/interfaces/pagination';
 import { IAddress, PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
 import { ReportPriority, ReportStatus, ReportType } from '@/interfaces/report';
-import { TransactionStatus } from '@/interfaces/transaction';
+import { ITransaction, TransactionStatus } from '@/interfaces/transaction';
 import { IBaseUserEmbed } from '@/interfaces/user';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
@@ -450,3 +450,9 @@ export const getRandomColor = () => {
     }
     return color;
 };
+
+export const getOwnerCreateContractMessage = (data: ICreateContractRequest) => {
+    return `Tạo hợp đồng thuê nhà với ${data.renterId} tại ${data.propertyId} từ ${data.startDate} đến ${data.endDate} với giá ${data.monthlyRent} và cọc ${data.depositAmount}`;
+};
+
+export const renterGetTransactionMessage = (data: ITransaction) => {};

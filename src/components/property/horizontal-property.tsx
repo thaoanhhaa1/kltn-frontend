@@ -13,7 +13,7 @@ const findByConditionType = (conditions: Array<ICondition>, type: string) => {
     return conditions.find((condition) => condition.type === type)?.value || '';
 };
 
-const HorizontalProperty = ({ property }: { property: IProperty }) => {
+const HorizontalProperty = ({ property, isGrid }: { property: IProperty; isGrid?: boolean }) => {
     const acreage = findByConditionType(property.rentalConditions, 'Diện tích');
     const bedroom = findByConditionType(property.rentalConditions, 'Phòng ngủ');
     const bathroom = findByConditionType(property.rentalConditions, 'Phòng tắm');
@@ -33,28 +33,32 @@ const HorizontalProperty = ({ property }: { property: IProperty }) => {
                     </div>
                 </div>
                 <div className="p-4 w-full">
-                    <Title level={4}>{property.title}</Title>
+                    <Title level={4} className="line-clamp-1">
+                        {property.title}
+                    </Title>
                     <Paragraph className="line-clamp-3 whitespace-pre-wrap" type="secondary">
                         {property.description}
                     </Paragraph>
                     <Text>
                         {property.address.district}, {property.address.city}
                     </Text>
-                    <Flex gap={24} className="mt-5">
-                        <Title className="!mt-0" level={5}>
-                            {acreage.replace('m2', '')} m²
-                        </Title>
-                        {bedroom && (
+                    {isGrid || (
+                        <Flex gap={24} className="mt-5">
                             <Title className="!mt-0" level={5}>
-                                {bedroom} ngủ
+                                {acreage.replace('m2', '')} m²
                             </Title>
-                        )}
-                        {bathroom && (
-                            <Title className="!mt-0" level={5}>
-                                {bathroom} tắm
-                            </Title>
-                        )}
-                    </Flex>
+                            {bedroom && (
+                                <Title className="!mt-0" level={5}>
+                                    {bedroom} ngủ
+                                </Title>
+                            )}
+                            {bathroom && (
+                                <Title className="!mt-0" level={5}>
+                                    {bathroom} tắm
+                                </Title>
+                            )}
+                        </Flex>
+                    )}
                     <Title type="danger" level={4}>
                         {formatCurrency(property.price, true)}
                     </Title>

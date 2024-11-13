@@ -1,6 +1,5 @@
 'use client';
 
-import CustomError from '@/lib/error';
 import { updateWalletAddress } from '@/services/user-service';
 import { Button, Flex, Typography } from 'antd';
 import { useRouter } from 'next/navigation';
@@ -10,12 +9,12 @@ import { Connector, useConnect, useDisconnect } from 'wagmi';
 const ConnectWallet = () => {
     const router = useRouter();
     const { connectors, connectAsync } = useConnect();
-    const { disconnect } = useDisconnect();
+    const { disconnectAsync } = useDisconnect();
 
     const handleConnect = async (connector: Connector) => {
         console.log('Attempting to connect with connector:', connector);
         try {
-            disconnect();
+            await disconnectAsync();
             const res = await connectAsync({ connector });
 
             const walletAddress = res?.accounts[0];
@@ -28,10 +27,10 @@ const ConnectWallet = () => {
             router.refresh();
         } catch (error) {
             console.log(error);
+            const errorAny = error as any;
 
-            if (error instanceof CustomError) return toast.error(error.message || 'Kết nối ví thất bại');
-
-            toast.error('Kết nối ví thất bại');
+            if (errorAny?.name === 'UserRejectedRequestError') toast.error('Người dùng từ chối yêu cầu');
+            else toast.error(errorAny.message || 'Kết nối ví thất bại');
         }
     };
 

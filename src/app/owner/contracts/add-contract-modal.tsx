@@ -3,9 +3,11 @@
 import PriceInput from '@/components/input/price-input';
 import TinyEditor from '@/components/tiny-editor';
 import { datePickerProps, inputNumberProps } from '@/constants/init-props';
-import { IGenerateContractRes } from '@/interfaces/contract';
+import useSignMessageCustom from '@/hooks/useSignMessageCustom';
+import { ICreateContractRequest, IGenerateContractRes } from '@/interfaces/contract';
 import { IProperty } from '@/interfaces/property';
 import { IUser } from '@/interfaces/user';
+import { getOwnerCreateContractMessage } from '@/lib/utils';
 import { createContract, generateContractService } from '@/services/contract-service';
 import { getAllPropertiesCbbForOwner } from '@/services/property-service';
 import { getAllRentersCbb } from '@/services/user-service';
@@ -66,6 +68,7 @@ const AddContractModal = ({
     const editorRef = useRef<any>(null);
     const [preRender, setPreRender] = useState(true);
     const [createLoading, setCreateLoading] = useState(false);
+    const { handleSign } = useSignMessageCustom();
 
     const handleChangeFromDate = (date: Dayjs) => {
         setFromDate(date);
@@ -193,7 +196,7 @@ const AddContractModal = ({
         ]);
 
         try {
-            await createContract({
+            const data: ICreateContractRequest = {
                 contractTerms: generateContract?.contractContent!,
                 depositAmount: form.getFieldValue('rentalDeposit'),
                 endDate: form.getFieldValue('rentalEndDate').format('YYYY-MM-DD'),
@@ -202,6 +205,18 @@ const AddContractModal = ({
                 propertyId: form.getFieldValue('propertyId'),
                 renterId: form.getFieldValue('renterId'),
                 startDate: form.getFieldValue('rentalStartDate').format('YYYY-MM-DD'),
+                signature: '',
+            };
+
+            const message = getOwnerCreateContractMessage(data);
+
+            const signature = await handleSign({
+                message,
+            });
+
+            await createContract({
+                ...data,
+                signature,
             });
 
             toast.success('Tạo hợp đồng thành công');
@@ -231,7 +246,7 @@ const AddContractModal = ({
                 },
             ]);
         } finally {
-            setCreateLoading(true);
+            setCreateLoading(false);
         }
     };
 

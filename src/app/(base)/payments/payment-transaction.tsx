@@ -1,5 +1,6 @@
 'use client';
 
+import useSignMessageCustom from '@/hooks/useSignMessageCustom';
 import { deposit, rentPayment } from '@/services/transaction-service';
 import { Button } from 'antd';
 import { useRouter } from 'next/navigation';
@@ -10,21 +11,27 @@ const PaymentTransaction = ({
     isDeposit,
     contractId,
     transactionId,
+    message,
 }: {
+    message: string;
     contractId: string;
     isDeposit: boolean;
     transactionId: number;
 }) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const { handleSign } = useSignMessageCustom();
 
     const handlePayment = async () => {
         setLoading(true);
 
         try {
+            const signature = await handleSign({ message });
+
             const data = {
                 contractId,
                 transactionId,
+                signature,
             };
 
             if (isDeposit) await deposit(data);
