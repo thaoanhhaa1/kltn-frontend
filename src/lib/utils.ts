@@ -8,7 +8,7 @@ import { IPagination } from '@/interfaces/pagination';
 import { IAddress, PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
 import { ReportPriority, ReportStatus, ReportType } from '@/interfaces/report';
-import { TransactionStatus } from '@/interfaces/transaction';
+import { ITransaction, TransactionStatus } from '@/interfaces/transaction';
 import { IBaseUserEmbed } from '@/interfaces/user';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
@@ -454,3 +454,5 @@ export const getRandomColor = () => {
 export const getOwnerCreateContractMessage = (data: ICreateContractRequest) => {
     return `Tạo hợp đồng thuê nhà với ${data.renterId} tại ${data.propertyId} từ ${data.startDate} đến ${data.endDate} với giá ${data.monthlyRent} và cọc ${data.depositAmount}`;
 };
+
+export const renterGetTransactionMessage = (data: ITransaction) => {};

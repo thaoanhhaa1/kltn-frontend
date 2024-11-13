@@ -1,3 +1,4 @@
+import useSignMessageCustom from '@/hooks/useSignMessageCustom';
 import { IContract } from '@/interfaces/contract';
 import { ITable } from '@/interfaces/table';
 import { formatCurrency } from '@/lib/utils';
@@ -24,6 +25,7 @@ const CancelModal = ({
     const { user } = useUserStore();
     const [form] = useForm();
     const [loading, setLoading] = useState(false);
+    const { handleSign } = useSignMessageCustom();
 
     const handleOk = async () => {
         if (!contract?.contractId) return;
@@ -34,10 +36,18 @@ const CancelModal = ({
             const values = form.getFieldsValue();
 
             setLoading(true);
+
+            const signature = await handleSign({
+                message: `Hủy hợp đồng ${contract?.contractId} vào lúc ${dayjs(values.cancellationDate).format(
+                    'YYYY-MM-DD',
+                )}`,
+            });
+
             const { contract: newContract } = await createContractCancelRequest({
                 cancelDate: values.cancellationDate.format('YYYY-MM-DD'),
                 contractId: contract?.contractId,
                 reason: values.reason,
+                signature,
             });
 
             if (setContracts)

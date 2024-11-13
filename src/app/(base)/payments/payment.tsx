@@ -78,6 +78,7 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                                     type="EXTEND_PAYMENT"
                                 />
                                 <PaymentTransaction
+                                    message={transaction.description}
                                     isDeposit={!transaction.toId}
                                     transactionId={transaction.id}
                                     contractId={transaction.contractId}

@@ -28,6 +28,7 @@ export interface ICreateContractCancelRequest {
     contractId: string;
     cancelDate: string;
     reason?: string;
+    signature: string;
 }
 
 export interface IUpdateContractCancelRequestStatus {
