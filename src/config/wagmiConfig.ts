@@ -22,31 +22,17 @@ const chains = [sepolia] as const;
 export const config = defaultWagmiConfig({
     connectors: [metaMask()],
     chains: [
-        (process.env.NODE_ENV === 'development' && {
-            // FIXME
-            id: 1337,
-            name: 'Localhost',
+        {
+            id: envConfig.NEXT_PUBLIC_CHAIN_ID,
+            name: envConfig.NEXT_PUBLIC_CHAIN_NAME,
             nativeCurrency: {
-                decimals: 18,
-                symbol: 'ETH',
-                name: 'Ethereum',
+                decimals: envConfig.NEXT_PUBLIC_CHAIN_DECIMALS,
+                symbol: envConfig.NEXT_PUBLIC_CHAIN_SYMBOL,
+                name: envConfig.NEXT_PUBLIC_CHAIN_CURRENCY,
             },
             rpcUrls: {
                 default: {
-                    http: ['http://localhost:7545'],
-                },
-            },
-        }) || {
-            id: 1337,
-            name: 'Staging',
-            nativeCurrency: {
-                decimals: 18,
-                symbol: 'ETH',
-                name: 'Ethereum',
-            },
-            rpcUrls: {
-                default: {
-                    http: ['https://ganache-staging.iuh-mern.id.vn'],
+                    http: [envConfig.NEXT_PUBLIC_CHAIN_NPC_URL],
                 },
             },
         },

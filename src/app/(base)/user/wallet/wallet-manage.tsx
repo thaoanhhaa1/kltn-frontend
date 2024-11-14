@@ -1,6 +1,7 @@
 'use client';
 
 import HistoryTransaction from '@/app/(base)/user/wallet/history-transaction';
+import { envConfig } from '@/config/envConfig';
 import { IHistoryTransaction, ITransactionType } from '@/interfaces/transaction';
 import { getHistoryTransactions } from '@/services/transaction-service';
 import { Divider, Empty, Flex, Skeleton, Spin, Tabs, Typography } from 'antd';
@@ -31,7 +32,7 @@ const WalletManage = ({ address }: { address: `0x${string}` }) => {
     const [type, setType] = useState<ITransactionType>('ALL');
     const { data, isLoading } = useBalance({
         address,
-        chainId: 1337,
+        chainId: envConfig.NEXT_PUBLIC_CHAIN_ID,
     });
 
     const fetchTransactions = useCallback(async () => {

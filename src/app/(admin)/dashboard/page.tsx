@@ -1,12 +1,8 @@
-import CountPropertiesByDistrict from '@/app/(admin)/dashboard/count-properties-by-district';
-import CountPropertiesByRevenue from '@/app/(admin)/dashboard/count-properties-by-revenue';
 import CountPropertiesByType, { ICountPropertyByTypeChart } from '@/app/(admin)/dashboard/count-properties-by-type';
 import CountRentalRequest from '@/app/(admin)/dashboard/count-rental-requests';
-import CountTransactionsByStatusAndMonth from '@/app/(admin)/dashboard/count-transactions-by-status-and-month';
 import DashboardBreadcrumb from '@/app/(admin)/dashboard/dashboard-breadcrumb';
 import NewUsersByTypeAndMonth from '@/app/(admin)/dashboard/new-users-by-type-month';
 import Overview from '@/app/(admin)/dashboard/overview';
-import RevenueAndFee from '@/app/(admin)/dashboard/revenue-and-fee';
 import Item from '@/app/owner/item';
 import Forbidden from '@/components/forbidden';
 import { ChartConfig } from '@/components/ui/chart';
@@ -33,7 +29,7 @@ import {
     getOverviewByAdmin,
     getRevenueAndFeeByMonth,
 } from '@/services/dashboard-service';
-import { Col, Flex, Row } from 'antd';
+import { Flex } from 'antd';
 import { cookies } from 'next/headers';
 
 const getPropertiesByTypeData = (
@@ -108,24 +104,20 @@ const DashboardPage = async () => {
                     </Item>
                 )}
                 {/* NewUsersByTypeAndMonth */}
-                <Item title="Số lượng người dùng mới theo loại và tháng">
+                <Item title="Số lượng người dùng theo tháng">
                     <NewUsersByTypeAndMonth data={newUsersByTypeAndMonth} />
                 </Item>
-                <Row gutter={16}>
-                    <Col span={12}>
-                        <Item title="Số lượng bất động sản theo loại">
-                            <CountPropertiesByType config={config} chartData={chartData} />
-                        </Item>
-                    </Col>
-                    <Col span={12}>
+                <Item title="Số lượng bất động sản theo loại">
+                    <CountPropertiesByType config={config} chartData={chartData} />
+                </Item>
+                {/* <Col span={12}>
                         <Item title="Giá thuê trung bình theo loại">
                             <CountPropertiesByRevenue config={config} chartData={chartData} />
                         </Item>
-                    </Col>
-                </Row>
-                <Item title="Số lượng bất động sản theo khu vực">
+                    </Col> */}
+                {/* <Item title="Số lượng bất động sản theo khu vực">
                     <CountPropertiesByDistrict data={propertiesByDistrict} />
-                </Item>
+                </Item> */}
                 {/* CountRentalRequest */}
                 <Item title="Số lượng yêu cầu thuê">
                     <CountRentalRequest
@@ -135,12 +127,12 @@ const DashboardPage = async () => {
                     />
                 </Item>
                 {/* countTransactionsByStatusAndMonth */}
-                <Item title="Số lượng giao dịch theo trạng thái và tháng">
+                {/* <Item title="Số lượng giao dịch theo trạng thái và tháng">
                     <CountTransactionsByStatusAndMonth data={transactionsByStatusAndMonth} />
                 </Item>
                 <Item title="Doanh thu và phí">
                     <RevenueAndFee data={revenueAndFeeByMonth} />
-                </Item>
+                </Item> */}
             </Flex>
         </div>
     );

@@ -1,3 +1,5 @@
+'use client';
+
 import Paragraph from '@/components/paragraph';
 import HeartBtn from '@/components/property/heart-btn';
 import Rating from '@/components/rating';

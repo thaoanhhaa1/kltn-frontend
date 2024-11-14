@@ -1,18 +1,45 @@
 import BaseInfo from '@/app/(base)/[slug]/base-info';
 import DetailInfo from '@/app/(base)/[slug]/detail-info';
+import { baseOpenGraph } from '@/app/shared-metadata';
 import Rating from '@/components/rating';
 import Review from '@/components/review/review';
 import Text from '@/components/text';
 import Title from '@/components/title';
+import { envConfig } from '@/config/envConfig';
 import { IProperty } from '@/interfaces/property';
 import { IReview } from '@/interfaces/review';
 import { HOME } from '@/path';
 import { getPropertyBySlug } from '@/services/property-service';
 import { getReviewsBySlug } from '@/services/review-service';
 import { Button, Col, Empty, Flex, Result, Row } from 'antd';
+import { Metadata } from 'next';
 import Image from 'next/image';
 
-const PropertyDetailPage = async ({ params: { slug } }: { params: { slug: string } }) => {
+type Props = { params: { slug: string } };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const slug = params.slug;
+
+    const property = await getPropertyBySlug(slug);
+    const title = property?.title || 'Không tìm thấy bất động sản';
+    const description = property?.description || 'Không tìm thấy bất động sản';
+    const url = `${envConfig.NEXT_PUBLIC_URL}/${slug}`;
+
+    return {
+        title,
+        description,
+        openGraph: {
+            ...baseOpenGraph,
+            title,
+            description,
+            url,
+            images: [{ url: property?.images[0] || '' }],
+        },
+        alternates: { canonical: url },
+    };
+}
+
+const PropertyDetailPage = async ({ params: { slug } }: Props) => {
     let property: IProperty | undefined;
     let reviews: IReview[] | undefined;
 
