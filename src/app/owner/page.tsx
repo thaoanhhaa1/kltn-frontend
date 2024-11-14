@@ -63,9 +63,9 @@ const OwnerPage = async () => {
                     <IncomeExpenditure incomeExpenditures={incomeExpenditure} />
                 </Item>
                 <Item title="Yêu cầu thuê nhà">
-                    <RentalRequestRating data={rentalRequestRating} />
+                    <RentalRequestRating data={rentalRequestRating} cancelRate={cancelRate} />
                 </Item>
-                <Row gutter={16}>
+                {/* <Row gutter={16}>
                     <Col span={12}>
                         <Item title="Tỷ lệ huỷ hợp đồng">
                             <ContractCancelRate data={cancelRate} />
@@ -76,7 +76,7 @@ const OwnerPage = async () => {
                             <TenantDistribution data={tenantDistribution} />
                         </Item>
                     </Col>
-                </Row>
+                </Row> */}
             </Flex>
         </div>
     );

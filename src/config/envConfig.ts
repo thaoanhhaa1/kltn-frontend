@@ -23,6 +23,13 @@ const envSchema = z.object({
     NEXT_PUBLIC_DOC_VIEWER: z.string(),
     NEXT_PUBLIC_OTP_EXPIRATION: z.coerce.number(),
     NEXT_PUBLIC_GOONG_API_KEY: z.string(),
+    NEXT_PUBLIC_CHAIN_ID: z.coerce.number(),
+    NEXT_PUBLIC_CHAIN_NAME: z.string(),
+    NEXT_PUBLIC_CHAIN_NPC_URL: z.string(),
+    NEXT_PUBLIC_CHAIN_DECIMALS: z.coerce.number(),
+    NEXT_PUBLIC_CHAIN_SYMBOL: z.string(),
+    NEXT_PUBLIC_CHAIN_CURRENCY: z.string(),
+    NEXT_PUBLIC_URL: z.string(),
 });
 
 const envParser = envSchema.safeParse({
@@ -48,6 +55,13 @@ const envParser = envSchema.safeParse({
     NEXT_PUBLIC_DOC_VIEWER: process.env.NEXT_PUBLIC_DOC_VIEWER!,
     NEXT_PUBLIC_OTP_EXPIRATION: process.env.NEXT_PUBLIC_OTP_EXPIRATION!,
     NEXT_PUBLIC_GOONG_API_KEY: process.env.NEXT_PUBLIC_GOONG_API_KEY!,
+    NEXT_PUBLIC_CHAIN_ID: process.env.NEXT_PUBLIC_CHAIN_ID!,
+    NEXT_PUBLIC_CHAIN_NAME: process.env.NEXT_PUBLIC_CHAIN_NAME!,
+    NEXT_PUBLIC_CHAIN_NPC_URL: process.env.NEXT_PUBLIC_CHAIN_NPC_URL!,
+    NEXT_PUBLIC_CHAIN_DECIMALS: process.env.NEXT_PUBLIC_CHAIN_DECIMALS!,
+    NEXT_PUBLIC_CHAIN_SYMBOL: process.env.NEXT_PUBLIC_CHAIN_SYMBOL!,
+    NEXT_PUBLIC_CHAIN_CURRENCY: process.env.NEXT_PUBLIC_CHAIN_CURRENCY!,
+    NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL!,
 });
 
 if (!envParser.success) {
