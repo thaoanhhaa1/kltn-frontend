@@ -1,7 +1,6 @@
 import ChatButton from '@/components/header/chat-button';
 import HeartButton from '@/components/header/heart-button';
 import Search from '@/components/header/search';
-import { ModeToggle } from '@/components/mode-toggle';
 import MyAccount from '@/components/my-account';
 import NotificationCount from '@/components/notification/notification-count';
 import { Notifications } from '@/components/notification/notifications';
@@ -28,7 +27,7 @@ const HeaderRight = ({ user, notificationsCount }: { user?: IUser; notifications
                     <Notifications />
                 </>
             )}
-            <ModeToggle />
+            {/* <ModeToggle /> */}
             {user?.userTypes.includes('admin') && (
                 <Button variant="outline" asChild>
                     <Link href={DASHBOARD}>Dashboard</Link>
