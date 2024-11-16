@@ -5,7 +5,7 @@ import { envConfig } from '@/config/envConfig';
 import { IHistoryTransaction, ITransactionType } from '@/interfaces/transaction';
 import { getHistoryTransactions } from '@/services/transaction-service';
 import { Divider, Empty, Flex, Skeleton, Spin, Tabs, Typography } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useBalance } from 'wagmi';
 
 const typeItems: Array<{
@@ -34,6 +34,12 @@ const WalletManage = ({ address }: { address: `0x${string}` }) => {
         address,
         chainId: envConfig.NEXT_PUBLIC_CHAIN_ID,
     });
+    const balance = useMemo(() => {
+        const balance = (Number(data?.value) / Math.pow(10, data?.decimals ?? 1)).toString();
+        const [integer, decimal] = balance.split('.');
+
+        return `${integer}.${(decimal || '').slice(0, 4).padEnd(4, '0')}`;
+    }, [data?.decimals, data?.value]);
 
     const fetchTransactions = useCallback(async () => {
         setLoading(true);
@@ -86,7 +92,7 @@ const WalletManage = ({ address }: { address: `0x${string}` }) => {
                     }}
                     level={1}
                 >
-                    {(Number(data?.value) / Math.pow(10, data?.decimals ?? 1)).toFixed(4)}
+                    {balance}
                     &nbsp;
                     {data?.symbol}
                 </Typography.Title>

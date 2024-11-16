@@ -60,3 +60,7 @@ export const blockUser = (userId: string) => {
 export const getAllRentersCbb = (): Promise<IUser[]> => {
     return http.get<IUser[]>(`${ENDPOINT}/renters/cbb`);
 };
+
+export const getBalanceService = () => {
+    return http.get<number>(`${ENDPOINT}/balance`);
+};
