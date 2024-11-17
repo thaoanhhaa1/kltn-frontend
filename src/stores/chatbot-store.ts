@@ -1,4 +1,4 @@
-import { IChatResponse } from '@/interfaces/chatbot';
+import { IChatbot, IChatResponse } from '@/interfaces/chatbot';
 import { create } from 'zustand';
 
 export interface IChatStore {
@@ -6,6 +6,7 @@ export interface IChatStore {
     chat: string;
     loading: boolean;
     addChat: (chat: IChatResponse) => void;
+    addChats: (chats: IChatbot[]) => void;
     setChat: (chat: string) => void;
     setLoading: (loading: boolean) => void;
 }
@@ -17,6 +18,7 @@ const useChatStore = create<IChatStore>((set) => ({
     addChat: (chat: IChatResponse) => set((state) => ({ chats: [...state.chats, chat] })),
     setChat: (chat: string) => set({ chat }),
     setLoading: (loading: boolean) => set({ loading }),
+    addChats: (chats: IChatbot[]) => set(() => ({ chats: chats.map((chat) => ({ response: chat })) })),
 }));
 
 export { useChatStore };

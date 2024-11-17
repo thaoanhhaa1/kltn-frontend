@@ -33,7 +33,7 @@ const PaymentsPage = async () => {
     }
 
     return (
-        <div className="mt-5">
+        <div className="mt-5 pb-5">
             <Header />
             <Row gutter={[12, 12]}>
                 {transactions.map((transaction) => (

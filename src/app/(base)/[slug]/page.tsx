@@ -12,9 +12,8 @@ import { IReview } from '@/interfaces/review';
 import { HOME } from '@/path';
 import { getPropertyBySlug } from '@/services/property-service';
 import { getReviewsBySlug } from '@/services/review-service';
-import { Button, Col, Empty, Flex, Result, Row } from 'antd';
+import { Button, Col, Empty, Flex, Image, Result, Row } from 'antd';
 import { Metadata } from 'next';
-import Image from 'next/image';
 
 type Props = { params: { slug: string } };
 
@@ -65,13 +64,15 @@ const PropertyDetailPage = async ({ params: { slug } }: Props) => {
         );
     }
 
+    const [image, ...restImages] = property.images;
+
     return (
         <div className="mt-10 pb-6">
             <Row gutter={24}>
                 <Col span={12}>
                     <Image
                         alt={property.title}
-                        src={property.images[0]}
+                        src={image}
                         height={500}
                         width={500}
                         className="w-full aspect-square object-cover rounded-lg"
@@ -81,16 +82,41 @@ const PropertyDetailPage = async ({ params: { slug } }: Props) => {
                     <BaseInfo property={property} />
                 </Col>
             </Row>
+            <div>
+                {restImages.length > 0 && (
+                    <div className="w-full">
+                        <div className="swipe-container">
+                            {restImages.map((img, index) => (
+                                <div className="swipe-item" key={index}>
+                                    <Image
+                                        rootClassName="w-full h-full"
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover',
+                                        }}
+                                        alt={property.title}
+                                        src={img}
+                                        className="rounded-lg"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
             <DetailInfo property={property} />
-            <Title
-                style={{
-                    marginTop: '0px',
-                    marginBottom: '15px',
-                }}
-                level={2}
-            >
-                Vị trí
-            </Title>
+            {property.latitude != null && property.longitude != null && (
+                <Title
+                    style={{
+                        marginTop: '0px',
+                        marginBottom: '15px',
+                    }}
+                    level={2}
+                >
+                    Vị trí
+                </Title>
+            )}
             {property.latitude != null && property.longitude != null && (
                 <Map latitude={property.latitude} longitude={property.longitude} />
             )}

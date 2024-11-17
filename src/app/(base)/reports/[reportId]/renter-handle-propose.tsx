@@ -49,7 +49,7 @@ const RenterHandlePropose = ({ renterId, reportChildId }: { renterId: string; re
     return (
         <Flex justify="flex-end" gap={8} flex={1}>
             <Button loading={loading === REJECT_LOADING} danger onClick={handleReject}>
-                Không đồng ý & Chuyển admin
+                Từ chối
             </Button>
             <Button loading={loading === ACCEPT_LOADING} type="primary" onClick={handleAccept}>
                 Đồng ý

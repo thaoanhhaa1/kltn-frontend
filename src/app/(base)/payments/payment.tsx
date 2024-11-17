@@ -4,7 +4,7 @@ import Text from '@/components/text';
 import Title from '@/components/title';
 import { Card } from '@/components/ui/card';
 import { ITransaction } from '@/interfaces/transaction';
-import { formatCurrency, formatDate, formatDateTime, getTransactionColor, getTransactionStatusText } from '@/lib/utils';
+import { formatCurrency, formatDate, getLocalTime, getTransactionColor, getTransactionStatusText } from '@/lib/utils';
 import { Flex, Tag } from 'antd';
 import dayjs from 'dayjs';
 import { ReceiptText } from 'lucide-react';
@@ -45,13 +45,13 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                     </Flex>
                     <Flex gap={4}>
                         <Text>Thời gian tạo:</Text>
-                        <Text strong>{formatDate(transaction.createdAt)}</Text>
+                        <Text strong>{formatDate(getLocalTime(transaction.createdAt))}</Text>
                     </Flex>
                     {transaction.endDate && transaction.status === 'PENDING' && (
                         <div>
                             <Text>Hạn thanh toán:</Text>
                             &nbsp;
-                            <Text strong>{formatDateTime(transaction.endDate)}</Text>
+                            <Text strong>{dayjs(getLocalTime(transaction.endDate)).format('00:00:00 DD/MM/YYYY')}</Text>
                             &nbsp;
                             <Text>
                                 (Còn lại:&nbsp;
