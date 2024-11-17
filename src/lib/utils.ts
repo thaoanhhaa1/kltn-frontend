@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { viewerType } from 'react-documents';
 import { twMerge } from 'tailwind-merge';
+import { toZonedTime } from 'date-fns-tz';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -472,3 +473,17 @@ export const convertToDMS = (lat: number, lng: number) => {
         longitude: toDMS(lng, false),
     };
 };
+
+// seconds to mm:ss
+export const secondsToMinutes = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+
+    return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
+};
+
+export function getLocalTime(date: string | Date) {
+    const localTime = toZonedTime(date, 'Asia/Ho_Chi_Minh');
+
+    return localTime; //Output format: 9:30 PM
+}
