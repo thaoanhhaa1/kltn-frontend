@@ -15,6 +15,11 @@ import { IUser } from '@/interfaces/user';
 import { getNameAvatar } from '@/lib/utils';
 import {
     ADD_PROPERTY,
+    DASHBOARD,
+    DASHBOARD_ATTRIBUTES,
+    DASHBOARD_PROPERTIES,
+    DASHBOARD_TYPES,
+    DASHBOARD_USERS,
     OWNER,
     OWNER_CONTRACTS,
     OWNER_PROPERTIES,
@@ -34,6 +39,32 @@ import { useMemo } from 'react';
 
 const MyAccount = ({ user }: { user: IUser }) => {
     const router = useRouter();
+
+    const adminMenu = useMemo(
+        () => [
+            {
+                title: 'Dashboard',
+                onClick: () => router.push(DASHBOARD),
+            },
+            {
+                title: 'Bất động sản',
+                onClick: () => router.push(DASHBOARD_PROPERTIES),
+            },
+            {
+                title: 'Người dùng',
+                onClick: () => router.push(DASHBOARD_USERS),
+            },
+            {
+                title: 'Tiện ích',
+                onClick: () => router.push(DASHBOARD_ATTRIBUTES),
+            },
+            {
+                title: 'Loại bất động sản',
+                onClick: () => router.push(DASHBOARD_TYPES),
+            },
+        ],
+        [router],
+    );
 
     const ownerMenu = useMemo(
         () => [
@@ -138,6 +169,16 @@ const MyAccount = ({ user }: { user: IUser }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Tài khoản của tôi</DropdownMenuLabel>
+                {user.userTypes.includes('admin') && (
+                    <>
+                        <DropdownMenuSeparator />
+                        {adminMenu.map((item) => (
+                            <DropdownMenuItem key={item.title} onClick={item.onClick}>
+                                {item.title}
+                            </DropdownMenuItem>
+                        ))}
+                    </>
+                )}
                 {user.userTypes.includes('owner') && (
                     <>
                         <DropdownMenuSeparator />
@@ -148,21 +189,23 @@ const MyAccount = ({ user }: { user: IUser }) => {
                         ))}
                     </>
                 )}
-                <DropdownMenuSeparator />
-                {user.userTypes.includes('renter')
-                    ? renterMenu.map((item) => (
-                          <DropdownMenuItem key={item.title} onClick={item.onClick}>
-                              {item.title}
-                          </DropdownMenuItem>
-                      ))
-                    : null}
+                {user.userTypes.includes('renter') ? (
+                    <>
+                        <DropdownMenuSeparator />
+                        {renterMenu.map((item) => (
+                            <DropdownMenuItem key={item.title} onClick={item.onClick}>
+                                {item.title}
+                            </DropdownMenuItem>
+                        ))}
+                    </>
+                ) : null}
                 <DropdownMenuSeparator />
                 {authMenu.map((item) => (
                     <DropdownMenuItem key={item.title} onClick={item.onClick}>
                         {item.title}
                     </DropdownMenuItem>
                 ))}
-                <DropdownMenuItem>Cài đặt</DropdownMenuItem>
+                {/* <DropdownMenuItem>Cài đặt</DropdownMenuItem> */}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>Đăng xuất</DropdownMenuItem>
             </DropdownMenuContent>

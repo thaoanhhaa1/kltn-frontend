@@ -1,11 +1,19 @@
 import { IChat, IConversation, IGetChat } from '@/interfaces/chat';
-import { IChatRequest, IChatResponse } from '@/interfaces/chatbot';
+import { IChatbot, IChatRequest, IChatResponse } from '@/interfaces/chatbot';
 import { IPagination } from '@/interfaces/pagination';
 import { ITable } from '@/interfaces/table';
 import http from '@/lib/http';
 
 export const chatService = (params: IChatRequest) => {
     return http.post<IChatResponse>('/chat-service/generate', params);
+};
+
+export const getAllChatsService = (accessToken: string) => {
+    return http.get<Array<IChatbot>>('/chat-service/chats', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
 };
 
 export const getConversationsService = (pagination: IPagination) => {

@@ -4,13 +4,13 @@ import Notification from '@/components/notification/notification';
 import Title from '@/components/title';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { IPagination } from '@/interfaces/pagination';
 import { getNotifications, readAllNotifications, updateNotificationStatus } from '@/services/notification-service';
 import { useNotificationStore } from '@/stores/notification-store';
 import { Badge, Button as ButtonAntD, Empty, Flex, Spin } from 'antd';
 import { Bell, CheckCheck } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export function Notifications() {
     const {
@@ -59,6 +59,10 @@ export function Notifications() {
         readAllNotificationsStore();
     };
 
+    const next = () => {
+        fetchNotifications({ take: 10, skip: notifications.data.length });
+    };
+
     useEffect(() => {
         if (Number.isInteger(count)) return;
         fetchNotifications({ take: 10, skip: 0 });
@@ -93,13 +97,21 @@ export function Notifications() {
                         </ButtonAntD>
                     ) : null}
                 </Flex>
-                <ScrollArea className="h-[300px] w-[320px] max-w-xs">
+                <InfiniteScroll
+                    className="w-[320px] max-w-xs"
+                    dataLength={notifications.data.length} //This is important field to render the next data
+                    next={next}
+                    hasMore={
+                        notifications.pageInfo.current * notifications.pageInfo.pageSize < notifications.pageInfo.total
+                    }
+                    loader={<Flex justify="center">{loading && <Spin />}</Flex>}
+                    height={300}
+                >
                     {notifications.data.map((notification) => (
                         <Notification key={notification.id} notification={notification} />
                     ))}
-                    <Flex justify="center">{loading && <Spin />}</Flex>
-                    {!loading && !notifications.data.length && <Empty description="Không có thông báo nào" />}
-                </ScrollArea>
+                </InfiniteScroll>
+                {!loading && !notifications.data.length && <Empty description="Không có thông báo nào" />}
             </DropdownMenuContent>
         </DropdownMenu>
     );

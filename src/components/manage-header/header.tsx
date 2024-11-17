@@ -2,7 +2,6 @@ import ChatButton from '@/components/header/chat-button';
 import Logo from '@/components/logo';
 import HeaderBreadcrumb from '@/components/manage-header/header-breadcrumb';
 import HeaderItem from '@/components/manage-header/header-item';
-import { ModeToggle } from '@/components/mode-toggle';
 import MyAccount from '@/components/my-account';
 import { Notifications } from '@/components/notification/notifications';
 import SaveUser from '@/components/save-user';
@@ -58,7 +57,7 @@ const Header = async ({ navList }: { navList: INavItem[] }) => {
             <div className="ml-auto flex gap-4">
                 <ChatButton />
                 <Notifications />
-                <ModeToggle />
+                {/* <ModeToggle /> */}
                 {user && <MyAccount user={user} />}
             </div>
             <SaveUser user={user} />

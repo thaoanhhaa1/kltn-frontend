@@ -120,3 +120,12 @@
     scroll-snap-align: center; /* Dừng đúng vị trí */
     transition: transform 0.3s ease, background-color 0.3s ease;
 }
+
+.infinite-scroll-component::-webkit-scrollbar {
+    width: 10px;
+}
+
+.infinite-scroll-component::-webkit-scrollbar-thumb {
+    background-color: hsl(240 5.9% 90%);
+    border-radius: 999px;
+}

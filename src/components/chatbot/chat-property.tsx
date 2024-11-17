@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const ChatProperty = ({ property }: { property: IProperty }) => {
     return (
-        <Link href={`/${property.slug}`} className="flex gap-2">
+        <Link href={`/${property.slug}`} className="flex gap-2 border rounded-md shadow">
             <Image
                 alt={property.title}
                 src={property.images[0]}

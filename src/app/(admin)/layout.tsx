@@ -1,21 +1,19 @@
-import { Report } from '@/assets/svgs/icons';
+import { PropertyType } from '@/assets/svgs/icons';
 import Forbidden from '@/components/forbidden';
 import ManageLayout from '@/components/manage-layout';
 import LoadNotification from '@/components/notification/load-notification';
 import { IPayloadJWT } from '@/interfaces/jwt';
 import {
     DASHBOARD,
-    DASHBOARD_ANALYTICS,
     DASHBOARD_ATTRIBUTES,
     DASHBOARD_PROPERTIES,
-    DASHBOARD_REPORTS,
     DASHBOARD_SETTINGS,
     DASHBOARD_TYPES,
     DASHBOARD_USERS,
 } from '@/path';
 import { DashboardIcon } from '@radix-ui/react-icons';
 import { jwtDecode } from 'jwt-decode';
-import { House, LineChart, Option, Settings, Tv, Users2 } from 'lucide-react';
+import { House, Settings, Tv, Users2 } from 'lucide-react';
 import { cookies } from 'next/headers';
 
 const topNavList = [
@@ -35,11 +33,6 @@ const topNavList = [
         icon: <Users2 className="w-5 h-5" />,
     },
     {
-        link: DASHBOARD_REPORTS,
-        title: 'Báo cáo',
-        icon: <Report className="w-5 h-5" />,
-    },
-    {
         link: DASHBOARD_ATTRIBUTES,
         title: 'Tiện ích',
         icon: <Tv className="w-5 h-5" />,
@@ -47,7 +40,7 @@ const topNavList = [
     {
         link: DASHBOARD_TYPES,
         title: 'Loại bất động sản',
-        icon: <Option className="w-5 h-5" />,
+        icon: <PropertyType className="w-5 h-5" />,
     },
 ];
 

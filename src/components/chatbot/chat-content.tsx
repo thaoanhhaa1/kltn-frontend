@@ -30,6 +30,10 @@ const ChatContent = () => {
         }
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') handleChat();
+    };
+
     return (
         <div className="flex-1 flex flex-col justify-end">
             <ScrollArea className="max-h-[40vh] min-h-[300px]">
@@ -59,7 +63,7 @@ const ChatContent = () => {
                     paddingRight: '12px',
                 }}
             >
-                <Input value={chat} placeholder="Nhập tin nhắn..." onChange={handleChange} />
+                <Input value={chat} placeholder="Nhập tin nhắn..." onChange={handleChange} onKeyDown={handleKeyDown} />
                 <Button
                     disabled={!chat}
                     loading={loading}
