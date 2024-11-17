@@ -77,6 +77,8 @@ const UpdatePropertyForm = ({ property, cities, districts, wards, attributes }: 
                     wards={wards}
                     form={form}
                     setAddressName={setAddressName}
+                    latitude={property.latitude}
+                    longitude={property.longitude}
                 />
             ),
         },

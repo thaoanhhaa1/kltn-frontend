@@ -38,6 +38,8 @@ export interface IProperty {
     rating: number;
     ratingCount: number;
     isFavorite: boolean;
+    longitude?: number;
+    latitude?: number;
 }
 
 export type IFiterProperty = {
