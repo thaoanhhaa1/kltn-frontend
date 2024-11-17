@@ -41,7 +41,7 @@ const getSubtitle = (status: ReportStatus) => {
         case 'renter_accepted':
             return 'Người thuê đã chấp nhận đề xuất của chủ nhà';
         case 'renter_rejected':
-            return 'Người thuê đã từ chối đề xuất của chủ nhà và chuyển cho admin';
+            return 'Người thuê đã từ chối đề xuất của chủ nhà';
     }
 };
 

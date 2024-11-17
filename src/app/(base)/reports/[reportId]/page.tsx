@@ -1,4 +1,3 @@
-import AdminHandleReport from '@/app/(base)/reports/[reportId]/admin-handle-report';
 import CancelReport from '@/app/(base)/reports/[reportId]/cancel-report';
 import ConfirmByOwner from '@/app/(base)/reports/[reportId]/confirm-by-owner';
 import ConfirmByRenter from '@/app/(base)/reports/[reportId]/confirm-by-renter';
@@ -59,7 +58,6 @@ const ReportDetailPage = async ({
     const lastReportChild = report.reportChild.at(-1)!;
     const childReportOfRenter = report.reportChild.at(0)!;
     const childReportOfOwner = report.reportChild.at(1);
-    const childReportOfAdmin = report.reportChild.at(2);
 
     const timelineItems = report.history.map((item) => ({
         color: item.status === 'owner_not_resolved' ? 'red' : item.status === 'renter_completed' ? 'green' : 'blue',
@@ -118,8 +116,6 @@ const ReportDetailPage = async ({
                     </Item>
                     <ReportChildItem title="Yêu cầu xử lý từ người thuê" item={childReportOfRenter} />
                     {childReportOfOwner && <ReportChildItem title="Đề xuất từ chủ nhà" item={childReportOfOwner} />}
-                    {lastReportChild.status === 'renter_rejected' && <AdminHandleReport reportId={report.id} />}
-                    {childReportOfAdmin && <ReportChildItem title="Xử lý từ admin" item={childReportOfAdmin} />}
                     {lastReportChild.status === 'pending_owner' && (
                         <OwnerHandleReport
                             ownerId={report.ownerId}

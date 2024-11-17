@@ -90,3 +90,33 @@
 .ant-upload-list {
     @apply mt-3;
 }
+
+/* Container chính */
+.swipe-container {
+    display: flex;
+    overflow-x: auto; /* Cho phép cuộn ngang */
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory; /* Kích hoạt cuộn từng mục */
+    gap: 10px; /* Khoảng cách giữa các mục */
+    padding-block: 10px;
+    scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+}
+
+/* Ẩn thanh cuộn trên Chrome và các trình duyệt khác */
+.swipe-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Mỗi mục */
+.swipe-item {
+    flex: 0 0 auto; /* Không cho phép giãn */
+    width: 200px;
+    height: 150px;
+    color: white;
+    text-align: center;
+    line-height: 150px;
+    font-size: 18px;
+    border-radius: 8px;
+    scroll-snap-align: center; /* Dừng đúng vị trí */
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
