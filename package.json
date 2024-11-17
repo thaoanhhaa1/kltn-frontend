@@ -11,6 +11,7 @@
     "dependencies": {
         "@ant-design/nextjs-registry": "^1.0.1",
         "@formatjs/intl-localematcher": "^0.5.4",
+        "@goongmaps/goong-map-react": "^1.1.2",
         "@hookform/resolvers": "^3.9.0",
         "@radix-ui/react-avatar": "^1.1.0",
         "@radix-ui/react-dialog": "^1.1.1",
