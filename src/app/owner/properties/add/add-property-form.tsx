@@ -39,6 +39,8 @@ export interface IAddressName {
     city: string;
     district: string;
     ward: string;
+    latitude?: number;
+    longitude?: number;
 }
 
 const AddPropertyForm = () => {
@@ -49,6 +51,7 @@ const AddPropertyForm = () => {
         district: '',
         ward: '',
     } as IAddressName);
+    console.log('🚀 ~ AddPropertyForm ~ addressName:', addressName);
     const [loading, setLoading] = useState<boolean>(false);
     const [type, setType] = useState<IPropertyType | undefined>();
 
@@ -82,6 +85,8 @@ const AddPropertyForm = () => {
     ];
 
     const handleFinish = async (values: IPropertyForm) => {
+        console.log('🚀 ~ handleFinish ~ values:', values);
+        // return;
         setLoading(true);
 
         const conditions: Array<{
@@ -131,6 +136,8 @@ const AddPropertyForm = () => {
         const {
             images,
             type: _,
+            latitude,
+            longitude,
             ...rest
         } = {
             ...values,
@@ -155,6 +162,12 @@ const AddPropertyForm = () => {
 
         formData.append('conditions', JSON.stringify(conditions));
         formData.append('type', JSON.stringify(type));
+        if (longitude !== undefined && latitude !== undefined) {
+            if (!Number.isNaN(+longitude) && !Number.isNaN(+latitude)) {
+                formData.append('longitude', longitude.toString());
+                formData.append('latitude', latitude.toString());
+            }
+        }
 
         try {
             await createProperty(formData);

@@ -1,4 +1,4 @@
-import { Contract, Report } from '@/assets/svgs/icons';
+import { Report } from '@/assets/svgs/icons';
 import LoadChat from '@/components/chat/load-chat';
 import Forbidden from '@/components/forbidden';
 import LoadFavorite from '@/components/load-favorite';
@@ -8,7 +8,7 @@ import { INavItem } from '@/components/sidebar/nav-item';
 import { IPayloadJWT } from '@/interfaces/jwt';
 import { ADD_PROPERTY, OWNER, OWNER_CONTRACTS, OWNER_PROPERTIES, OWNER_REPORTS, OWNER_REQUESTS } from '@/path';
 import { jwtDecode } from 'jwt-decode';
-import { Home, HousePlus, PieChart, PlusCircle } from 'lucide-react';
+import { FileText, Home, HousePlus, PieChart, PlusCircle } from 'lucide-react';
 import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 
@@ -36,7 +36,7 @@ const topNavList: INavItem[] = [
     {
         title: 'Hợp đồng thuê nhà',
         link: OWNER_CONTRACTS,
-        icon: <Contract className="w-5 h-5" />,
+        icon: <FileText className="w-5 h-5" />,
     },
     {
         title: 'Báo cáo',

@@ -1,5 +1,6 @@
 import BaseInfo from '@/app/(base)/[slug]/base-info';
 import DetailInfo from '@/app/(base)/[slug]/detail-info';
+import Map from '@/app/(base)/[slug]/map';
 import { baseOpenGraph } from '@/app/shared-metadata';
 import Rating from '@/components/rating';
 import Review from '@/components/review/review';
@@ -81,6 +82,18 @@ const PropertyDetailPage = async ({ params: { slug } }: Props) => {
                 </Col>
             </Row>
             <DetailInfo property={property} />
+            <Title
+                style={{
+                    marginTop: '0px',
+                    marginBottom: '15px',
+                }}
+                level={2}
+            >
+                Vị trí
+            </Title>
+            {property.latitude != null && property.longitude != null && (
+                <Map latitude={property.latitude} longitude={property.longitude} />
+            )}
             <Flex gap={20} align="center">
                 <Title
                     style={{
