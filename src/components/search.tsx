@@ -1,6 +1,7 @@
 'use client';
 
 import FormPopover from '@/components/form-popover';
+import PriceInput from '@/components/input/price-input';
 import { interiorOptions } from '@/constants/init-data';
 import { inputNumberProps, selectProps } from '@/constants/init-props';
 import { IAttributeCbb } from '@/interfaces/attribute';
@@ -70,6 +71,7 @@ const SearchComponent = () => {
         ward: '',
     });
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
+    console.log('🚀 ~ SearchComponent ~ priceRange:', priceRange);
     const [attributes, setAttributes] = useState<IAttributeCbb[]>([]);
     const [loadingAttributes, setLoadingAttributes] = useState(false);
     const [selectedAttributes, setSelectedAttributes] = useState<string[]>([]);
@@ -260,6 +262,16 @@ const SearchComponent = () => {
         router.push(`${SEARCH}?${convertObjectToParams(searchParams)}`);
     };
 
+    const handleChangePriceFrom = (value: number | null) => {
+        setPriceRange([value || 0, priceRange[1]]);
+        form.setFieldValue('price', [value || 0, priceRange[1]]);
+    };
+
+    const handleChangePriceTo = (value: number | null) => {
+        setPriceRange([priceRange[0], value || 0]);
+        form.setFieldValue('price', [priceRange[0], value || 0]);
+    };
+
     useEffect(() => {
         const fetchCities = async () => {
             setCityLoading(true);
@@ -373,6 +385,7 @@ const SearchComponent = () => {
                                 </Flex>
                                 <Form.Item initialValue={priceRange} className="!mb-2" name="price">
                                     <Slider
+                                        value={priceRange}
                                         min={0}
                                         max={1_000_000_000}
                                         range
@@ -383,6 +396,24 @@ const SearchComponent = () => {
                                         onChangeComplete={handleChangeComplete}
                                     />
                                 </Form.Item>
+                                <div className="!mb-2">
+                                    <PriceInput
+                                        value={priceRange[0]}
+                                        min={0}
+                                        max={priceRange[1] || 1_000_000_000}
+                                        onChange={handleChangePriceFrom}
+                                        placeholder="Từ"
+                                    />
+                                </div>
+                                <div className="!mb-2">
+                                    <PriceInput
+                                        value={priceRange[1]}
+                                        min={priceRange[0] || 0}
+                                        max={1_000_000_000}
+                                        onChange={handleChangePriceTo}
+                                        placeholder="Đến"
+                                    />
+                                </div>
                             </FormPopover>
                         </Col>
                         <Col span={6}>
