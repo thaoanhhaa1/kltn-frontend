@@ -6,6 +6,7 @@ import { config } from '@/config/wagmiConfig';
 import AppKitProvider from '@/context/wagmi';
 import { cn } from '@/lib/utils';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { headers } from 'next/headers';
@@ -45,6 +46,7 @@ export default function RootLayout({
                         </ThemeProvider>
                     </AntdRegistry>
                 </AppKitProvider>
+                <SpeedInsights />
             </body>
         </html>
     );
