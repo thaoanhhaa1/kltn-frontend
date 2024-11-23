@@ -17,6 +17,7 @@ export interface IConversationStore {
     setSelectedConversation: (conversation: IConversation) => void;
     setLoading: (loading: boolean) => void;
     readConversation: (data: IReadConversationSocket) => void;
+    resetConversationStore: () => void;
 }
 
 const useConversationStore = create<IConversationStore>((set) => ({
@@ -119,6 +120,19 @@ const useConversationStore = create<IConversationStore>((set) => ({
                     newConversations.find((c) => c.conversationId === prev.selectedConversation?.conversationId) ??
                     null,
             };
+        }),
+    resetConversationStore: () =>
+        set({
+            unreadCount: 0,
+            conversations: [],
+            selectedConversation: null,
+            pageInfo: {
+                current: 0,
+                pageSize: 10,
+                total: 0,
+            },
+            isFirstLoad: true,
+            loading: true,
         }),
 }));
 

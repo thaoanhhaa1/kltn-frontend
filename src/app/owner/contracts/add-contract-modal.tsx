@@ -234,6 +234,8 @@ const AddContractModal = ({
             handleCancel();
             refresh();
         } catch (error) {
+            console.error('🚀 ~ handleCreateContract ~ error', error);
+
             toast.error((error as Error).message || 'Có lỗi xảy ra');
             setSteps([
                 {
@@ -262,8 +264,6 @@ const AddContractModal = ({
     };
 
     const handleEditorChange = (value: string) => {
-        console.log('🚀 ~ handleEditorChange ~ value', value);
-
         if (generateContract) {
             setGenerateContract({
                 ...generateContract,
@@ -314,6 +314,7 @@ const AddContractModal = ({
             style={modalStyle}
             className="!w-full"
             centered
+            onCancel={handleCancel}
             footer={
                 <Flex justify="end" gap={8}>
                     <Button onClick={handleCancel}>Huỷ</Button>

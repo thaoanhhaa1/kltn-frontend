@@ -11,6 +11,7 @@ export interface IFavoriteStore {
     addFavorite: (favorite: IPropertyInteraction) => void;
     setLoading: (loading: boolean) => void;
     setCount: (count: number) => void;
+    resetFavoriteStore: () => void;
 }
 
 const useFavoriteStore = create<IFavoriteStore>((set) => ({
@@ -23,6 +24,7 @@ const useFavoriteStore = create<IFavoriteStore>((set) => ({
     addFavorite: (favorite) => set((state) => ({ favorites: [...state.favorites, favorite] })),
     setLoading: (loading) => set({ loading }),
     setCount: (count) => set({ count }),
+    resetFavoriteStore: () => set({ favorites: [], count: 0, loading: false, isFirstLoad: false }),
 }));
 
 export { useFavoriteStore };

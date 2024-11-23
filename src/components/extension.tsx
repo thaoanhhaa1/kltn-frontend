@@ -24,7 +24,7 @@ const Extension = ({
     const [open, setOpen] = useState(false);
     const [form] = useForm();
     const [loading, setLoading] = useState(false);
-    const typeText = useMemo(() => getExtensionRequestTypeText(type), [type]);
+    const typeText = useMemo(() => getExtensionRequestTypeText(type).toLowerCase(), [type]);
 
     const handleOpenModal = () => setOpen(true);
     const handleCloseModal = () => setOpen(false);
@@ -43,7 +43,7 @@ const Extension = ({
                 type,
             });
 
-            toast.success(`${typeText} thành công`);
+            toast.success(`Gửi yêu cầu ${typeText} thành công`);
             setOpen(false);
         } catch (error: any) {
             console.error(error);

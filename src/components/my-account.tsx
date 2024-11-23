@@ -34,11 +34,25 @@ import {
     WALLET,
 } from '@/path';
 import { signOut } from '@/services/auth-service';
+import { useChatStore } from '@/stores/chat-store';
+import { useChatStore as useChatbotStore } from '@/stores/chatbot-store';
+import { useConversationStore } from '@/stores/conversation-store';
+import { useFavoriteStore } from '@/stores/favorite-store';
+import { useNotificationStore } from '@/stores/notification-store';
+import { useSocketStore } from '@/stores/socket-store';
+import { useUserStore } from '@/stores/user-store';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
 const MyAccount = ({ user }: { user: IUser }) => {
     const router = useRouter();
+    const { resetChatStore } = useChatStore();
+    const { resetChatbotStore } = useChatbotStore();
+    const { resetConversationStore } = useConversationStore();
+    const { resetFavoriteStore } = useFavoriteStore();
+    const { resetNotificationStore } = useNotificationStore();
+    const { resetSocketStore } = useSocketStore();
+    const { resetUserStore } = useUserStore();
 
     const adminMenu = useMemo(
         () => [
@@ -150,6 +164,14 @@ const MyAccount = ({ user }: { user: IUser }) => {
     const handleLogout = async () => {
         try {
             await signOut();
+
+            resetChatStore();
+            resetChatbotStore();
+            resetConversationStore();
+            resetFavoriteStore();
+            resetNotificationStore();
+            resetSocketStore();
+            resetUserStore();
 
             router.push(SIGN_IN);
         } catch (error) {

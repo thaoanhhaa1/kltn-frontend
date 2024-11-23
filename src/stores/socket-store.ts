@@ -6,6 +6,7 @@ export interface ISocketStore {
     socket: Socket | null;
     connect: () => void;
     disconnect: () => void;
+    resetSocketStore: () => void;
 }
 
 const useSocketStore = create<ISocketStore>((set) => ({
@@ -15,6 +16,7 @@ const useSocketStore = create<ISocketStore>((set) => ({
             socket: io(envConfig.NEXT_PUBLIC_SOCKET_ENDPOINT),
         }),
     disconnect: () => set({ socket: null }),
+    resetSocketStore: () => set({ socket: null }),
 }));
 
 export { useSocketStore };

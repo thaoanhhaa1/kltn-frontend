@@ -1,9 +1,6 @@
 import SignInForm from '@/app/(auth)/sign-in/sign-in-form';
-import GoogleIcon from '@/components/svgs/google-icon';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FORGOT_PASSWORD, SIGN_UP } from '@/path';
-import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 
 const SignInPage = async () => {
@@ -16,7 +13,7 @@ const SignInPage = async () => {
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-4">
-                        <div className="flex gap-6">
+                        {/* <div className="flex gap-6">
                             <Button variant="outline" className="flex-1">
                                 <GitHubLogoIcon className="mr-2 h-4 w-4" />
                                 Github
@@ -26,12 +23,12 @@ const SignInPage = async () => {
                                 Google
                             </Button>
                         </div>
-                        {/* Separate */}
                         <div className="flex items-center gap-2">
                             <hr className="flex-1 border-gray-300" />
                             <span className="text-sm text-muted-foreground">Hoặc</span>
                             <hr className="flex-1 border-gray-300" />
-                        </div>
+                        </div> 
+                        */}
                         <SignInForm />
                     </div>
                     <div className="mt-4 text-sm flex flex-wrap justify-center xs:justify-between items-center gap-4">
