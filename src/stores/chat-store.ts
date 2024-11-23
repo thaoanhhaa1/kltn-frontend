@@ -12,6 +12,7 @@ export interface IChatStore {
     addChat: (receiver: string, chat: IChat) => void;
     addChats: (receiver: string, chats: Array<IChat>) => void;
     setLoading: (loading: boolean) => void;
+    resetChatStore: () => void;
 }
 
 const useChatStore = create<IChatStore>((set, get) => ({
@@ -35,6 +36,7 @@ const useChatStore = create<IChatStore>((set, get) => ({
             firstGet: [...state.firstGet, receiver],
         })),
     setLoading: (loading) => set({ loading }),
+    resetChatStore: () => set({ chats: {}, firstGet: [], loading: false }),
 }));
 
 export { useChatStore };

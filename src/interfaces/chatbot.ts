@@ -5,6 +5,7 @@ export interface IChatRequest {
 }
 
 export interface IChatbot {
+    _id: string;
     query: string;
     result: string;
     source_documents: Array<IProperty>;

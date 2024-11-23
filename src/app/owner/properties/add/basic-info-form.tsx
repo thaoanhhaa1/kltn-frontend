@@ -7,6 +7,7 @@ import { getCities, getDistricts, getWards, IAddress } from '@/services/address-
 import { addressToLngLatService, lngLatToAddressService } from '@/services/goong-service';
 import { Button, Col, Form, FormInstance, Input, Row, Select, Spin } from 'antd';
 import { LocateIcon } from 'lucide-react';
+import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -41,11 +42,11 @@ const BasicInfoForm = ({
     const [marker, setMarker] = useState<[number, number] | null>(null);
     const isChangeAddress = useRef<boolean>(false);
     const isChangeMarker = useRef<boolean>(false);
-    const [viewport, setViewport] = useState<IViewPort>({
+    const [viewport, setViewport] = useState<IViewPort>(() => ({
         latitude: 21.03072,
         longitude: 105.85239,
         zoom: 15,
-    });
+    }));
     const [street, setStreet] = useState<string>('');
     const streetDebounce = useDebounce(street, 500);
     const [mapLoaded, setMapLoaded] = useState<boolean>(false);
@@ -69,67 +70,6 @@ const BasicInfoForm = ({
         } else {
             toast.error('Vị trí của bạn không được hỗ trợ bởi trình duyệt của bạn');
         }
-    };
-
-    const handleChangeMarker = async (data: [number, number]) => {
-        console.log('🚀 ~ handleChangeMarker ~ data:', data);
-        isChangeMarker.current = true;
-        setMarker(data);
-
-        const [lng, lat] = data;
-
-        const res = await lngLatToAddressService([lat, lng]);
-
-        const address = res.results.find((r) => r.address_components.length > 3);
-
-        if (!address) {
-            return;
-        }
-
-        const addressComponents = address.address_components;
-
-        const addressComponentsDesc = addressComponents.reverse();
-        const [city, district, ward, ...restAddress] = addressComponentsDesc;
-
-        const cityFind = cities.find((c) => c.name.toLowerCase().includes(city.short_name.toLowerCase()));
-        const cityId = cityFind?._id;
-        form.setFieldValue('city', cityId);
-
-        if (!cityId) {
-            return;
-        }
-
-        const districts = await handleCityChange(cityId);
-        console.log('district.short_name', district.short_name);
-
-        const districtFind = districts.find((d) => d.name.toLowerCase().includes(district.short_name.toLowerCase()));
-        const districtId = districtFind?._id;
-        form.setFieldValue('district', districtId);
-
-        if (!districtId) {
-            return;
-        }
-        const wards = await handleDistrictChange(districtId);
-        console.log('ward.short_name', ward.short_name);
-
-        const wardFind = wards.find((w) => w.name.toLowerCase().includes(ward.short_name.toLowerCase()));
-        const wardId = wardFind?._id;
-        form.setFieldValue('ward', wardId);
-
-        if (!wardId) {
-            return;
-        }
-        handleWardChange(wardId);
-
-        form.setFieldValue('street', restAddress.map((a) => a.short_name).join(' '));
-        setStreet(restAddress.map((a) => a.short_name).join(' '));
-        setAddressName({
-            latitude: data[1],
-            longitude: data[0],
-            city: cityFind.name,
-            district: districtFind.name,
-            ward: wardFind.name,
-        });
     };
 
     const handleCityChange = useCallback(
@@ -242,6 +182,72 @@ const BasicInfoForm = ({
         setMapLoaded(true);
     };
 
+    const handleChangeMarker = useCallback(
+        async (data: [number, number]) => {
+            console.log('🚀 ~ handleChangeMarker ~ data:', data);
+            isChangeMarker.current = true;
+            setMarker(data);
+
+            const [lng, lat] = data;
+
+            const res = await lngLatToAddressService([lat, lng]);
+
+            const address = res.results.find((r) => r.address_components.length > 3);
+
+            if (!address) {
+                return;
+            }
+
+            const addressComponents = address.address_components;
+
+            const addressComponentsDesc = addressComponents.reverse();
+            const [city, district, ward, ...restAddress] = addressComponentsDesc;
+
+            const cityFind = cities.find((c) => c.name.toLowerCase().includes(city.short_name.toLowerCase()));
+            const cityId = cityFind?._id;
+            form.setFieldValue('city', cityId);
+
+            if (!cityId) {
+                return;
+            }
+
+            const districts = await handleCityChange(cityId);
+            console.log('district.short_name', district.short_name);
+
+            const districtFind = districts.find((d) =>
+                d.name.toLowerCase().includes(district.short_name.toLowerCase()),
+            );
+            const districtId = districtFind?._id;
+            form.setFieldValue('district', districtId);
+
+            if (!districtId) {
+                return;
+            }
+            const wards = await handleDistrictChange(districtId);
+            console.log('ward.short_name', ward.short_name);
+
+            const wardFind = wards.find((w) => w.name.toLowerCase().includes(ward.short_name.toLowerCase()));
+            const wardId = wardFind?._id;
+            form.setFieldValue('ward', wardId);
+
+            if (!wardId) {
+                return;
+            }
+            handleWardChange(wardId);
+
+            form.setFieldValue('street', restAddress.map((a) => a.short_name).join(' '));
+            setStreet(restAddress.map((a) => a.short_name).join(' '));
+            setAddressName({
+                latitude: data[1],
+                longitude: data[0],
+                city: cityFind.name,
+                district: districtFind.name,
+                ward: wardFind.name,
+            });
+        },
+        [cities, form, handleCityChange, handleDistrictChange, handleWardChange, setAddressName],
+    );
+
     useEffect(() => {
         const fetchCities = async () => {
             setCityLoading(true);
@@ -255,6 +261,8 @@ const BasicInfoForm = ({
     }, []);
 
     useEffect(() => {
+        console.log('🚀 ~ useEffect ~ streetDebounce');
+
         if (streetDebounce && !isChangeMarker.current) {
             isChangeAddress.current = true;
             const city = cities.find((city) => city._id === form.getFieldValue('city'));
@@ -278,106 +286,108 @@ const BasicInfoForm = ({
     }, [streetDebounce]);
 
     return (
-        <div>
-            <Row gutter={[12, 12]}>
-                <Col span={8}>
-                    <Row gutter={12}>
-                        <Col span={24}>
-                            <Form.Item
-                                label="Tỉnh, thành phố"
-                                name="city"
-                                rules={[{ required: true, message: 'Vui lòng chọn tỉnh, thành phố' }]}
-                            >
-                                <Select
-                                    loading={cityLoading}
-                                    options={cities}
-                                    {...selectProps}
-                                    onChange={handleCityChange}
-                                    placeholder="Chọn tỉnh, thành phố"
+        <ErrorBoundary errorComponent={() => <div>Something went wrong</div>}>
+            <div>
+                <Row gutter={[12, 12]}>
+                    <Col span={8}>
+                        <Row gutter={12}>
+                            <Col span={24}>
+                                <Form.Item
+                                    label="Tỉnh, thành phố"
+                                    name="city"
+                                    rules={[{ required: true, message: 'Vui lòng chọn tỉnh, thành phố' }]}
+                                >
+                                    <Select
+                                        loading={cityLoading}
+                                        options={cities}
+                                        {...selectProps}
+                                        onChange={handleCityChange}
+                                        placeholder="Chọn tỉnh, thành phố"
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={24}>
+                                <Form.Item
+                                    label="Quận, huyện"
+                                    name="district"
+                                    rules={[{ required: true, message: 'Vui lòng chọn quận, huyện' }]}
+                                >
+                                    <Select
+                                        loading={distinctLoading}
+                                        options={districts}
+                                        {...selectProps}
+                                        onChange={handleDistrictChange}
+                                        placeholder="Chọn quận, huyện"
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={24}>
+                                <Form.Item
+                                    label="Phường, xã"
+                                    name="ward"
+                                    rules={[{ required: true, message: 'Vui lòng chọn phường, xã' }]}
+                                >
+                                    <Select
+                                        loading={wardLoading}
+                                        options={wards}
+                                        {...selectProps}
+                                        placeholder="Chọn phường, xã"
+                                        onChange={handleWardChange}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={24}>
+                                <Form.Item
+                                    label="Địa chỉ"
+                                    name="street"
+                                    rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
+                                >
+                                    <Input.TextArea
+                                        rows={3}
+                                        placeholder="Vui lòng nhập địa chỉ"
+                                        onChange={handleChangeStreet}
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col
+                        span={16}
+                        style={{
+                            minHeight: '200px',
+                        }}
+                    >
+                        <div className="relative w-full h-full">
+                            <div className="absolute inset-0">
+                                <Button
+                                    style={{
+                                        zIndex: 1,
+                                        position: 'absolute',
+                                        top: '10px',
+                                        left: '10px',
+                                    }}
+                                    icon={<LocateIcon className="w-5 h-5" />}
+                                    onClick={getMyLocation}
                                 />
-                            </Form.Item>
-                        </Col>
-                        <Col span={24}>
-                            <Form.Item
-                                label="Quận, huyện"
-                                name="district"
-                                rules={[{ required: true, message: 'Vui lòng chọn quận, huyện' }]}
-                            >
-                                <Select
-                                    loading={distinctLoading}
-                                    options={districts}
-                                    {...selectProps}
-                                    onChange={handleDistrictChange}
-                                    placeholder="Chọn quận, huyện"
+                                <GoongMap
+                                    marker={marker}
+                                    // setMarker={setMarker}
+                                    onChangeMarker={handleChangeMarker}
+                                    setViewport={setViewport}
+                                    viewport={viewport}
+                                    onLoad={handleLoadedMap}
                                 />
-                            </Form.Item>
-                        </Col>
-                        <Col span={24}>
-                            <Form.Item
-                                label="Phường, xã"
-                                name="ward"
-                                rules={[{ required: true, message: 'Vui lòng chọn phường, xã' }]}
-                            >
-                                <Select
-                                    loading={wardLoading}
-                                    options={wards}
-                                    {...selectProps}
-                                    placeholder="Chọn phường, xã"
-                                    onChange={handleWardChange}
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col span={24}>
-                            <Form.Item
-                                label="Địa chỉ"
-                                name="street"
-                                rules={[{ required: true, message: 'Vui lòng nhập địa chỉ' }]}
-                            >
-                                <Input.TextArea
-                                    rows={3}
-                                    placeholder="Vui lòng nhập địa chỉ"
-                                    onChange={handleChangeStreet}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col
-                    span={16}
-                    style={{
-                        minHeight: '200px',
-                    }}
-                >
-                    <div className="relative w-full h-full">
-                        <div className="absolute inset-0">
-                            <Button
-                                style={{
-                                    zIndex: 1,
-                                    position: 'absolute',
-                                    top: '10px',
-                                    left: '10px',
-                                }}
-                                icon={<LocateIcon className="w-5 h-5" />}
-                                onClick={getMyLocation}
-                            />
-                            <GoongMap
-                                marker={marker}
-                                // setMarker={setMarker}
-                                onChangeMarker={handleChangeMarker}
-                                setViewport={setViewport}
-                                viewport={viewport}
-                                onLoad={handleLoadedMap}
-                            />
-                        </div>
-                        {mapLoaded || (
-                            <div className="z-20 absolute inset-0 bg-white bg-opacity-50 flex justify-center items-center">
-                                <Spin size="large" />
                             </div>
-                        )}
-                    </div>
-                </Col>
-            </Row>
-        </div>
+                            {mapLoaded || (
+                                <div className="z-20 absolute inset-0 bg-white bg-opacity-50 flex justify-center items-center">
+                                    <Spin size="large" />
+                                </div>
+                            )}
+                        </div>
+                    </Col>
+                </Row>
+            </div>
+        </ErrorBoundary>
     );
 };
 

@@ -13,6 +13,7 @@ import { useForm } from 'antd/es/form/Form';
 import { UploadChangeParam, UploadFile } from 'antd/es/upload';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 export interface IPropertyForm {
     city: string;
@@ -172,9 +173,12 @@ const AddPropertyForm = () => {
         try {
             await createProperty(formData);
 
+            toast.success('Đăng tin thành công');
             router.push(OWNER_PROPERTIES);
         } catch (error) {
             console.error(error);
+
+            toast.error((error as Error).message || 'Đăng tin thất bại');
         } finally {
             setLoading(false);
         }

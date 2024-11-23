@@ -47,7 +47,7 @@ const RentalRequestRating = ({
                 item = data[index];
                 itemCancel = cancelRate[indexCancel];
 
-                if (item.month === itemCancel.month) {
+                if (itemCancel && item.month === itemCancel.month) {
                     newArray[index].cancel = itemCancel.count;
                     indexCancel++;
                 }

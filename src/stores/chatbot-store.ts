@@ -9,6 +9,7 @@ export interface IChatStore {
     addChats: (chats: IChatbot[]) => void;
     setChat: (chat: string) => void;
     setLoading: (loading: boolean) => void;
+    resetChatbotStore: () => void;
 }
 
 const useChatStore = create<IChatStore>((set) => ({
@@ -18,7 +19,14 @@ const useChatStore = create<IChatStore>((set) => ({
     addChat: (chat: IChatResponse) => set((state) => ({ chats: [...state.chats, chat] })),
     setChat: (chat: string) => set({ chat }),
     setLoading: (loading: boolean) => set({ loading }),
-    addChats: (chats: IChatbot[]) => set(() => ({ chats: chats.map((chat) => ({ response: chat })) })),
+    addChats: (chats: IChatbot[]) =>
+        set((state) => {
+            console.log(chats);
+            if (chats[0]?._id === state.chats[0]?.response._id) return state;
+
+            return { chats: [...[...chats].reverse().map((chat) => ({ response: chat })), ...state.chats] };
+        }),
+    resetChatbotStore: () => set({ chats: [], chat: '', loading: false }),
 }));
 
 export { useChatStore };

@@ -2,29 +2,29 @@ import { OWNER, RENTER } from '@/constants/account-type';
 import { z } from 'zod';
 
 export const registerSchema = z.object({
-    email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Email is invalid' }),
+    email: z.string().min(1, { message: 'Email là bắt buộc' }).email({ message: 'Email không hợp lệ' }),
     password: z
         .string()
-        .min(1, { message: 'Password is required' })
-        .min(6, { message: 'Password must be at least 6 characters long' })
+        .min(1, { message: 'Mật khẩu là bắt buộc' })
+        .min(6, { message: 'Mật khẩu phải dài ít nhất 6 ký tự' })
         .regex(/^(?=.*[A-Za-z])(?=.*\d).{6,}$/, {
-            message: 'Password must contain at least one letter, one number',
+            message: 'Mật khẩu phải chứa ít nhất một chữ cái, một số',
         }),
-    userType: z.enum([RENTER, OWNER], { message: 'User type must be "renter" or "owner"' }),
-    name: z.string().min(1, { message: 'Name is required' }),
-    otp: z.string().min(1, { message: 'OTP is required' }).length(6, { message: 'OTP must be 6 characters long' }),
+    userType: z.enum([RENTER, OWNER], { message: 'Loại tài khoản không hợp lệ' }),
+    name: z.string().min(1, { message: 'Tên là bắt buộc' }),
+    otp: z.string().min(1, { message: 'OTP là bắt buộc' }).length(6, { message: 'OTP phải dài 6 ký tự' }),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;
 
 export const loginSchema = z.object({
-    email: z.string().min(1, { message: 'Email is required' }).email({ message: 'Email is invalid' }),
+    email: z.string().min(1, { message: 'Email là bắt buộc' }).email({ message: 'Email không hợp lệ' }),
     password: z
         .string()
-        .min(1, { message: 'Password is required' })
-        .min(6, { message: 'Password must be at least 6 characters long' })
+        .min(1, { message: 'Mật khẩu là bắt buộc' })
+        .min(6, { message: 'Mật khẩu phải dài ít nhất 6 ký tự' })
         .regex(/^(?=.*[A-Za-z])(?=.*\d).{6,}$/, {
-            message: 'Password must contain at least one letter, one number',
+            message: 'Mật khẩu phải chứa ít nhất một chữ cái, một số',
         }),
 });
 

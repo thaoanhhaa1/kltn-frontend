@@ -16,6 +16,7 @@ export interface INotificationStore {
     readNotification: (id: string) => void;
     readAllNotifications: () => void;
     addNotification: (notification: INotification) => void;
+    resetNotificationStore: () => void;
 }
 
 const useNotificationStore = create<INotificationStore>((set) => ({
@@ -76,6 +77,7 @@ const useNotificationStore = create<INotificationStore>((set) => ({
             },
             count: state.count ? state.count + 1 : 1,
         })),
+    resetNotificationStore: () => set({ notifications: initDataTable, loading: false, readNotificationsIds: [] }),
 }));
 
 export { useNotificationStore };

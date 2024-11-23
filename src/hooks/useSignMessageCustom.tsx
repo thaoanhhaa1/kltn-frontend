@@ -10,13 +10,16 @@ const useSignMessageCustom = () => {
 
     const handleSign = async ({ message }: { message: string }) => {
         const connector: Connector = connectors.find((c) => c.id === 'metaMaskSDK')!;
+        let add = address;
 
         if (address !== user?.walletAddress) {
             await disconnectAsync();
-            await connectAsync({ connector });
+            const res = await connectAsync({ connector });
+
+            if (res) add = res.accounts?.[0] || '';
         }
 
-        if (user?.walletAddress !== address) throw new Error('Địa chỉ ví không khớp');
+        if (user?.walletAddress !== add) throw new Error('Địa chỉ ví không khớp');
 
         const res = await signMessageAsync({
             message,
