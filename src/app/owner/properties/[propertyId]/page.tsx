@@ -2,10 +2,12 @@ import UpdatePropertyBreadcrumb from '@/app/owner/properties/[propertyId]/update
 import UpdatePropertyForm from '@/app/owner/properties/[propertyId]/update-property-form';
 import { IAttributeCbb } from '@/interfaces/attribute';
 import { IProperty } from '@/interfaces/property';
+import { IPropertyType } from '@/interfaces/property-type';
 import { OWNER_PROPERTIES } from '@/path';
 import { getCities, getDistricts, getWards, IAddress } from '@/services/address-service';
 import { getAllAttributesCbb } from '@/services/attribute-service';
 import { getPropertyById } from '@/services/property-service';
+import { getPropertyTypes } from '@/services/property-type';
 import { Button } from 'antd';
 import { cookies } from 'next/headers';
 
@@ -17,9 +19,14 @@ const EditPropertyPage = async ({ params: { propertyId } }: { params: { property
     let districts: IAddress[] = [];
     let wards: IAddress[] = [];
     let attributes: IAttributeCbb[] = [];
+    let propertyTypes: IPropertyType[] = [];
 
     try {
-        [property, attributes] = await Promise.all([getPropertyById(propertyId, accessToken!), getAllAttributesCbb()]);
+        [property, attributes, propertyTypes] = await Promise.all([
+            getPropertyById(propertyId, accessToken!),
+            getAllAttributesCbb(),
+            getPropertyTypes(),
+        ]);
 
         if (property) {
             cities = await getCities();
@@ -54,6 +61,7 @@ const EditPropertyPage = async ({ params: { propertyId } }: { params: { property
                 districts={districts}
                 wards={wards}
                 attributes={attributes}
+                propertyTypes={propertyTypes}
             />
         </div>
     );

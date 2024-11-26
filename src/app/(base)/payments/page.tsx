@@ -4,7 +4,7 @@ import Forbidden from '@/components/forbidden';
 import { IPayloadJWT } from '@/interfaces/jwt';
 import { ITransaction } from '@/interfaces/transaction';
 import { getTransactionsByRenter } from '@/services/transaction-service';
-import { Col, Row } from 'antd';
+import { Col, Empty, Row } from 'antd';
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
 
@@ -41,6 +41,7 @@ const PaymentsPage = async () => {
                         <Payment transaction={transaction} />
                     </Col>
                 ))}
+                {transactions.length === 0 && <Empty description="Không có giao dịch nào" />}
             </Row>
         </div>
     );
