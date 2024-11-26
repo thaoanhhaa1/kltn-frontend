@@ -58,7 +58,7 @@ const Extension = ({
             <Button onClick={handleOpenModal}>Gia hạn</Button>
             <Modal
                 open={open}
-                title={`${typeText} ${transactionId || contractId}`}
+                title={`G${typeText.substring(1)} ${transactionId || contractId}`}
                 okText="Gia hạn"
                 cancelText="Huỷ"
                 onCancel={handleCloseModal}

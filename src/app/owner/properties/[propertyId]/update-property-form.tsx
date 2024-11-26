@@ -50,9 +50,17 @@ export interface IUpdatePropertyFormProps {
     districts: Array<IAddress>;
     wards: Array<IAddress>;
     attributes: Array<IAttributeCbb>;
+    propertyTypes: Array<IPropertyType>;
 }
 
-const UpdatePropertyForm = ({ property, cities, districts, wards, attributes }: IUpdatePropertyFormProps) => {
+const UpdatePropertyForm = ({
+    property,
+    cities,
+    districts,
+    wards,
+    attributes,
+    propertyTypes,
+}: IUpdatePropertyFormProps) => {
     const router = useRouter();
     const [form] = useForm<IPropertyForm>();
     const [addressName, setAddressName] = useState<IAddressName>(property.address as IAddressName);
@@ -94,7 +102,7 @@ const UpdatePropertyForm = ({ property, cities, districts, wards, attributes }: 
         {
             key: '1',
             label: 'Thông tin bất động sản',
-            children: <PropertyInfoForm setType={setType} attributes={attributes} />,
+            children: <PropertyInfoForm propertyTypes={propertyTypes} setType={setType} attributes={attributes} />,
         },
     ];
     const imagesItems: CollapseProps['items'] = [

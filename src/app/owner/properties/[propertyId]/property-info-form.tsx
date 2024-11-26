@@ -20,12 +20,14 @@ const inputNumberProps = {
 
 const PropertyInfoForm = ({
     attributes,
+    propertyTypes,
     setType,
 }: {
     attributes: IAttributeCbb[];
+    propertyTypes: IPropertyType[];
     setType: Dispatch<SetStateAction<IPropertyType | undefined>>;
 }) => {
-    const [typeOptions] = useState<IPropertyType[]>(attributes);
+    const [typeOptions] = useState<IPropertyType[]>(propertyTypes);
 
     const handleChangeType = (_value: string, option: IPropertyType | IPropertyType[]) => {
         const type = Array.isArray(option) ? option[0] : option;
