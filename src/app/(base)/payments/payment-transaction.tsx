@@ -41,7 +41,7 @@ const PaymentTransaction = ({
             router.refresh();
         } catch (error) {
             console.error(error);
-            toast.error('Thanh toán thất bại');
+            toast.error((error as any).message || 'Thanh toán thất bại');
         } finally {
             setLoading(false);
         }

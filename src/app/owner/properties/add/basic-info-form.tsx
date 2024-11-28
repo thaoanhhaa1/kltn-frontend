@@ -5,11 +5,13 @@ import GoongMap from '@/components/goong-map';
 import useDebounce from '@/hooks/useDebounce';
 import { getCities, getDistricts, getWards, IAddress } from '@/services/address-service';
 import { addressToLngLatService, lngLatToAddressService } from '@/services/goong-service';
-import { Button, Col, Form, FormInstance, Input, Row, Select, Spin } from 'antd';
+import { Button, Col, Flex, Form, FormInstance, Input, Row, Select, Spin, Typography } from 'antd';
 import { LocateIcon } from 'lucide-react';
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
 import { Dispatch, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+
+const { Text } = Typography;
 
 export interface IViewPort {
     latitude: number;
@@ -286,7 +288,28 @@ const BasicInfoForm = ({
     }, [streetDebounce]);
 
     return (
-        <ErrorBoundary errorComponent={() => <div>Something went wrong</div>}>
+        <ErrorBoundary
+            errorComponent={() => {
+                return (
+                    <Flex vertical justify="space-between" align="center" gap={8}>
+                        <Text type="danger">Có lỗi xảy ra đối với Goong Map. Vui lòng thử lại sau.</Text>
+                        <Button
+                            onClick={() => {
+                                setMapLoaded(false);
+                                setMarker(null);
+                                setViewport({
+                                    latitude: 21.03072,
+                                    longitude: 105.85239,
+                                    zoom: 15,
+                                });
+                            }}
+                        >
+                            Thử lại
+                        </Button>
+                    </Flex>
+                );
+            }}
+        >
             <div>
                 <Row gutter={[12, 12]}>
                     <Col span={8}>

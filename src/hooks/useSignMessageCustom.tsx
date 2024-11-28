@@ -9,24 +9,34 @@ const useSignMessageCustom = () => {
     const { user } = useUserStore();
 
     const handleSign = async ({ message }: { message: string }) => {
-        const connector: Connector = connectors.find((c) => c.id === 'metaMaskSDK')!;
-        let add = address;
+        try {
+            const connector: Connector = connectors.find((c) => c.id === 'metaMaskSDK')!;
+            let add = address;
 
-        if (address !== user?.walletAddress) {
-            await disconnectAsync();
-            const res = await connectAsync({ connector });
+            if (address !== user?.walletAddress) {
+                await disconnectAsync();
+                const res = await connectAsync({ connector });
 
-            if (res) add = res.accounts?.[0] || '';
+                if (res) add = res.accounts?.[0] || '';
+            }
+
+            if (user?.walletAddress !== add) throw new Error('Địa chỉ ví không khớp');
+
+            const res = await signMessageAsync({
+                message,
+                account: address,
+            });
+
+            return res;
+        } catch (error) {
+            const { code, name } = error as any;
+
+            if (code === 4001 || name === 'ConnectorAccountNotFoundError') {
+                throw new Error('Có lỗi xảy ra khi ký xác thực, vui lòng thử lại');
+            }
+
+            throw error;
         }
-
-        if (user?.walletAddress !== add) throw new Error('Địa chỉ ví không khớp');
-
-        const res = await signMessageAsync({
-            message,
-            account: address,
-        });
-
-        return res;
     };
 
     return { handleSign };

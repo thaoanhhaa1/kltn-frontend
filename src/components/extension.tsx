@@ -29,10 +29,18 @@ const Extension = ({
     const handleOpenModal = () => setOpen(true);
     const handleCloseModal = () => setOpen(false);
 
+    const validate = async () => {
+        try {
+            await form.validateFields();
+        } catch (error) {}
+    };
+
     const handleConfirm = async () => {
         setLoading(true);
 
         try {
+            await validate();
+
             const extensionDate = form.getFieldValue('extensionDate') as dayjs.Dayjs;
 
             await createExtensionRequest({

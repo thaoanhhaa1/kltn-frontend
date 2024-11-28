@@ -77,7 +77,8 @@ const useNotificationStore = create<INotificationStore>((set) => ({
             },
             count: state.count ? state.count + 1 : 1,
         })),
-    resetNotificationStore: () => set({ notifications: initDataTable, loading: false, readNotificationsIds: [] }),
+    resetNotificationStore: () =>
+        set({ notifications: initDataTable, loading: false, readNotificationsIds: [], count: undefined }),
 }));
 
 export { useNotificationStore };

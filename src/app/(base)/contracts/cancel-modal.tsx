@@ -55,7 +55,7 @@ const CancelModal = ({
                     ...contracts,
                     data: contracts.data.map((c) => (c.contractId === newContract.contractId ? newContract : c)),
                 }));
-            toast.success('Huỷ hợp đồng thành công');
+            toast.success('Đã gửi yêu cầu huỷ hợp đồng');
             onClose();
 
             if (!setContracts) router.refresh();

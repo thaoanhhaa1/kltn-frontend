@@ -80,7 +80,7 @@ const ReviewItem = ({
             <Flex align="center" gap={8}>
                 <Flex gap={4} vertical>
                     <Title level={5}>{user.name}</Title>
-                    {reviewId === review.id && <Rate allowHalf value={value} disabled />}
+                    {reviewId === review.id && <Rate value={value} disabled />}
                     <Text>{formatDateTime(review.createdAt)}</Text>
                     <Text>{review.content}</Text>
                     <Flex gap={4}>
