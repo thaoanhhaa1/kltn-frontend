@@ -122,7 +122,7 @@ const ReviewFooter = ({
                                 style={{
                                     paddingInline: '11px',
                                 }}
-                                allowHalf
+                                // allowHalf
                             />
                         </Form.Item>
                     )}

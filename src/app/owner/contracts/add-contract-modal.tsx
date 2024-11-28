@@ -111,7 +111,7 @@ const AddContractModal = ({
     };
 
     const handleNext = async () => {
-        console.log('🚀 ~ handleNext ~ form.getFieldsValue()', form.getFieldsValue());
+        setCreateLoading(false);
         setGenerateLoading(true);
         setSteps([
             {
@@ -168,6 +168,7 @@ const AddContractModal = ({
     };
 
     const handlePrev = () => {
+        setCreateLoading(false);
         setStep(step - 1);
         setPreRender(true);
         setSteps([
@@ -232,10 +233,10 @@ const AddContractModal = ({
                 },
             ]);
             handleCancel();
+            setCreateLoading(false);
             refresh();
         } catch (error) {
-            console.error('🚀 ~ handleCreateContract ~ error', error);
-
+            setCreateLoading(false);
             toast.error((error as Error).message || 'Có lỗi xảy ra');
             setSteps([
                 {
@@ -247,8 +248,6 @@ const AddContractModal = ({
                     status: 'error',
                 },
             ]);
-        } finally {
-            setCreateLoading(false);
         }
     };
 

@@ -29,8 +29,20 @@ const Extension = ({
     const handleOpenModal = () => setOpen(true);
     const handleCloseModal = () => setOpen(false);
 
+    const validate = async () => {
+        try {
+            await form.validateFields();
+
+            return true;
+        } catch (error) {}
+
+        return false;
+    };
+
     const handleConfirm = async () => {
         setLoading(true);
+
+        if (!(await validate())) return setLoading(false);
 
         try {
             const extensionDate = form.getFieldValue('extensionDate') as dayjs.Dayjs;
