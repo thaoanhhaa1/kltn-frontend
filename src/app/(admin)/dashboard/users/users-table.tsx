@@ -13,11 +13,11 @@ import {
     getUserStatusText,
     toSkipTake,
 } from '@/lib/utils';
-import { blockUser, getAllUsers } from '@/services/user-service';
+import { activeUser, blockUser, getAllUsers } from '@/services/user-service';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
 import { Button, Flex, TableProps, Tag, Tooltip } from 'antd';
-import { CircleMinus } from 'lucide-react';
+import { Check, CircleMinus } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -35,6 +35,26 @@ const UsersTable = () => {
             const user = await blockUser(userId);
 
             toast.success(`Đã chặn người dùng ${user.name}`);
+            setUsers((prev) => ({
+                ...prev,
+                data: prev.data.map((u) => (u.userId === user.userId ? user : u)),
+            }));
+        } catch (error) {
+            console.error(error);
+
+            toast.error('Đã xảy ra lỗi, vui lòng thử lại sau');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    const handleActiveUser = useCallback(async (userId: string) => {
+        setLoading(true);
+
+        try {
+            const user = await activeUser(userId);
+
+            toast.success(`Đã bỏ chặn người dùng ${user.name}`);
             setUsers((prev) => ({
                 ...prev,
                 data: prev.data.map((u) => (u.userId === user.userId ? user : u)),
@@ -110,19 +130,29 @@ const UsersTable = () => {
                 render: (_, record) => (
                     <Flex justify="center">
                         {/* <Button type="text" icon={<Edit2 className="w-5 h-5" />} /> */}
+                        <Tooltip title="Bỏ chặn người dùng">
+                            <Button
+                                variant="text"
+                                color="primary"
+                                icon={<Check className="w-5 h-5" />}
+                                onClick={() => handleActiveUser(record.userId)}
+                                disabled={record.status !== 'BLOCKED'}
+                            />
+                        </Tooltip>
                         <Tooltip title="Chặn người dùng">
                             <Button
                                 danger
                                 type="text"
                                 icon={<CircleMinus className="w-5 h-5" />}
                                 onClick={() => handleBlockUser(record.userId)}
+                                disabled={record.status === 'BLOCKED'}
                             />
                         </Tooltip>
                     </Flex>
                 ),
             },
         ],
-        [handleBlockUser],
+        [handleActiveUser, handleBlockUser],
     );
 
     useEffect(() => {

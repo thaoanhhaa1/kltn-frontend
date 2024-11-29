@@ -57,6 +57,12 @@ export const blockUser = (userId: string) => {
     });
 };
 
+export const activeUser = (userId: string) => {
+    return http.post<IUser>(`${ENDPOINT}/active`, {
+        id: userId,
+    });
+};
+
 export const getAllRentersCbb = (): Promise<IUser[]> => {
     return http.get<IUser[]>(`${ENDPOINT}/renters/cbb`);
 };
