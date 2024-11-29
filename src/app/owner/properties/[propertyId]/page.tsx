@@ -1,5 +1,6 @@
 import UpdatePropertyBreadcrumb from '@/app/owner/properties/[propertyId]/update-property-breadcrumb';
 import UpdatePropertyForm from '@/app/owner/properties/[propertyId]/update-property-form';
+import AntButtonLink from '@/components/button/ant-button-link';
 import { IAttributeCbb } from '@/interfaces/attribute';
 import { IProperty } from '@/interfaces/property';
 import { IPropertyType } from '@/interfaces/property-type';
@@ -8,7 +9,7 @@ import { getCities, getDistricts, getWards, IAddress } from '@/services/address-
 import { getAllAttributesCbb } from '@/services/attribute-service';
 import { getPropertyById } from '@/services/property-service';
 import { getPropertyTypes } from '@/services/property-type';
-import { Button } from 'antd';
+import { Result } from 'antd';
 import { cookies } from 'next/headers';
 
 const EditPropertyPage = async ({ params: { propertyId } }: { params: { propertyId: string } }) => {
@@ -43,9 +44,16 @@ const EditPropertyPage = async ({ params: { propertyId } }: { params: { property
 
     if (!property) {
         return (
-            <Button type="primary" href={OWNER_PROPERTIES}>
-                Quay về trang quản lý bất động sản
-            </Button>
+            <Result
+                status="404"
+                title="404"
+                subTitle="Bất động sản không tồn tại"
+                extra={
+                    <AntButtonLink href={OWNER_PROPERTIES} type="primary">
+                        Quay về trang quản lý bất động sản
+                    </AntButtonLink>
+                }
+            />
         );
     }
 

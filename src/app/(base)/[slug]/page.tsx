@@ -2,6 +2,7 @@ import BaseInfo from '@/app/(base)/[slug]/base-info';
 import DetailInfo from '@/app/(base)/[slug]/detail-info';
 import Map from '@/app/(base)/[slug]/map';
 import { baseOpenGraph } from '@/app/shared-metadata';
+import AntButtonLink from '@/components/button/ant-button-link';
 import Rating from '@/components/rating';
 import Review from '@/components/review/review';
 import Text from '@/components/text';
@@ -12,7 +13,7 @@ import { IReview } from '@/interfaces/review';
 import { HOME } from '@/path';
 import { getPropertyBySlug } from '@/services/property-service';
 import { getReviewsBySlug } from '@/services/review-service';
-import { Button, Col, Empty, Flex, Image, Result, Row } from 'antd';
+import { Col, Empty, Flex, Image, Result, Row } from 'antd';
 import { Metadata } from 'next';
 
 type Props = { params: { slug: string } };
@@ -20,7 +21,12 @@ type Props = { params: { slug: string } };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const slug = params.slug;
 
-    const property = await getPropertyBySlug(slug);
+    let property = null;
+
+    try {
+        property = await getPropertyBySlug(slug);
+    } catch (error) {}
+
     const title = property?.title || 'Không tìm thấy bất động sản';
     const description = property?.description || 'Không tìm thấy bất động sản';
     const url = `${envConfig.NEXT_PUBLIC_URL}/${slug}`;
@@ -56,9 +62,9 @@ const PropertyDetailPage = async ({ params: { slug } }: Props) => {
                 title="404"
                 subTitle="Xin lỗi, bất động sản bạn đang tìm kiếm không tồn tại."
                 extra={
-                    <Button href={HOME} type="primary">
+                    <AntButtonLink href={HOME} type="primary">
                         Trang chủ
-                    </Button>
+                    </AntButtonLink>
                 }
             />
         );
