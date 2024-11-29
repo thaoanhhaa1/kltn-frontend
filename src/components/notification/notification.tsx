@@ -43,7 +43,7 @@ const getLink = (type: NotificationType) => {
     }
 };
 
-const Notification = ({ notification }: { notification: INotification }) => {
+const Notification = ({ notification, onClose }: { notification: INotification; onClose: () => void }) => {
     const { readNotification } = useNotificationStore();
     const url = useMemo(() => {
         if (notification.type === 'CONTRACT_DETAIL') return `${RENTAL_CONTRACTS}/${notification.docId}`;
@@ -51,12 +51,15 @@ const Notification = ({ notification }: { notification: INotification }) => {
 
         return getLink(notification.type);
     }, [notification.docId, notification.type]);
+    const time = useMemo(() => convertDateToTimeAgo(new Date(notification.createdAt)), [notification.createdAt]);
 
     const handleClick = () => {
         if (notification.status === 'RECEIVED') {
             readNotification(notification.id);
             updateNotificationStatus([notification.id], 'READ').then();
         }
+
+        onClose();
     };
 
     return (
@@ -64,9 +67,7 @@ const Notification = ({ notification }: { notification: INotification }) => {
             <Link onClick={handleClick} href={url}>
                 <Typography.Title level={5}>{notification.title}</Typography.Title>
                 <Markdown className="!m-0">{notification.body}</Markdown>
-                <Typography.Text type="secondary">
-                    {convertDateToTimeAgo(new Date(notification.createdAt))}
-                </Typography.Text>
+                <Typography.Text type="secondary">{time}</Typography.Text>
             </Link>
         </DropdownMenuItem>
     );

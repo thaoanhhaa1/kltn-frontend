@@ -31,6 +31,8 @@ const envSchema = z.object({
     NEXT_PUBLIC_CHAIN_SYMBOL: z.string(),
     NEXT_PUBLIC_CHAIN_CURRENCY: z.string(),
     NEXT_PUBLIC_URL: z.string(),
+    NEXT_PUBLIC_FPT_AI_API_KEY: z.string(),
+    NEXT_PUBLIC_FPT_AI_ENDPOINT: z.string(),
 });
 
 const envParser = envSchema.safeParse({
@@ -64,6 +66,8 @@ const envParser = envSchema.safeParse({
     NEXT_PUBLIC_CHAIN_SYMBOL: process.env.NEXT_PUBLIC_CHAIN_SYMBOL!,
     NEXT_PUBLIC_CHAIN_CURRENCY: process.env.NEXT_PUBLIC_CHAIN_CURRENCY!,
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL!,
+    NEXT_PUBLIC_FPT_AI_API_KEY: process.env.NEXT_PUBLIC_FPT_AI_API_KEY!,
+    NEXT_PUBLIC_FPT_AI_ENDPOINT: process.env.NEXT_PUBLIC_FPT_AI_ENDPOINT!,
 });
 
 if (!envParser.success) {

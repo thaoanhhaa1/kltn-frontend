@@ -1,5 +1,6 @@
+import AntButtonLink from '@/components/button/ant-button-link';
 import { HOME } from '@/path';
-import { Button, Result } from 'antd';
+import { Result } from 'antd';
 
 const Forbidden = () => {
     return (
@@ -8,9 +9,9 @@ const Forbidden = () => {
             title="403"
             subTitle="Xin lỗi, bạn không có quyền truy cập trang này."
             extra={
-                <Button type="primary" href={HOME}>
+                <AntButtonLink type="primary" href={HOME}>
                     Quay về trang chủ
-                </Button>
+                </AntButtonLink>
             }
         />
     );

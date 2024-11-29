@@ -8,7 +8,7 @@ import { IPagination } from '@/interfaces/pagination';
 import { IAddress, PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
 import { ReportPriority, ReportStatus, ReportType } from '@/interfaces/report';
-import { ITransaction, TransactionStatus } from '@/interfaces/transaction';
+import { ITransaction, TransactionStatus, TransactionType } from '@/interfaces/transaction';
 import { IBaseUserEmbed } from '@/interfaces/user';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
@@ -134,6 +134,31 @@ export const getTransactionStatusText = (status: TransactionStatus) => {
     if (status === 'OVERDUE') return 'Quá hạn';
     if (status === 'CANCELLED') return 'Đã hủy';
     return 'Không xác định';
+};
+
+export const getTransactionTypeText = (type: TransactionType) => {
+    switch (type) {
+        case 'DEPOSIT':
+            return 'Tiền đặt cọc';
+        case 'RENT':
+            return 'Thanh toán thuê nhà';
+        case 'WITHDRAW':
+            return 'Rút tiền';
+        case 'REFUND':
+            return 'Hoàn tiền';
+        case 'CREATE_CONTRACT':
+            return 'Tạo hợp đồng';
+        case 'CANCEL_CONTRACT':
+            return 'Huỷ hợp đồng';
+        case 'END_CONTRACT':
+            return 'Kết thúc hợp đồng';
+        case 'COMPENSATION':
+            return 'Bồi thường';
+        case 'REPORT':
+            return 'Báo cáo';
+        default:
+            return 'Không xác định';
+    }
 };
 
 export const getCancelRequestColor = (status: ContractCancelRequestStatus) => {
@@ -456,8 +481,6 @@ export const getOwnerCreateContractMessage = (data: ICreateContractRequest) => {
     return `Tạo hợp đồng thuê nhà với ${data.renterId} tại ${data.propertyId} từ ${data.startDate} đến ${data.endDate} với giá ${data.monthlyRent} và cọc ${data.depositAmount}`;
 };
 
-export const renterGetTransactionMessage = (data: ITransaction) => {};
-
 export const convertToDMS = (lat: number, lng: number) => {
     function toDMS(coordinate: number, isLatitude: boolean): string {
         const degrees = Math.floor(Math.abs(coordinate));
@@ -487,3 +510,22 @@ export function getLocalTime(date: string | Date) {
 
     return localTime; //Output format: 9:30 PM
 }
+
+export const sumAmountCurrency = (amount: number, fee: number, isIncome: boolean) => {
+    if (isIncome) return amount;
+
+    return amount + (fee || 0);
+};
+
+export const formatEth = (
+    eth: number,
+    options: {
+        decimal?: number;
+        unit?: string;
+    } = {
+        decimal: 4,
+        unit: 'ETH',
+    },
+) => {
+    return `${(eth || 0).toFixed(options.decimal)} ${options.unit}`;
+};

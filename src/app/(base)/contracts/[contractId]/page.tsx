@@ -5,6 +5,7 @@ import Report from '@/app/(base)/contracts/[contractId]/report';
 import Transactions from '@/app/(base)/contracts/[contractId]/transactions';
 import ViewContractButton from '@/app/(base)/contracts/[contractId]/view-contract-button';
 import AvatarWithName from '@/components/avatar-with-name';
+import AntButtonLink from '@/components/button/ant-button-link';
 import Extension from '@/components/extension';
 import ExtensionRequests from '@/components/extension-request/extension-requests';
 import Forbidden from '@/components/forbidden';
@@ -67,9 +68,9 @@ export default async function ContractDetails({ params: { contractId } }: { para
                 title="404"
                 subTitle="Xin lỗi, hợp đồng bạn đang tìm kiếm không tồn tại."
                 extra={
-                    <Button href={HOME} type="primary">
+                    <AntButtonLink href={HOME} type="primary">
                         Trang chủ
-                    </Button>
+                    </AntButtonLink>
                 }
             />
         );

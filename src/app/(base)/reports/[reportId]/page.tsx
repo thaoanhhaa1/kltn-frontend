@@ -7,6 +7,7 @@ import RenterHandlePropose from '@/app/(base)/reports/[reportId]/renter-handle-p
 import ReportChildItem from '@/app/(base)/reports/[reportId]/report-child-item';
 import ReportItem from '@/app/(base)/reports/[reportId]/report-item';
 import TimelineItem from '@/app/(base)/reports/[reportId]/timeline-item';
+import AntButtonLink from '@/components/button/ant-button-link';
 import BackButton from '@/components/button/back-button';
 import Text from '@/components/text';
 import Title from '@/components/title';
@@ -22,7 +23,7 @@ import {
 } from '@/lib/utils';
 import { HOME } from '@/path';
 import { getReportDetailById } from '@/services/report-service';
-import { Button, Card, Col, Flex, Result, Row, Tag, Timeline } from 'antd';
+import { Card, Col, Flex, Result, Row, Tag, Timeline } from 'antd';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
 
@@ -48,9 +49,9 @@ const ReportDetailPage = async ({
                 title="404"
                 subTitle="Xin lỗi, báo cáo bạn đang tìm kiếm không tồn tại."
                 extra={
-                    <Button href={HOME} type="primary">
+                    <AntButtonLink href={HOME} type="primary">
                         Trang chủ
-                    </Button>
+                    </AntButtonLink>
                 }
             />
         );

@@ -43,6 +43,23 @@ const modalStyle = {
     paddingInline: '8px',
 };
 
+const userFilterOption = (input: string, option: any) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
+const userFieldNames = {
+    value: 'userId',
+};
+
+const propertyFilterOption = (input: string, option: IProperty | undefined) =>
+    (option?.title ?? '').toLowerCase().includes(input.toLowerCase());
+
+const propertyFieldNames = {
+    label: 'title',
+    value: 'propertyId',
+};
+
+type IUserOption = IUser & { label: string };
+
 const AddContractModal = ({
     open,
     refresh,
@@ -57,7 +74,7 @@ const AddContractModal = ({
     const [fromDate, setFromDate] = useState<Dayjs>();
     const [months, setMonths] = useState<number | null>(null);
     const [property, setProperty] = useState<IProperty>();
-    const [renters, setRenters] = useState<IUser[]>([]);
+    const [renters, setRenters] = useState<IUserOption[]>([]);
     const [renterLoading, setRenterLoading] = useState(false);
     const [properties, setProperties] = useState<IProperty[]>([]);
     const [propertyLoading, setPropertyLoading] = useState(false);
@@ -282,7 +299,12 @@ const AddContractModal = ({
 
                 const renters = await getAllRentersCbb();
 
-                setRenters(renters);
+                setRenters(
+                    renters.map((item) => ({
+                        ...item,
+                        label: `${item.name} - ${item.email}`,
+                    })),
+                );
             } catch (error) {
             } finally {
                 setRenterLoading(false);
@@ -353,13 +375,12 @@ const AddContractModal = ({
                                 rules={[{ required: true, message: 'Chọn người thuê' }]}
                             >
                                 <Select
+                                    showSearch
+                                    filterOption={userFilterOption}
                                     loading={renterLoading}
                                     placeholder="Chọn người thuê"
                                     options={renters}
-                                    fieldNames={{
-                                        label: 'name',
-                                        value: 'userId',
-                                    }}
+                                    fieldNames={userFieldNames}
                                 />
                             </Form.Item>
                         </Col>
@@ -370,13 +391,12 @@ const AddContractModal = ({
                                 rules={[{ required: true, message: 'Chọn bất động sản' }]}
                             >
                                 <Select
+                                    showSearch
+                                    filterOption={propertyFilterOption}
                                     loading={propertyLoading}
                                     placeholder="Chọn bất động sản"
                                     options={properties}
-                                    fieldNames={{
-                                        label: 'title',
-                                        value: 'propertyId',
-                                    }}
+                                    fieldNames={propertyFieldNames}
                                     onChange={handleChangeProperty}
                                 />
                             </Form.Item>

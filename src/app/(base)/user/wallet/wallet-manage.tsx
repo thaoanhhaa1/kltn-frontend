@@ -2,7 +2,7 @@
 
 import HistoryTransaction from '@/app/(base)/user/wallet/history-transaction';
 import { envConfig } from '@/config/envConfig';
-import { IHistoryTransaction, ITransactionType } from '@/interfaces/transaction';
+import { ITransactionDetail, ITransactionType } from '@/interfaces/transaction';
 import { getHistoryTransactions } from '@/services/transaction-service';
 import { Divider, Empty, Flex, Skeleton, Spin, Tabs, Typography } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -27,7 +27,7 @@ const typeItems: Array<{
 ];
 
 const WalletManage = ({ address }: { address: `0x${string}` }) => {
-    const [transactions, setTransactions] = useState<Array<IHistoryTransaction>>([]);
+    const [transactions, setTransactions] = useState<Array<ITransactionDetail>>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [type, setType] = useState<ITransactionType>('ALL');
     const { data, isLoading } = useBalance({
