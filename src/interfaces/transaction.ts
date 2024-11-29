@@ -68,8 +68,8 @@ export interface ITransactionDetail {
     endDate: string;
     createdAt: Date;
     updatedAt: Date;
-    from: IUser;
-    to: IUser;
+    from?: IUser;
+    to?: IUser;
 }
 
 export interface IUser {

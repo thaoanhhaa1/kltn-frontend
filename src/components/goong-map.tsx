@@ -2,6 +2,7 @@
 
 import { IViewPort } from '@/app/owner/properties/add/basic-info-form';
 import { Pin } from '@/assets/svgs/icons';
+import ErrorComponent from '@/components/error-component';
 import { envConfig } from '@/config/envConfig';
 import ReactMapGL, { MapEvent, Marker } from '@goongmaps/goong-map-react';
 import { InteractiveMapProps } from '@goongmaps/goong-map-react/src/components/interactive-map';
@@ -43,7 +44,7 @@ const GoongMap = ({
     );
 
     return (
-        <ErrorBoundary errorComponent={() => <div>Something went wrong</div>}>
+        <ErrorBoundary errorComponent={ErrorComponent}>
             <ReactMapGL
                 {...props}
                 {...viewport}

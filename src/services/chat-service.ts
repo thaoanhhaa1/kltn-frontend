@@ -8,12 +8,18 @@ export const chatService = (params: IChatRequest) => {
     return http.post<IChatResponse>('/chat-service/generate', params);
 };
 
-export const getAllChatsService = (accessToken: string) => {
-    return http.get<Array<IChatbot>>('/chat-service/chats', {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
+export const getAllChatsService = async (accessToken: string) => {
+    try {
+        const result = await http.get<Array<IChatbot>>('/chat-service/chats', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        return result;
+    } catch (error) {
+        return [];
+    }
 };
 
 export const getConversationsService = (pagination: IPagination) => {

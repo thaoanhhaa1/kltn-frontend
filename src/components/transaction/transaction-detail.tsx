@@ -45,28 +45,24 @@ const TransactionDetailView = ({
 
             {/* Thông tin người gửi và người nhận */}
             <div className="flex gap-4 mb-6 pb-4 border-b border-gray-200">
-                {transaction.from && (
-                    <div className="flex-1 flex items-center space-x-4">
-                        <Users className="text-blue-500" />
-                        <div className="flex-1">
-                            <p className="text-gray-600">Người gửi</p>
-                            <div className="flex justify-between items-center">
-                                <p className="font-semibold">{transaction.from.name || 'SmartContract'}</p>
-                            </div>
+                <div className="flex-1 flex items-center space-x-4">
+                    <Users className="text-blue-500" />
+                    <div className="flex-1">
+                        <p className="text-gray-600">Người gửi</p>
+                        <div className="flex justify-between items-center">
+                            <p className="font-semibold">{transaction.from?.name || 'SmartContract'}</p>
                         </div>
                     </div>
-                )}
-                {transaction.to && (
-                    <div className="flex-1 flex items-center space-x-4">
-                        <Users className="text-blue-500" />
-                        <div className="flex-1">
-                            <p className="text-gray-600">Người nhận</p>
-                            <div className="flex justify-between items-center">
-                                <p className="font-semibold">{transaction.to.name || 'SmartContract'}</p>
-                            </div>
+                </div>
+                <div className="flex-1 flex items-center space-x-4">
+                    <Users className="text-blue-500" />
+                    <div className="flex-1">
+                        <p className="text-gray-600">Người nhận</p>
+                        <div className="flex justify-between items-center">
+                            <p className="font-semibold">{transaction.to?.name || 'SmartContract'}</p>
                         </div>
                     </div>
-                )}
+                </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -83,7 +79,7 @@ const TransactionDetailView = ({
                     <div className="flex items-center space-x-3">
                         <div>
                             <p className="text-gray-600">Phí</p>
-                            <p className="font-semibold text-orange-600">
+                            <p className="font-semibold text-[#ff4d4f]">
                                 {formatCurrency(isIncome ? 0 : transaction.fee, true)}
                             </p>
                         </div>
@@ -112,7 +108,7 @@ const TransactionDetailView = ({
                     <div className="flex items-center space-x-3">
                         <div>
                             <p className="text-gray-600">&nbsp;</p>
-                            <p className="font-semibold text-orange-600">
+                            <p className="font-semibold text-[#ff4d4f]">
                                 {formatEth(isIncome ? 0 : transaction.feeEth)}
                             </p>
                         </div>
