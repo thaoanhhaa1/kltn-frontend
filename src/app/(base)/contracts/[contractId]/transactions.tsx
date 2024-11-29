@@ -2,14 +2,14 @@
 
 import HistoryTransaction from '@/app/(base)/user/wallet/history-transaction';
 import useBoolean from '@/hooks/useBoolean';
-import { ITransaction } from '@/interfaces/transaction';
+import { ITransactionDetail } from '@/interfaces/transaction';
 import { getTransactionsByContract } from '@/services/transaction-service';
 import { Button, Drawer, Empty, Flex, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 
 const Transactions = ({ contractId }: { contractId: string }) => {
     const { value, setTrue, setFalse } = useBoolean(false);
-    const [transactions, setTransactions] = useState<Array<ITransaction>>([]);
+    const [transactions, setTransactions] = useState<Array<ITransactionDetail>>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {

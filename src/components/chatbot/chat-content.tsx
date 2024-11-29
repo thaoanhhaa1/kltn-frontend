@@ -5,37 +5,80 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import useBoolean from '@/hooks/useBoolean';
 import { secondsToMinutes } from '@/lib/utils';
 import { chatService } from '@/services/chat-service';
+import { speechToText } from '@/services/fpt-ai-service';
 import { useChatStore } from '@/stores/chatbot-store';
 import { Button, Divider, Flex, Input } from 'antd';
 import { Mic, Pause, Play, Send, StopCircle, X } from 'lucide-react';
 import { ChangeEvent, Fragment, useEffect, useRef, useState } from 'react';
+import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
+import { toast } from 'react-toastify';
 
 const ChatContent = ({ isFullScreen }: { isFullScreen: boolean }) => {
     const { chats, chat, loading, setChat, setLoading, addChat } = useChatStore((state) => state);
     const ref = useRef<HTMLDivElement>(null);
     const isFirst = useRef(true);
-    const { value: isActiveMic, toggle: toggleMic } = useBoolean(false);
-    const { value: isRecord, toggle: toggleRecord, setTrue: record, setFalse: stop } = useBoolean(false);
-    const { value: isPlay, toggle: togglePlay, setTrue: play, setFalse: pause } = useBoolean(false);
+    const { value: isActiveMic, setFalse: inActiveMic, setTrue: activeMic, toggle: toggleMic } = useBoolean(false);
+    const { value: isRecord, setTrue: record, setFalse: stop } = useBoolean(false);
+    const { value: isPlay, setTrue: play, setFalse: pause } = useBoolean(false);
+    const { startRecording, stopRecording, recordingTime, recordingBlob } = useAudioRecorder();
     const [seconds, setSeconds] = useState(0);
-    const secondRef = useRef<NodeJS.Timeout | undefined>();
+    const [canSend, setCanSend] = useState(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    const handleScrollToBottom = () => {
+        if (!ref.current) return;
+
+        const containerElement = ref.current.querySelector('.scroll-area-content');
+        const scrollElement = ref.current.querySelector('div[data-radix-scroll-area-viewport]');
+
+        if (!containerElement || !scrollElement) return;
+
+        isFirst.current = false;
+        scrollElement.scrollTo(0, containerElement?.scrollHeight);
+    };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setChat(e.target.value);
     };
 
+    const handlePause = () => {
+        pause();
+
+        if (audioRef.current) audioRef.current.pause();
+    };
+
     const handleChat = async () => {
+        if (audioRef.current) audioRef.current.pause();
+
         setLoading(true);
 
         try {
-            const res = await chatService({ query: chat });
+            let query = chat.trim();
+
+            if (recordingBlob && canSend) {
+                const result = await speechToText(recordingBlob);
+
+                query = result.hypotheses
+                    .map((hypothesis) => hypothesis.utterance)
+                    .join(' ')
+                    .trim();
+            }
+
+            if (!query) throw new Error('Vui lòng nhập tin nhắn hoặc ghi âm');
+
+            const res = await chatService({ query });
 
             addChat(res);
+            handleScrollToBottom();
         } catch (error) {
             console.log(error);
+
+            toast.error((error as Error).message || 'Có lỗi xảy ra');
         } finally {
             setLoading(false);
             setChat('');
+            handleClickCancelMic();
+            setCanSend(false);
         }
     };
 
@@ -44,41 +87,59 @@ const ChatContent = ({ isFullScreen }: { isFullScreen: boolean }) => {
     };
 
     const handleClickMic = () => {
-        toggleMic();
+        startRecording();
+        activeMic();
         record();
-        secondRef.current = setInterval(() => {
-            setSeconds((prev) => prev + 1);
-        }, 1000);
     };
 
     const handleStopRecord = () => {
+        stopRecording();
         stop();
-        clearInterval(secondRef.current as NodeJS.Timeout);
+        setSeconds(recordingTime);
+        setCanSend(true);
     };
 
     const handleClickCancelMic = () => {
-        toggleMic();
-        setSeconds(0);
+        inActiveMic();
         stop();
-        clearInterval(secondRef.current as NodeJS.Timeout);
+        setSeconds(0);
+        stopRecording();
+        setCanSend(false);
+    };
+
+    const handlePlay = () => {
+        if (!recordingBlob) return;
+
+        play();
+
+        const audioUrl = URL.createObjectURL(recordingBlob);
+        const audioElement = new Audio(audioUrl);
+        audioRef.current = audioElement;
+
+        audioElement.play();
+
+        audioElement.onended = () => {
+            pause();
+        };
+
+        audioElement.onerror = () => {
+            pause();
+        };
+
+        audioElement.onpause = () => {
+            pause();
+        };
+
+        audioElement.ontimeupdate = () => {
+            setSeconds(Math.floor(audioElement.currentTime));
+        };
     };
 
     useEffect(() => {
         console.log('useEffect');
 
-        if (chats.length > 0 && isFirst.current && ref.current) {
-            console.log('scrollTo');
-            console.log([ref.current]);
-
-            const containerElement = ref.current.querySelector('.scroll-area-content');
-            const scrollElement = ref.current.querySelector('div[data-radix-scroll-area-viewport]');
-            console.log('🚀 ~ useEffect ~ scrollElement:', [scrollElement]);
-
-            if (!containerElement || !scrollElement) return;
-            console.log('containerElement?.scrollHeight', containerElement?.scrollHeight);
-
-            isFirst.current = false;
-            scrollElement.scrollTo(0, containerElement?.scrollHeight);
+        if (chats.length > 0 && isFirst.current) {
+            handleScrollToBottom();
         }
     }, [chats.length]);
 
@@ -131,10 +192,20 @@ const ChatContent = ({ isFullScreen }: { isFullScreen: boolean }) => {
                                     />
                                 )) ||
                                     (isPlay && (
-                                        <Button type="primary" icon={<Pause className="w-5 h-5" />} onClick={pause} />
-                                    )) || <Button type="primary" icon={<Play className="w-5 h-5" />} onClick={play} />}
+                                        <Button
+                                            type="primary"
+                                            icon={<Pause className="w-5 h-5" />}
+                                            onClick={handlePause}
+                                        />
+                                    )) || (
+                                        <Button
+                                            type="primary"
+                                            icon={<Play className="w-5 h-5" />}
+                                            onClick={handlePlay}
+                                        />
+                                    )}
                                 <div className="px-2 rounded-full bg-white text-antd-primary">
-                                    {secondsToMinutes(seconds)}
+                                    {secondsToMinutes(recordingTime || seconds)}
                                 </div>
                             </div>
                         </>
@@ -156,7 +227,7 @@ const ChatContent = ({ isFullScreen }: { isFullScreen: boolean }) => {
                     )}
                 </div>
                 <Button
-                    disabled={!chat}
+                    disabled={!chat && !canSend}
                     loading={loading}
                     onClick={handleChat}
                     style={{
@@ -165,6 +236,9 @@ const ChatContent = ({ isFullScreen }: { isFullScreen: boolean }) => {
                     icon={<Send className="w-5 h-5" />}
                 />
             </Flex>
+            <div className="hidden">
+                <AudioRecorder />
+            </div>
         </div>
     );
 };

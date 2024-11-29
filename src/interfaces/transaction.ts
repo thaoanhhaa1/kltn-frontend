@@ -50,3 +50,29 @@ export interface IHistoryTransaction {
     fromId: string | null;
     toId: string | null;
 }
+
+export interface ITransactionDetail {
+    id: number;
+    fromId: string;
+    toId: string;
+    contractId: string;
+    amount: number;
+    amountEth: number;
+    fee: number;
+    feeEth: number;
+    transactionHash: string;
+    status: TransactionStatus;
+    title: string;
+    type: TransactionType;
+    description: string;
+    endDate: string;
+    createdAt: Date;
+    updatedAt: Date;
+    from: IUser;
+    to: IUser;
+}
+
+export interface IUser {
+    userId: string;
+    name: string;
+}

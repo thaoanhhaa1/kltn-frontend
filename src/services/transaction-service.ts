@@ -1,5 +1,5 @@
 import { ITable } from '@/interfaces/table';
-import { IDepositTransaction, ITransaction, ITransactionType } from '@/interfaces/transaction';
+import { IDepositTransaction, ITransaction, ITransactionDetail, ITransactionType } from '@/interfaces/transaction';
 import http from '@/lib/http';
 
 export const getTransactionsByRenter = (accessToken: string) => {
@@ -19,9 +19,9 @@ export const rentPayment = (data: IDepositTransaction) => {
 };
 
 export const getHistoryTransactions = (type: ITransactionType) => {
-    return http.get<ITable<ITransaction>>(`/contract-service/transactions?type=${type}`);
+    return http.get<ITable<ITransactionDetail>>(`/contract-service/transactions?type=${type}`);
 };
 
 export const getTransactionsByContract = (contractId: string) => {
-    return http.get<Array<ITransaction>>(`/contract-service/contracts/${contractId}/transactions`);
+    return http.get<Array<ITransactionDetail>>(`/contract-service/contracts/${contractId}/transactions`);
 };

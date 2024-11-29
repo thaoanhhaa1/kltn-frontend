@@ -25,6 +25,7 @@ export function Notifications() {
         readAllNotifications: readAllNotificationsStore,
     } = useNotificationStore();
     const [readAllLoading] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const fetchNotifications = useCallback(
         async (pagination: IPagination) => {
@@ -44,12 +45,17 @@ export function Notifications() {
     );
 
     const handleToggleNotifications = (open: boolean) => {
+        setOpen(open);
         if (!open) {
             setReadNotificationsIds([]);
             updateNotificationStatus(readNotificationsIds, 'READ').then();
 
             return;
         }
+    };
+
+    const close = () => {
+        setOpen(false);
     };
 
     const handleReadAllNotifications = () => {
@@ -69,7 +75,7 @@ export function Notifications() {
     }, [count, fetchNotifications, setCount]);
 
     return (
-        <DropdownMenu onOpenChange={handleToggleNotifications}>
+        <DropdownMenu open={open} onOpenChange={handleToggleNotifications}>
             <DropdownMenuTrigger asChild>
                 <Badge count={count}>
                     <Button variant="outline" size="icon">
@@ -108,7 +114,7 @@ export function Notifications() {
                     height={300}
                 >
                     {notifications.data.map((notification) => (
-                        <Notification key={notification.id} notification={notification} />
+                        <Notification key={notification.id} notification={notification} onClose={close} />
                     ))}
                 </InfiniteScroll>
                 {!loading && !notifications.data.length && <Empty description="Không có thông báo nào" />}
