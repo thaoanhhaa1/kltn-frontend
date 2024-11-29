@@ -3,7 +3,11 @@ import { IGenerateContractRequest, IGenerateContractResponse, IRentalRequest } f
 import { ITable } from '@/interfaces/table';
 import http from '@/lib/http';
 import { convertObjectToParams } from '@/lib/utils';
-import { ICreateRentalRequest, IUpdateRentalRequestStatus } from '@/schemas/rental-request.schema';
+import {
+    ICreateRentalRequest,
+    IRenterGetAllRentalRequests,
+    IUpdateRentalRequestStatus,
+} from '@/schemas/rental-request.schema';
 
 const ENDPOINT = '/contract-service/rental-requests';
 
@@ -11,11 +15,9 @@ export const createRentalRequest = (params: ICreateRentalRequest) => {
     return http.post(`${ENDPOINT}`, params);
 };
 
-export const renterGetAllRentalRequests = (accessToken: string) => {
+export const renterGetAllRentalRequests = (data: IRenterGetAllRentalRequests) => {
     return http.get<ITable<IRentalRequest>>(`${ENDPOINT}/renter`, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
+        params: data,
     });
 };
 

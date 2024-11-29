@@ -90,6 +90,14 @@ export const getRentalRequestStatusText = (status: RentalRequestStatus) => {
     return 'Không xác định';
 };
 
+export const getRentalRequestStatusCode = (status: string) => {
+    if (status === 'Chờ xác nhận') return 'PENDING';
+    if (status === 'Đã xác nhận') return 'APPROVED';
+    if (status === 'Đã từ chối') return 'REJECTED';
+    if (status === 'Đã hủy') return 'CANCELLED';
+    return undefined;
+};
+
 export const getContractColor = (status: ContractStatus) => {
     if (status === 'WAITING') return 'processing';
     if (status === 'DEPOSITED') return 'warning';
