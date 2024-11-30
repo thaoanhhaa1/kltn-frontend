@@ -1,15 +1,18 @@
+import RejectReasonsView from '@/app/owner/properties/[propertyId]/reject-reasons-view';
 import UpdatePropertyBreadcrumb from '@/app/owner/properties/[propertyId]/update-property-breadcrumb';
 import UpdatePropertyForm from '@/app/owner/properties/[propertyId]/update-property-form';
 import AntButtonLink from '@/components/button/ant-button-link';
 import { IAttributeCbb } from '@/interfaces/attribute';
 import { IProperty } from '@/interfaces/property';
 import { IPropertyType } from '@/interfaces/property-type';
+import { IRejectReason } from '@/interfaces/reject-reason';
 import { OWNER_PROPERTIES } from '@/path';
 import { getCities, getDistricts, getWards, IAddress } from '@/services/address-service';
 import { getAllAttributesCbb } from '@/services/attribute-service';
 import { getPropertyById } from '@/services/property-service';
 import { getPropertyTypes } from '@/services/property-type';
-import { Result } from 'antd';
+import { getRejectReasonsByPropertyIdService } from '@/services/reject-reason-service';
+import { Flex, Result } from 'antd';
 import { cookies } from 'next/headers';
 
 const EditPropertyPage = async ({ params: { propertyId } }: { params: { propertyId: string } }) => {
@@ -21,12 +24,14 @@ const EditPropertyPage = async ({ params: { propertyId } }: { params: { property
     let wards: IAddress[] = [];
     let attributes: IAttributeCbb[] = [];
     let propertyTypes: IPropertyType[] = [];
+    let rejectReasons: IRejectReason[] = [];
 
     try {
-        [property, attributes, propertyTypes] = await Promise.all([
+        [property, attributes, propertyTypes, rejectReasons] = await Promise.all([
             getPropertyById(propertyId, accessToken!),
             getAllAttributesCbb(),
             getPropertyTypes(),
+            getRejectReasonsByPropertyIdService(propertyId, accessToken!),
         ]);
 
         if (property) {
@@ -60,9 +65,12 @@ const EditPropertyPage = async ({ params: { propertyId } }: { params: { property
     return (
         <div>
             <UpdatePropertyBreadcrumb />
-            <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-                Cập nhật bất động sản
-            </h2>
+            <Flex justify="space-between" align="center" gap={12}>
+                <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+                    Cập nhật bất động sản
+                </h2>
+                <RejectReasonsView rejectReasons={rejectReasons} />
+            </Flex>
             <UpdatePropertyForm
                 property={property}
                 cities={cities}

@@ -77,3 +77,11 @@ export const updateProperty = (propertyId: string, formData: FormData) => {
 export const getAllPropertiesCbbForOwner = () => {
     return http.get<IProperty[]>('/estate-manager-service/properties/owner/cbb');
 };
+
+export const getNotDeletedPropertyService = (propertyId: string, accessToken: string) => {
+    return http.get<IProperty>(`/estate-manager-service/properties/${propertyId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+};

@@ -1,12 +1,14 @@
 'use client';
 
 import RejectPropertyModal, { IRejectInput } from '@/app/(admin)/dashboard/properties/reject-property-modal';
+import AntButtonLink from '@/components/button/ant-button-link';
 import TablePagination from '@/components/table-pagination';
 import { initDataTable } from '@/constants/init-data';
 import usePagination from '@/hooks/usePagination';
 import { IProperty, PropertyStatus } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
 import { formatCurrency, formatDateTime, getPropertyStatusColor, getPropertyStatusText, toSkipTake } from '@/lib/utils';
+import { DASHBOARD_PROPERTIES } from '@/path';
 import { getAllNotDeletedProperties, updateApprovalProperties } from '@/services/property-service';
 import { Button, Flex, Space, TableProps, Tag, Tooltip } from 'antd';
 import { Check, Eye, Filter, X } from 'lucide-react';
@@ -160,7 +162,11 @@ const PropertiesTable = () => {
                 width: 110,
                 render: (property: IProperty) => (
                     <Space>
-                        <Button type="text" icon={<Eye className="w-5 h-5" />} />
+                        <AntButtonLink
+                            href={`${DASHBOARD_PROPERTIES}/${property.propertyId}`}
+                            type="text"
+                            icon={<Eye className="w-5 h-5" />}
+                        />
                         <Button
                             disabled={DISABLED_APPROVE_STATUS.includes(property.status)}
                             type="link"
