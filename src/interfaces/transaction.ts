@@ -76,3 +76,9 @@ export interface IUser {
     userId: string;
     name: string;
 }
+
+export interface IGetHistoryTransactions {
+    type: ITransactionType;
+    take: number;
+    skip: number;
+}
