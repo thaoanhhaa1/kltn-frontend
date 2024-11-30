@@ -1,4 +1,5 @@
 import { ITable } from '@/interfaces/table';
+import { getRentalRequestStatusText } from '@/lib/utils';
 
 export const initDataTable = {
     data: [],
@@ -92,6 +93,21 @@ export const statusReportOwnerOptions = [
     {
         label: 'Đã xử lý',
         value: 'resolved',
+    },
+];
+
+export const rentalRequestStatusOptions = [
+    {
+        label: getRentalRequestStatusText('PENDING'),
+        value: 'PENDING',
+    },
+    {
+        label: getRentalRequestStatusText('APPROVED'),
+        value: 'APPROVED',
+    },
+    {
+        label: getRentalRequestStatusText('REJECTED'),
+        value: 'REJECTED',
     },
 ];
 

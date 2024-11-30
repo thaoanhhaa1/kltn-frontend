@@ -1,6 +1,7 @@
 import { IPagination } from '@/interfaces/pagination';
 import { IGenerateContractRequest, IGenerateContractResponse, IRentalRequest } from '@/interfaces/rentalRequest';
 import { ITable } from '@/interfaces/table';
+import { IUser } from '@/interfaces/user';
 import http from '@/lib/http';
 import { convertObjectToParams } from '@/lib/utils';
 import {
@@ -37,4 +38,8 @@ export const ownerGetAllRentalRequests = (params: IPagination) => {
 
 export const generateContract = (params: IGenerateContractRequest) => {
     return http.post<IGenerateContractResponse>(`${ENDPOINT}/generate-contract`, params);
+};
+
+export const ownerGetRenterRequests = () => {
+    return http.get<IUser[]>(`${ENDPOINT}/owner/renter/cbb`);
 };

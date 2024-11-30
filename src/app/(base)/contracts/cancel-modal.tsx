@@ -27,12 +27,24 @@ const CancelModal = ({
     const [loading, setLoading] = useState(false);
     const { handleSign } = useSignMessageCustom();
 
-    const handleOk = async () => {
-        if (!contract?.contractId) return;
-
+    const validate = async () => {
         try {
             await form.validateFields();
 
+            return true;
+        } catch (error) {
+            console.error(error);
+        }
+
+        return false;
+    };
+
+    const handleOk = async () => {
+        if (!contract?.contractId) return;
+
+        if (!(await validate())) return;
+
+        try {
             const values = form.getFieldsValue();
 
             setLoading(true);
