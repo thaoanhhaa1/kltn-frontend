@@ -8,7 +8,7 @@ import { IPagination } from '@/interfaces/pagination';
 import { IAddress, PropertyStatus } from '@/interfaces/property';
 import { RentalRequestStatus } from '@/interfaces/rentalRequest';
 import { ReportPriority, ReportStatus, ReportType } from '@/interfaces/report';
-import { ITransaction, TransactionStatus, TransactionType } from '@/interfaces/transaction';
+import { TransactionStatus, TransactionType } from '@/interfaces/transaction';
 import { IBaseUserEmbed } from '@/interfaces/user';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
@@ -142,6 +142,15 @@ export const getTransactionStatusText = (status: TransactionStatus) => {
     if (status === 'OVERDUE') return 'Quá hạn';
     if (status === 'CANCELLED') return 'Đã hủy';
     return 'Không xác định';
+};
+
+export const getTransactionStatusCode = (status: string): TransactionStatus | undefined => {
+    if (status === 'Chờ thanh toán') return 'PENDING';
+    if (status === 'Thành công') return 'COMPLETED';
+    if (status === 'Thất bại') return 'FAILED';
+    if (status === 'Quá hạn') return 'OVERDUE';
+    if (status === 'Đã hủy') return 'CANCELLED';
+    return undefined;
 };
 
 export const getTransactionTypeText = (type: TransactionType) => {

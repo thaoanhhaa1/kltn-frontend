@@ -1,5 +1,5 @@
 import { ITable } from '@/interfaces/table';
-import { getPropertyStatusText, getRentalRequestStatusText } from '@/lib/utils';
+import { getContractStatusText, getPropertyStatusText, getRentalRequestStatusText } from '@/lib/utils';
 
 export const initDataTable = {
     data: [],
@@ -127,6 +127,49 @@ export const propertyStatusOptions = [
     {
         label: getPropertyStatusText('UNAVAILABLE'),
         value: 'UNAVAILABLE',
+    },
+];
+
+export const contractStatusOptions = [
+    {
+        label: getContractStatusText('WAITING'),
+        value: 'WAITING',
+    },
+    {
+        label: getContractStatusText('DEPOSITED'),
+        value: 'DEPOSITED',
+    },
+    {
+        label: getContractStatusText('ONGOING'),
+        value: 'ONGOING',
+    },
+    {
+        label: getContractStatusText('ENDED'),
+        value: 'ENDED',
+    },
+    {
+        label: getContractStatusText('OVERDUE'),
+        value: 'OVERDUE',
+    },
+    {
+        label: getContractStatusText('CANCELLED'),
+        value: 'CANCELLED',
+    },
+    {
+        label: getContractStatusText('PENDING_CANCELLATION'),
+        value: 'PENDING_CANCELLATION',
+    },
+    {
+        label: getContractStatusText('UNILATERAL_CANCELLATION'),
+        value: 'UNILATERAL_CANCELLATION',
+    },
+    {
+        label: getContractStatusText('APPROVED_CANCELLATION'),
+        value: 'APPROVED_CANCELLATION',
+    },
+    {
+        label: getContractStatusText('REJECTED_CANCELLATION'),
+        value: 'REJECTED_CANCELLATION',
     },
 ];
 

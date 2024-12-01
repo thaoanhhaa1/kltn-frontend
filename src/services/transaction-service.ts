@@ -4,13 +4,14 @@ import {
     IGetHistoryTransactions,
     ITransaction,
     ITransactionDetail,
+    TransactionStatus,
 } from '@/interfaces/transaction';
 import http from '@/lib/http';
 
-export const getTransactionsByRenter = (accessToken: string) => {
+export const getTransactionsByRenter = (status?: TransactionStatus) => {
     return http.get<Array<ITransaction>>('/contract-service/transactions/renter', {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
+        params: {
+            status,
         },
     });
 };
