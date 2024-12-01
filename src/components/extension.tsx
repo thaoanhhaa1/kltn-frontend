@@ -7,7 +7,8 @@ import { Button, DatePicker, Form, Modal } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import TextArea from 'antd/es/input/TextArea';
 import dayjs from 'dayjs';
-import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { use, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
 const Extension = ({
@@ -25,6 +26,7 @@ const Extension = ({
     const [form] = useForm();
     const [loading, setLoading] = useState(false);
     const typeText = useMemo(() => getExtensionRequestTypeText(type).toLowerCase(), [type]);
+    const router = useRouter();
 
     const handleOpenModal = () => setOpen(true);
     const handleCloseModal = () => setOpen(false);
@@ -57,6 +59,7 @@ const Extension = ({
 
             toast.success(`Gửi yêu cầu ${typeText} thành công`);
             setOpen(false);
+            router.refresh();
         } catch (error: any) {
             console.error(error);
             toast.error(error.message || `${typeText} thất bại`);
