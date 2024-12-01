@@ -3,6 +3,7 @@ import {
     ApprovalStatus,
     ICountAvailableProperties,
     IFiterProperty,
+    IGetNotDeletedProperties,
     IProperty,
     PropertyStatus,
     VisibleStatus,
@@ -11,13 +12,10 @@ import { ITable } from '@/interfaces/table';
 import http from '@/lib/http';
 import { convertObjectToParams } from '@/lib/utils';
 
-export const getAllNotDeletedProperties = async (params: IPagination): Promise<ITable<IProperty>> => {
-    const search = new URLSearchParams({
-        skip: String(params.skip),
-        take: String(params.take),
-    }).toString();
-
-    return http.get<ITable<IProperty>>(`/estate-manager-service/properties/all?${search}`);
+export const getAllNotDeletedProperties = async (params: IGetNotDeletedProperties): Promise<ITable<IProperty>> => {
+    return http.get<ITable<IProperty>>(`/estate-manager-service/properties/all`, {
+        params,
+    });
 };
 
 export const getAllNotDeletedPropertiesByOwnerId = async (
@@ -76,4 +74,12 @@ export const updateProperty = (propertyId: string, formData: FormData) => {
 
 export const getAllPropertiesCbbForOwner = () => {
     return http.get<IProperty[]>('/estate-manager-service/properties/owner/cbb');
+};
+
+export const getNotDeletedPropertyService = (propertyId: string, accessToken: string) => {
+    return http.get<IProperty>(`/estate-manager-service/properties/${propertyId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
 };

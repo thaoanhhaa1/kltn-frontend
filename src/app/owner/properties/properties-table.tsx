@@ -3,12 +3,14 @@
 import { IAddressName } from '@/app/owner/properties/add/add-property-form';
 import ButtonLink from '@/components/button/button-link';
 import PriceInput from '@/components/input/price-input';
+import RejectReasons from '@/components/reject-reasons/reject-reasons';
 import TableFilter from '@/components/table-filter';
 import TablePagination from '@/components/table-pagination';
 import { initDataTable } from '@/constants/init-data';
 import { selectProps } from '@/constants/init-props';
 import usePagination from '@/hooks/usePagination';
 import { IFiterProperty, IProperty, PropertyStatus } from '@/interfaces/property';
+import { IRejectReason } from '@/interfaces/reject-reason';
 import { ITable } from '@/interfaces/table';
 import { formatCurrency, formatDateTime, getPropertyStatusColor, getPropertyStatusText, toSkipTake } from '@/lib/utils';
 import { getCities, getDistricts, getWards, IAddress } from '@/services/address-service';
@@ -18,11 +20,12 @@ import {
     softDeleteProperty,
     updateVisibleProperties,
 } from '@/services/property-service';
+import { getRejectReasonsByPropertyId } from '@/services/reject-reason-service';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Flex, Form, Input, Popconfirm, Select, Space, TableProps, Tag, Tooltip } from 'antd';
+import { Button, Col, Flex, Form, Input, Modal, Popconfirm, Select, Space, TableProps, Tag, Tooltip } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { BaseOptionType, DefaultOptionType } from 'antd/es/select';
-import { Eye, Filter, Trash } from 'lucide-react';
+import { Eye, FileSpreadsheetIcon, Filter, Trash } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -47,6 +50,9 @@ const PropertiesTable = () => {
     const [statuses, setStatuses] = useState<(BaseOptionType | DefaultOptionType)[]>([]);
     const [statusLoading, setStatusLoading] = useState<boolean>(false);
     const [activeFilter, setActiveFilter] = useState<boolean>(false);
+    const [propertySelected, setPropertySelected] = useState<IProperty | null>(null);
+    const [rejectReasons, setRejectReasons] = useState<IRejectReason[]>([]);
+    const [rejectReasonLoading, setRejectReasonLoading] = useState<boolean>(false);
 
     const { page, pageSize } = usePagination();
 
@@ -94,6 +100,10 @@ const PropertiesTable = () => {
         },
         [getProperties, pageSize],
     );
+
+    const handleClickShowRejectReason = useCallback((property: IProperty) => {
+        setPropertySelected(property);
+    }, []);
 
     const columns: TableProps<IProperty>['columns'] = useMemo(
         () => [
@@ -184,6 +194,12 @@ const PropertiesTable = () => {
                 width: 110,
                 render: (property: IProperty) => (
                     <Space>
+                        <Button
+                            icon={<FileSpreadsheetIcon className="w-5 h-5" />}
+                            color="default"
+                            variant="text"
+                            onClick={() => handleClickShowRejectReason(property)}
+                        />
                         <ButtonLink href={`/owner/properties/${property.propertyId}`}>
                             <Eye className="w-5 h-5" />
                         </ButtonLink>
@@ -207,7 +223,7 @@ const PropertiesTable = () => {
                 ),
             },
         ],
-        [handleSoftDeleteProperties, page, pageSize],
+        [handleClickShowRejectReason, handleSoftDeleteProperties, page, pageSize],
     );
 
     const getCheckboxProps = useCallback((record: IProperty) => {
@@ -345,6 +361,25 @@ const PropertiesTable = () => {
 
     const handleToggleFilter = () => setActiveFilter((prev) => !prev);
 
+    const loadRejectReasons = useCallback(async (propertyId: string) => {
+        setRejectReasonLoading(true);
+
+        try {
+            const rejectReasons = await getRejectReasonsByPropertyId(propertyId);
+
+            setRejectReasons(rejectReasons);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setRejectReasonLoading(false);
+        }
+    }, []);
+
+    const handleCancel = () => {
+        setPropertySelected(null);
+        setRejectReasons([]);
+    };
+
     useEffect(() => {
         const fetchCities = async () => {
             setCityLoading(true);
@@ -382,6 +417,14 @@ const PropertiesTable = () => {
             pageSize,
         });
     }, [getProperties, page, pageSize]);
+
+    useEffect(() => {
+        if (propertySelected) {
+            loadRejectReasons(propertySelected.propertyId);
+        } else {
+            setRejectReasons([]);
+        }
+    }, [loadRejectReasons, propertySelected]);
 
     return (
         <>
@@ -485,6 +528,9 @@ const PropertiesTable = () => {
                     onChange: setSelectedRowKeys,
                 }}
             />
+            <Modal title="Lý do từ chối" open={Boolean(propertySelected)} onCancel={handleCancel} footer={null}>
+                <RejectReasons loading={rejectReasonLoading} rejectReasons={rejectReasons} />
+            </Modal>
         </>
     );
 };

@@ -1,10 +1,7 @@
 import Header from '@/app/(base)/payments/header';
-import Payment from '@/app/(base)/payments/payment';
+import Payments from '@/app/(base)/payments/payments';
 import Forbidden from '@/components/forbidden';
 import { IPayloadJWT } from '@/interfaces/jwt';
-import { ITransaction } from '@/interfaces/transaction';
-import { getTransactionsByRenter } from '@/services/transaction-service';
-import { Col, Empty, Row } from 'antd';
 import { jwtDecode } from 'jwt-decode';
 import { cookies } from 'next/headers';
 
@@ -21,28 +18,13 @@ const PaymentsPage = async () => {
             return <Forbidden />;
         }
     } catch (error) {
-        return <div>Unauthorized</div>;
-    }
-
-    let transactions: Array<ITransaction> = [];
-
-    try {
-        transactions = await getTransactionsByRenter(accessToken);
-    } catch (error) {
-        console.error(error);
+        return <Forbidden />;
     }
 
     return (
         <div className="mt-5 pb-5">
             <Header />
-            <Row gutter={[12, 12]}>
-                {transactions.map((transaction) => (
-                    <Col key={transaction.id} span={12}>
-                        <Payment transaction={transaction} />
-                    </Col>
-                ))}
-                {transactions.length === 0 && <Empty description="Không có giao dịch nào" />}
-            </Row>
+            <Payments />
         </div>
     );
 };

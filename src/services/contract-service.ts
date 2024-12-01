@@ -4,9 +4,12 @@ import {
     ICreateContractRequest,
     IGenerateContract,
     IGenerateContractRes,
+    IGetContractsByOwner,
+    IGetContractsByRenter,
 } from '@/interfaces/contract';
-import { IPagination } from '@/interfaces/pagination';
+import { IProperty } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
+import { IBaseUser } from '@/interfaces/user';
 import http from '@/lib/http';
 
 const ENDPOINT = '/contract-service/contracts';
@@ -23,15 +26,15 @@ export const createContract = (data: ICreateContractRequest) => {
     return http.post(ENDPOINT, data);
 };
 
-export const getContractsByRenter = (pagination: IPagination) => {
+export const getContractsByRenter = (data: IGetContractsByRenter) => {
     return http.get<ITable<IContract>>(`${ENDPOINT}/renter`, {
-        params: pagination,
+        params: data,
     });
 };
 
-export const getContractsByOwner = (pagination: IPagination) => {
+export const getContractsByOwner = (data: IGetContractsByOwner) => {
     return http.get<ITable<IContract>>(`${ENDPOINT}/owner`, {
-        params: pagination,
+        params: data,
     });
 };
 
@@ -51,4 +54,20 @@ export const getContractDetail = (contractId: string, token: string) => {
 
 export const generateContractService = (data: IGenerateContract) => {
     return http.post<IGenerateContractRes>(`${ENDPOINT}/generate`, data);
+};
+
+export const getPropertiesByOwnerService = () => {
+    return http.get<IProperty[]>(`${ENDPOINT}/owner/property/cbb`);
+};
+
+export const getUsersByOwnerService = () => {
+    return http.get<IBaseUser[]>(`${ENDPOINT}/owner/user/cbb`);
+};
+
+export const getPropertiesByRenterService = () => {
+    return http.get<IProperty[]>(`${ENDPOINT}/renter/property/cbb`);
+};
+
+export const getUsersByRenterService = () => {
+    return http.get<IBaseUser[]>(`${ENDPOINT}/renter/user/cbb`);
 };

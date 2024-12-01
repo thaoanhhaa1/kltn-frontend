@@ -2,7 +2,7 @@
 
 import { Card } from '@/components/ui/card';
 import { IRentalRequest } from '@/interfaces/rentalRequest';
-import { formatCurrency, formatDate, getRentalRequestColor } from '@/lib/utils';
+import { formatCurrency, formatDate, getRentalRequestColor, getRentalRequestStatusText } from '@/lib/utils';
 import { renterUpdateRentalRequestStatus } from '@/services/rental-request-service';
 import { Button, Flex, Tag, Typography } from 'antd';
 import Image from 'next/image';
@@ -67,13 +67,7 @@ const RentalRequest = ({ rentalRequest }: { rentalRequest: IRentalRequest }) => 
                     </Typography.Text>
                     <Flex className="mt-2" align="flex-end" justify="space-between" flex={1}>
                         <Tag color={getRentalRequestColor(rentalRequest.status)}>
-                            {rentalRequest.status === 'PENDING'
-                                ? 'Đang chờ'
-                                : rentalRequest.status === 'APPROVED'
-                                ? 'Đã duyệt'
-                                : rentalRequest.status === 'REJECTED'
-                                ? 'Đã từ chối'
-                                : 'Đã hủy'}
+                            {getRentalRequestStatusText(rentalRequest.status)}
                         </Tag>
                         {rentalRequest.status === 'PENDING' && (
                             <Button danger ghost onClick={handleCanCelRequest}>

@@ -1,11 +1,17 @@
 import { ITable } from '@/interfaces/table';
-import { IDepositTransaction, ITransaction, ITransactionDetail, ITransactionType } from '@/interfaces/transaction';
+import {
+    IDepositTransaction,
+    IGetHistoryTransactions,
+    ITransaction,
+    ITransactionDetail,
+    TransactionStatus,
+} from '@/interfaces/transaction';
 import http from '@/lib/http';
 
-export const getTransactionsByRenter = (accessToken: string) => {
+export const getTransactionsByRenter = (status?: TransactionStatus) => {
     return http.get<Array<ITransaction>>('/contract-service/transactions/renter', {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
+        params: {
+            status,
         },
     });
 };
@@ -18,8 +24,10 @@ export const rentPayment = (data: IDepositTransaction) => {
     return http.post('/contract-service/contracts/pay', data);
 };
 
-export const getHistoryTransactions = (type: ITransactionType) => {
-    return http.get<ITable<ITransactionDetail>>(`/contract-service/transactions?type=${type}`);
+export const getHistoryTransactions = (data: IGetHistoryTransactions) => {
+    return http.get<ITable<ITransactionDetail>>(`/contract-service/transactions`, {
+        params: data,
+    });
 };
 
 export const getTransactionsByContract = (contractId: string) => {

@@ -2,12 +2,14 @@
 
 import { IAddressName, IPropertyForm } from '@/app/owner/properties/add/add-property-form';
 import { IViewPort } from '@/app/owner/properties/add/basic-info-form';
+import ErrorComponent from '@/components/error-component';
 import GoongMap from '@/components/goong-map';
 import useDebounce from '@/hooks/useDebounce';
 import { getDistricts, getWards, IAddress } from '@/services/address-service';
 import { addressToLngLatService, lngLatToAddressService } from '@/services/goong-service';
 import { Button, Col, Form, FormInstance, Input, Row, Select, Spin } from 'antd';
 import { LocateIcon } from 'lucide-react';
+import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
 import { Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -287,7 +289,7 @@ const BasicInfoForm = ({
     }, [streetDebounce]);
 
     return (
-        <div>
+        <ErrorBoundary errorComponent={ErrorComponent}>
             <Row gutter={[12, 12]}>
                 <Col span={8}>
                     <Row gutter={12}>
@@ -385,7 +387,7 @@ const BasicInfoForm = ({
                     </div>
                 </Col>
             </Row>
-        </div>
+        </ErrorBoundary>
     );
 };
 

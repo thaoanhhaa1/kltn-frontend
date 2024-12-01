@@ -46,3 +46,9 @@ export interface IUpdateRentalRequestStatus {
     requestId: string;
     status: Extract<RentalRequestStatus, 'APPROVED' | 'REJECTED' | 'CANCELLED'>;
 }
+
+export interface IRenterGetAllRentalRequests {
+    skip: number;
+    take: number;
+    status?: RentalRequestStatus;
+}

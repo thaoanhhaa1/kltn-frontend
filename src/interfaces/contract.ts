@@ -1,4 +1,5 @@
 import { IContractCancelRequest } from '@/interfaces/contract-cancel-request';
+import { IPagination } from '@/interfaces/pagination';
 import { IProperty } from '@/interfaces/property';
 import { IBaseUser } from '@/interfaces/user';
 
@@ -70,3 +71,22 @@ export interface IGenerateContractRes {
     monthlyRent: number;
     depositAmount: number;
 }
+
+export type IGetContractsTable = IPagination & {
+    contractId?: string;
+    title?: string;
+    startDate?: string;
+    endDate?: string;
+    monthlyRent?: number;
+    depositAmount?: number;
+    status?: ContractStatus;
+    propertyId?: string;
+};
+
+export type IGetContractsByOwner = IGetContractsTable & {
+    renterId?: string;
+};
+
+export type IGetContractsByRenter = IGetContractsTable & {
+    ownerId?: string;
+};

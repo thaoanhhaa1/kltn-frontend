@@ -11,7 +11,6 @@ import ExtensionRequests from '@/components/extension-request/extension-requests
 import Forbidden from '@/components/forbidden';
 import Review from '@/components/review/review';
 import Title from '@/components/title';
-import { CardContent, CardHeader } from '@/components/ui/card';
 import { IContractCancelRequestDetail } from '@/interfaces/contract-cancel-request';
 import { IExtensionRequest } from '@/interfaces/contract-extension-request';
 import { IReview } from '@/interfaces/review';
@@ -29,7 +28,7 @@ import { getReviewByContractId } from '@/services/review-service';
 import { getMe } from '@/services/user-service';
 import { Button, Card, Col, Empty, Flex, Result, Row, Tag } from 'antd';
 import dayjs from 'dayjs';
-import { CalendarIcon, Mail, MapPin, MessageCircle } from 'lucide-react';
+import { CalendarIcon, MapPin, MessageCircle } from 'lucide-react';
 import { cookies } from 'next/headers';
 
 export default async function ContractDetails({ params: { contractId } }: { params: { contractId: string } }) {
@@ -105,44 +104,35 @@ export default async function ContractDetails({ params: { contractId } }: { para
                 <Col span={12}>
                     <Flex vertical gap={12}>
                         <Card>
-                            <CardHeader>
+                            <Flex vertical gap={24}>
                                 <Title level={3}>{isOwner ? 'Thông tin người thuê' : 'Thông tin chủ nhà'}</Title>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex items-center space-x-4 mb-4">
-                                    <AvatarWithName avatar={otherUser.avatar || ''} name={otherUser.name} />
-                                    <div>
-                                        <Title level={3}>{otherUser.name}</Title>
-                                        <p className="text-muted-foreground">{otherUser.email}</p>
-                                        <p className="text-muted-foreground">{otherUser.phoneNumber}</p>
+                                <Flex gap={8} align="center">
+                                    <div className="flex items-center space-x-4 flex-1">
+                                        <AvatarWithName avatar={otherUser.avatar || ''} name={otherUser.name} />
+                                        <div>
+                                            <Title level={3}>{otherUser.name}</Title>
+                                            <p className="text-muted-foreground">{otherUser.email}</p>
+                                            <p className="text-muted-foreground">{otherUser.phoneNumber}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <Button type="default" icon={<Mail className="w-5 h-5" />}>
-                                        Gửi mail
-                                    </Button>
                                     <Button type="default" icon={<MessageCircle className="w-5 h-5" />}>
                                         Nhắn tin
                                     </Button>
-                                </div>
-                            </CardContent>
+                                </Flex>
+                            </Flex>
                         </Card>
                         <Card className="col-span-2">
-                            <CardHeader>
+                            <Flex vertical gap={24}>
                                 <Title level={3}>Yêu cầu huỷ hợp đồng</Title>
-                            </CardHeader>
-                            <CardContent>
                                 <CancellationRequest
                                     cancelRequest={notHandledRequest}
                                     cancelRequestHandled={handledRequests}
                                 />
-                            </CardContent>
+                            </Flex>
                         </Card>
                         <Card>
-                            <CardHeader>
+                            <Flex vertical gap={24}>
                                 <Title level={3}>Các ngày quan trọng</Title>
-                            </CardHeader>
-                            <CardContent>
                                 <ul className="space-y-2">
                                     <li className="flex items-center">
                                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -159,17 +149,15 @@ export default async function ContractDetails({ params: { contractId } }: { para
                                         </span>
                                     </li>
                                 </ul>
-                            </CardContent>
+                            </Flex>
                         </Card>
                     </Flex>
                 </Col>
                 <Col span={12}>
                     <Flex vertical gap={12}>
                         <Card>
-                            <CardHeader>
+                            <Flex vertical gap={24}>
                                 <Title level={3}>Thông tin bất động sản</Title>
-                            </CardHeader>
-                            <CardContent>
                                 <div className="space-y-2">
                                     <p className="flex items-center">
                                         <MapPin className="mr-2 h-4 w-4" /> {formatAddress(contract.property.address)}
@@ -183,13 +171,11 @@ export default async function ContractDetails({ params: { contractId } }: { para
                                         </p>
                                     ))}
                                 </div>
-                            </CardContent>
+                            </Flex>
                         </Card>
                         <Card>
-                            <CardHeader>
+                            <Flex vertical gap={24}>
                                 <Title level={3}>Thông tin hợp đồng</Title>
-                            </CardHeader>
-                            <CardContent>
                                 <div>
                                     <p>
                                         <strong>Ngày bắt đầu thuê:</strong> {formatDate(contract.startDate)}
@@ -204,34 +190,28 @@ export default async function ContractDetails({ params: { contractId } }: { para
                                         <strong>Tiền cọc:</strong> {formatCurrency(contract.depositAmount, true)}
                                     </p>
                                 </div>
-                            </CardContent>
+                            </Flex>
                         </Card>
                         <Card className="col-span-2">
-                            <CardHeader className="pb-0">
+                            <Flex vertical gap={24}>
                                 <Title level={3}>Yêu cầu gia hạn</Title>
-                            </CardHeader>
-                            <CardContent>
                                 <ExtensionRequests isOwner={isOwner} extensionRequests={extensionRequests} />
-                            </CardContent>
+                            </Flex>
                         </Card>
                     </Flex>
                 </Col>
                 <Col span={24}>
                     <Card className="col-span-2">
-                        <CardHeader className="pb-0">
+                        <Flex vertical gap={24}>
                             <Title level={3}>Báo cáo sự cố & vi phạm</Title>
-                        </CardHeader>
-                        <CardContent>
                             <Report isAdmin={isAdmin} isOwner={isOwner} isRenter={isRenter} contractId={contractId} />
-                        </CardContent>
+                        </Flex>
                     </Card>
                 </Col>
                 <Col span={24}>
                     <Card className="col-span-2">
-                        <CardHeader className="pb-0">
+                        <Flex vertical gap={24}>
                             <Title level={3}>Đánh giá</Title>
-                        </CardHeader>
-                        <CardContent>
                             {review === null && <Empty description="Chưa có đánh giá" />}
                             {(contract.status === 'ENDED' || contract.status === 'CANCELLED') && (
                                 <Review
@@ -242,7 +222,7 @@ export default async function ContractDetails({ params: { contractId } }: { para
                                     isAddReview
                                 />
                             )}
-                        </CardContent>
+                        </Flex>
                     </Card>
                 </Col>
             </Row>

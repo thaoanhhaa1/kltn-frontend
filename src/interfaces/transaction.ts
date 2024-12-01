@@ -68,11 +68,17 @@ export interface ITransactionDetail {
     endDate: string;
     createdAt: Date;
     updatedAt: Date;
-    from: IUser;
-    to: IUser;
+    from?: IUser;
+    to?: IUser;
 }
 
 export interface IUser {
     userId: string;
     name: string;
+}
+
+export interface IGetHistoryTransactions {
+    type: ITransactionType;
+    take: number;
+    skip: number;
 }

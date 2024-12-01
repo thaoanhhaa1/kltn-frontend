@@ -16,6 +16,7 @@ const ContractCancelRequest = ({ request }: { request: IContractCancelRequestDet
 
     const handleUpdateStatus = async (status: Exclude<ContractCancelRequestStatus, 'PENDING'>) => {
         if (['REJECTED', 'UNILATERAL_CANCELLATION'].includes(status)) setIndexLoading(1);
+        else if (status === 'CANCELLED') setIndexLoading(3);
         else setIndexLoading(2);
 
         try {
@@ -59,45 +60,52 @@ const ContractCancelRequest = ({ request }: { request: IContractCancelRequestDet
                 <strong>Trạng thái:</strong>{' '}
                 <Tag color={getCancelRequestColor(request.status)}>{getCancelRequestStatusText(request.status)}</Tag>
             </div>
-            <Flex
-                gap={12}
-                style={{
-                    marginTop: '12px',
-                }}
-            >
-                {request.status === 'PENDING' && !isMyRequest && (
-                    <>
-                        <Button loading={indexLoading === 1} danger onClick={() => handleUpdateStatus('REJECTED')}>
-                            Từ chối
+            {user ? (
+                <Flex
+                    gap={12}
+                    style={{
+                        marginTop: '12px',
+                    }}
+                >
+                    {request.status === 'PENDING' && !isMyRequest && (
+                        <>
+                            <Button loading={indexLoading === 1} danger onClick={() => handleUpdateStatus('REJECTED')}>
+                                Từ chối
+                            </Button>
+                            <Button
+                                loading={indexLoading === 2}
+                                type="primary"
+                                onClick={() => handleUpdateStatus('APPROVED')}
+                            >
+                                Đồng ý
+                            </Button>
+                        </>
+                    )}
+                    {request.status === 'PENDING' && isMyRequest && (
+                        <Button loading={indexLoading === 3} onClick={() => handleUpdateStatus('CANCELLED')} danger>
+                            Huỷ yêu cầu
                         </Button>
-                        <Button
-                            loading={indexLoading === 2}
-                            type="primary"
-                            onClick={() => handleUpdateStatus('APPROVED')}
-                        >
-                            Đồng ý
-                        </Button>
-                    </>
-                )}
-                {request.status === 'REJECTED' && isMyRequest && (
-                    <>
-                        <Button
-                            loading={indexLoading === 1}
-                            danger
-                            onClick={() => handleUpdateStatus('UNILATERAL_CANCELLATION')}
-                        >
-                            Đơn phương chấm dứt
-                        </Button>
-                        <Button
-                            loading={indexLoading === 2}
-                            type="primary"
-                            onClick={() => handleUpdateStatus('CONTINUE')}
-                        >
-                            Tiếp tục thuê
-                        </Button>
-                    </>
-                )}
-            </Flex>
+                    )}
+                    {request.status === 'REJECTED' && isMyRequest && (
+                        <>
+                            <Button
+                                loading={indexLoading === 1}
+                                danger
+                                onClick={() => handleUpdateStatus('UNILATERAL_CANCELLATION')}
+                            >
+                                Đơn phương chấm dứt
+                            </Button>
+                            <Button
+                                loading={indexLoading === 2}
+                                type="primary"
+                                onClick={() => handleUpdateStatus('CONTINUE')}
+                            >
+                                Tiếp tục thuê
+                            </Button>
+                        </>
+                    )}
+                </Flex>
+            ) : null}
         </div>
     );
 };

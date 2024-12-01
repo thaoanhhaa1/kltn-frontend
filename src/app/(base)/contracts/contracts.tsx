@@ -1,7 +1,6 @@
 'use client';
 
 import CancelModal from '@/app/(base)/contracts/cancel-modal';
-import AddContractModal from '@/app/owner/contracts/add-contract-modal';
 import ButtonLink from '@/components/button/button-link';
 import CancelBeforeDeposit from '@/components/contracts/cancel-before-deposit';
 import PriceInput from '@/components/input/price-input';
@@ -10,7 +9,7 @@ import TablePagination from '@/components/table-pagination';
 import { contractStatusOptions, initDataTable } from '@/constants/init-data';
 import { datePickerProps } from '@/constants/init-props';
 import usePagination from '@/hooks/usePagination';
-import { ContractStatus, IContract, IGetContractsByOwner, IGetContractsByRenter } from '@/interfaces/contract';
+import { ContractStatus, IContract, IGetContractsByRenter } from '@/interfaces/contract';
 import { IProperty } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
 import { IBaseUser } from '@/interfaces/user';
@@ -22,11 +21,15 @@ import {
     getContractStatusText,
     toSkipTake,
 } from '@/lib/utils';
-import { OWNER_CONTRACTS, RENTAL_CONTRACTS } from '@/path';
-import { getContractsByOwner, getPropertiesByOwnerService, getUsersByOwnerService } from '@/services/contract-service';
+import { RENTAL_CONTRACTS } from '@/path';
+import {
+    getContractsByRenter,
+    getPropertiesByRenterService,
+    getUsersByRenterService,
+} from '@/services/contract-service';
 import { Button, Col, DatePicker, Flex, Form, Input, Select, Space, TableProps, Tag, Tooltip } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { Eye, Filter, Plus, X } from 'lucide-react';
+import { Eye, Filter, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -47,12 +50,11 @@ const userFieldNames = {
 
 type IUserOption = IBaseUser & { label: string };
 
-const ContractsTable = () => {
+const Contracts = () => {
     const [contracts, setContracts] = useState<ITable<IContract>>(initDataTable);
     const [loading, setLoading] = useState(true);
     const [cancelContract, setCancelContract] = useState<IContract | null>(null);
     const { page, pageSize } = usePagination();
-    const [showAddModal, setShowAddModal] = useState(false);
     const [activeFilter, setActiveFilter] = useState<boolean>(false);
     const [form] = useForm<IGetContractsByRenter>();
     const [properties, setProperties] = useState<IProperty[]>([]);
@@ -79,13 +81,13 @@ const ContractsTable = () => {
                 width: 200,
             },
             {
-                title: 'Bất động sản',
+                title: 'Tiêu đề',
                 dataIndex: ['property', 'title'],
                 width: 250,
             },
             {
-                title: 'Người thuê',
-                dataIndex: ['renter', 'name'],
+                title: 'Chủ nhà',
+                dataIndex: ['owner', 'name'],
                 width: 200,
             },
             {
@@ -170,15 +172,11 @@ const ContractsTable = () => {
         setCancelContract(null);
     };
 
-    const handleShowAddModal = () => {
-        setShowAddModal(true);
-    };
-
-    const getContracts = useCallback(async (data: IGetContractsByOwner) => {
+    const fetchData = useCallback(async (data: IGetContractsByRenter) => {
         setLoading(true);
 
         try {
-            const res = await getContractsByOwner({
+            const res = await getContractsByRenter({
                 ...data,
                 startDate: data.startDate && formatDate(data.startDate),
                 endDate: data.endDate && formatDate(data.endDate),
@@ -192,40 +190,35 @@ const ContractsTable = () => {
         }
     }, []);
 
-    const refresh = () => {
-        const pagination = toSkipTake(page, pageSize);
-
-        getContracts(pagination);
-    };
-
     const handleToggleFilter = () => setActiveFilter((prev) => !prev);
 
     const handleFilter = () => {
-        if (page === 1) getContracts({ ...form.getFieldsValue(), ...toSkipTake(1, pageSize) });
-        else router.replace(`${OWNER_CONTRACTS}?page=1&pageSize=${pageSize}`);
+        if (page === 1) fetchData({ ...form.getFieldsValue(), ...toSkipTake(1, pageSize) });
+        else router.replace(`${RENTAL_CONTRACTS}?page=1&pageSize=${pageSize}`);
     };
 
     const handleReset = () => {
         form.resetFields();
 
-        if (page === 1) getContracts({ take: pageSize, skip: 0 });
-        else router.replace(`${OWNER_CONTRACTS}?page=1&pageSize=${pageSize}`);
+        if (page === 1) fetchData({ take: pageSize, skip: 0 });
+        else router.replace(`${RENTAL_CONTRACTS}?page=1&pageSize=${pageSize}`);
     };
 
     useEffect(() => {
         const pagination = toSkipTake(page, pageSize);
-        getContracts({
+
+        fetchData({
             ...pagination,
             ...form.getFieldsValue(),
         });
-    }, [form, getContracts, page, pageSize]);
+    }, [fetchData, form, page, pageSize]);
 
     useEffect(() => {
         const fetchProperties = async () => {
             setPropertiesLoading(true);
 
             try {
-                const properties = await getPropertiesByOwnerService();
+                const properties = await getPropertiesByRenterService();
 
                 setProperties(properties);
             } catch (error) {
@@ -238,7 +231,7 @@ const ContractsTable = () => {
             setUsersLoading(true);
 
             try {
-                const users = await getUsersByOwnerService();
+                const users = await getUsersByRenterService();
 
                 setUsers(users.map((user) => ({ ...user, label: `${user.name} - ${user.email}` })));
             } catch (error) {
@@ -260,7 +253,6 @@ const ContractsTable = () => {
                     icon={<Filter className="w-5 h-5" />}
                     onClick={handleToggleFilter}
                 />
-                <Button icon={<Plus className="w-5 h-5" />} onClick={handleShowAddModal} />
             </Flex>
             {activeFilter && (
                 <TableFilter<IGetContractsByRenter> onFinish={handleFilter} onReset={handleReset} form={form}>
@@ -293,13 +285,13 @@ const ContractsTable = () => {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label="Người thuê" name="renterId">
+                        <Form.Item label="Chủ nhà" name="ownerId">
                             <Select
                                 allowClear
                                 showSearch
                                 filterOption={userFilterOption}
                                 loading={usersLoading}
-                                placeholder="Chọn người thuê"
+                                placeholder="Chọn chủ nhà"
                                 options={users}
                                 fieldNames={userFieldNames}
                             />
@@ -322,7 +314,6 @@ const ContractsTable = () => {
                     </Col>
                 </TableFilter>
             )}
-            <AddContractModal open={showAddModal} setOpen={setShowAddModal} refresh={refresh} />
             <TablePagination
                 loading={loading}
                 rowKey={(record) => record.contractId}
@@ -342,4 +333,4 @@ const ContractsTable = () => {
     );
 };
 
-export default ContractsTable;
+export default Contracts;

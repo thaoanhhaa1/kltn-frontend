@@ -59,13 +59,14 @@ const ConfirmByRenter = ({
 
     if (!isRenter) return null;
 
-    if (!['owner_accepted', 'renter_accepted', 'admin_resolved', 'in_progress'].includes(status)) return null;
+    if (!['owner_accepted', 'renter_accepted', 'admin_resolved', 'in_progress', 'owner_completed'].includes(status))
+        return null;
 
     return (
         <>
-            <Button danger loading={loading === NOT_RESOLVE} onClick={handleNotResolve}>
+            {/* <Button danger loading={loading === NOT_RESOLVE} onClick={handleNotResolve}>
                 Chủ nhà không giải quyết
-            </Button>
+            </Button> */}
             <Button type="primary" loading={loading === COMPLETE} onClick={handleComplete}>
                 Hoàn thành
             </Button>

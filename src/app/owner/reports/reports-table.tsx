@@ -1,5 +1,6 @@
 'use client';
 
+import AddChildReport from '@/app/(base)/reports/[reportId]/add-child-report';
 import TableFilter from '@/components/table-filter';
 import TablePagination from '@/components/table-pagination';
 import { statusReportOwnerOptions } from '@/constants/init-data';
@@ -17,12 +18,17 @@ import {
     getReportTypeText,
 } from '@/lib/utils';
 import { REPORTS } from '@/path';
-import { getReportByOwner } from '@/services/report-service';
+import { getReportByOwner, ownerAcceptReport } from '@/services/report-service';
 import { Button, Col, Flex, Form, Select, TableProps, Tag, Tooltip } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { Eye, Filter } from 'lucide-react';
+import { Check, Eye, Filter, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
+
+const NO_LOADING = 0;
+const ACCEPT_LOADING = 1;
+const REJECT_LOADING = 2;
 
 const ReportsTable = () => {
     const [form] = useForm<IReportFilterByOwner>();
@@ -30,10 +36,32 @@ const ReportsTable = () => {
     const [reports, setReports] = useState<IReport[]>([]);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const [handleLoading, setHandleLoading] = useState<number>(NO_LOADING);
+    const [report, setReport] = useState<IReport | null>(null);
 
     const handleViewDetail = useCallback(
         (id: number) => {
             router.push(`${REPORTS}/${id}`);
+        },
+        [router],
+    );
+
+    const handleAcceptReport = useCallback(
+        async (report: IReport) => {
+            setHandleLoading(ACCEPT_LOADING);
+            setReport(report);
+            try {
+                await ownerAcceptReport({ reportId: report.id, reportChildId: report.reportChildId });
+
+                setReports((prev) => prev.map((r) => (r.id === report.id ? { ...r, status: 'owner_accepted' } : r)));
+                toast.success('Đã chấp nhận yêu cầu báo cáo');
+                router.refresh();
+            } catch (error) {
+                toast.error((error as Error).message || 'Có lỗi xảy ra, vui lòng thử lại sau');
+            } finally {
+                setHandleLoading(NO_LOADING);
+                setReport(null);
+            }
         },
         [router],
     );
@@ -116,11 +144,32 @@ const ReportsTable = () => {
                                 onClick={() => handleViewDetail(record.id)}
                             />
                         </Tooltip>
+                        <Tooltip title="Đồng ý">
+                            <Button
+                                loading={handleLoading === ACCEPT_LOADING && report?.id === record.id}
+                                onClick={() => handleAcceptReport(record)}
+                                color="primary"
+                                variant="text"
+                                icon={<Check className="w-5 h-5" />}
+                                disabled={record.status !== 'pending_owner'}
+                            />
+                        </Tooltip>
+                        <Tooltip title="Từ chối">
+                            <Button
+                                type="primary"
+                                danger
+                                color="danger"
+                                variant="text"
+                                icon={<X className="w-5 h-5" />}
+                                onClick={() => handleShowRejectModal(record)}
+                                disabled={record.status !== 'pending_owner'}
+                            />
+                        </Tooltip>
                     </Flex>
                 ),
             },
         ],
-        [handleViewDetail],
+        [handleAcceptReport, handleLoading, handleViewDetail, report?.id],
     );
 
     const fetchReports = useCallback(async (data: IReportFilterByOwner) => {
@@ -143,6 +192,18 @@ const ReportsTable = () => {
     const handleReset = () => {
         form.resetFields();
         fetchReports(form.getFieldsValue());
+    };
+
+    const handleShowRejectModal = (report: IReport) => {
+        setReport(report);
+    };
+
+    const handleCancelReject = () => {
+        setReport(null);
+    };
+
+    const handleReject = () => {
+        setReports((prev) => prev.map((r) => (r.id === report?.id ? { ...r, status: 'pending_renter' } : r)));
     };
 
     useEffect(() => {
@@ -168,6 +229,14 @@ const ReportsTable = () => {
                 </TableFilter>
             )}
             <TablePagination loading={loading} columns={columns} dataSource={reports} />
+            <AddChildReport
+                onOK={handleReject}
+                onCancel={handleCancelReject}
+                reportId={report?.id || null}
+                isModal
+                okText="Gửi đề xuất"
+                open={Boolean(report) && handleLoading !== ACCEPT_LOADING}
+            />
         </>
     );
 };
