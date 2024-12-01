@@ -1,9 +1,7 @@
-import ContractCancelRate from '@/app/owner/contract-cancel-rate';
 import IncomeExpenditure from '@/app/owner/income-expenditure';
 import Item from '@/app/owner/item';
 import OwnerBreadcrumb from '@/app/owner/owner-breadcrumb';
 import RentalRequestRating from '@/app/owner/rental-request-rating';
-import TenantDistribution from '@/app/owner/tenant-distribution';
 import Overview from '@/components/overview/overview';
 import {
     IGetContractCancellationRateByOwner,
@@ -19,7 +17,7 @@ import {
     getRentalRequestRatingByOwner,
     getTenantDistributionByOwner,
 } from '@/services/dashboard-service';
-import { Col, Flex, Row } from 'antd';
+import { Flex } from 'antd';
 import { cookies } from 'next/headers';
 
 const OwnerPage = async () => {
