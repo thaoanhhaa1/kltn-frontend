@@ -1,5 +1,5 @@
 import { ITable } from '@/interfaces/table';
-import { getRentalRequestStatusText } from '@/lib/utils';
+import { getPropertyStatusText, getRentalRequestStatusText } from '@/lib/utils';
 
 export const initDataTable = {
     data: [],
@@ -108,6 +108,25 @@ export const rentalRequestStatusOptions = [
     {
         label: getRentalRequestStatusText('REJECTED'),
         value: 'REJECTED',
+    },
+];
+
+export const propertyStatusOptions = [
+    {
+        label: getPropertyStatusText('PENDING'),
+        value: 'PENDING',
+    },
+    {
+        label: getPropertyStatusText('ACTIVE'),
+        value: 'ACTIVE',
+    },
+    {
+        label: getPropertyStatusText('REJECTED'),
+        value: 'REJECTED',
+    },
+    {
+        label: getPropertyStatusText('UNAVAILABLE'),
+        value: 'UNAVAILABLE',
     },
 ];
 

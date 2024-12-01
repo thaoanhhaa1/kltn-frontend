@@ -27,6 +27,10 @@ export default async function BaseLayout({ children }: { children: React.ReactNo
         const cookiesStore = cookies();
         const accessToken = cookiesStore.get('accessToken')?.value || '';
 
+        if (!accessToken) {
+            throw new Error(`Access token is required`);
+        }
+
         const [res, count, conversationsRes, countFavoriteRes, chatbotRes] = await Promise.all([
             getMe(accessToken),
             countNotifications(accessToken),

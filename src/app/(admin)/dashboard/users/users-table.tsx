@@ -78,7 +78,7 @@ const UsersTable = () => {
             {
                 title: 'Họ và tên',
                 dataIndex: 'name',
-                width: 150,
+                width: 200,
             },
             {
                 title: 'Email',

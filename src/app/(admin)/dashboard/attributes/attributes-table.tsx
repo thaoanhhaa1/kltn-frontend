@@ -145,13 +145,13 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
             {
                 title: 'Ngày tạo',
                 dataIndex: 'createdAt',
-                width: 150,
+                width: 170,
                 render: (value) => (value ? formatDateTime(value) : '-'),
             },
             {
                 title: 'Ngày cập nhật',
                 dataIndex: 'updatedAt',
-                width: 150,
+                width: 170,
                 render: (value) => (value ? formatDateTime(value) : '-'),
             },
             {

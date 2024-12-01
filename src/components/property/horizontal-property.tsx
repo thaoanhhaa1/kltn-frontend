@@ -12,7 +12,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const findByConditionType = (conditions: Array<ICondition>, type: string) => {
-    return conditions.find((condition) => condition.type === type)?.value || '';
+    return (conditions || []).find((condition) => condition.type === type)?.value || '';
 };
 
 const HorizontalProperty = ({ property, isGrid }: { property: IProperty; isGrid?: boolean }) => {
