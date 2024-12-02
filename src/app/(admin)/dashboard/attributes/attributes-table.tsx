@@ -87,7 +87,7 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
             {
                 title: 'Tên tiện ích',
                 dataIndex: 'name',
-                width: 150,
+                width: 250,
                 render: (value, _, index) => {
                     if ((isAdd && index === 0) || editIndex === index)
                         return (
