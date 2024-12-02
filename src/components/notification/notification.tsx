@@ -48,6 +48,7 @@ const Notification = ({ notification, onClose }: { notification: INotification; 
     const url = useMemo(() => {
         if (notification.type === 'CONTRACT_DETAIL') return `${RENTAL_CONTRACTS}/${notification.docId}`;
         if (notification.type === 'REPORT') return `${REPORTS}/${notification.docId}`;
+        if (notification.type === 'REVIEW') return `${RENTAL_CONTRACTS}/${notification.docId}`;
 
         return getLink(notification.type);
     }, [notification.docId, notification.type]);
