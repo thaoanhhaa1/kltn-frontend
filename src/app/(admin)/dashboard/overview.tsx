@@ -37,7 +37,7 @@ const Overview = ({ overview }: { overview: IOverviewByAdminRes }) => {
             <OverviewItem title="Hợp đồng đã kết thúc" value={overview.contractByStatus.ENDED} /> */}
             <OverviewItem
                 title="Yêu cầu thuê nhà"
-                value={overview.rentalRequestByStatus.APPROVED + overview.rentalRequestByStatus.REJECTED}
+                value={(overview.rentalRequestByStatus.APPROVED ?? 0) + (overview.rentalRequestByStatus.REJECTED ?? 0)}
             />
         </div>
     );
