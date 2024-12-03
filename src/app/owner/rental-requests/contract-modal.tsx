@@ -104,7 +104,7 @@ const ContractModal = ({
         };
 
         rentalRequest && fetch();
-    }, [rentalRequest, rentalRequest?.property.propertyId, rentalRequest?.renterId, rentalRequest?.requestId]);
+    }, [rentalRequest, rentalRequest?.propertyId, rentalRequest?.renterId, rentalRequest?.requestId]);
 
     return (
         <Modal
