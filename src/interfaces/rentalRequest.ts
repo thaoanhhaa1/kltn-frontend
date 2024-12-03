@@ -1,4 +1,5 @@
 export interface IRentalRequest {
+    propertyId: string;
     property: {
         propertyId: string;
         title: string;

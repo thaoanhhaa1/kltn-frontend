@@ -85,7 +85,7 @@ const ContractModal = ({
         const fetch = async () => {
             try {
                 const contract = await generateContract({
-                    propertyId: rentalRequest?.property.propertyId!,
+                    propertyId: rentalRequest?.propertyId!,
                     renterId: rentalRequest?.renterId!,
                     requestId: rentalRequest?.requestId!,
                 });
