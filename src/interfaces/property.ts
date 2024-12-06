@@ -75,3 +75,9 @@ export type IGetNotDeletedProperties = IPagination & {
     ownerName?: IUser['name'];
     status?: IProperty['status'];
 };
+
+export interface SuggestSearch {
+    title: string;
+    slug: string;
+    images: string[];
+}

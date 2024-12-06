@@ -6,6 +6,7 @@ import {
     IGetNotDeletedProperties,
     IProperty,
     PropertyStatus,
+    SuggestSearch,
     VisibleStatus,
 } from '@/interfaces/property';
 import { ITable } from '@/interfaces/table';
@@ -78,6 +79,18 @@ export const getAllPropertiesCbbForOwner = () => {
 
 export const getNotDeletedPropertyService = (propertyId: string, accessToken: string) => {
     return http.get<IProperty>(`/estate-manager-service/properties/${propertyId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    });
+};
+
+export const suggestSearch = (query: string) => {
+    return http.get<Array<SuggestSearch>>(`/estate-manager-service/properties/suggest-search?query=${query}`);
+};
+
+export const suggest = (accessToken: string) => {
+    return http.get<Array<IProperty>>('/estate-manager-service/properties/suggest', {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },

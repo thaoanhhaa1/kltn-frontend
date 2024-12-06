@@ -1,3 +1,5 @@
+'use client';
+
 import { HeartFill } from '@/assets/svgs/icons';
 import { createPropertyInteraction } from '@/services/property-interaction-service';
 import { useFavoriteStore } from '@/stores/favorite-store';

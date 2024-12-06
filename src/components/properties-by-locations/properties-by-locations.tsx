@@ -6,9 +6,9 @@ import { Col, Row, Typography } from 'antd';
 
 const PropertiesByLocations = () => {
     return (
-        <div className="mt-10">
+        <div className="mt-8">
             <Typography.Title level={4}>Bất động sản theo địa điểm</Typography.Title>
-            <Row gutter={32}>
+            <Row gutter={12}>
                 {locations.map((location, index) => (
                     <Col span={6} key={index}>
                         <PropertiesByLocation {...location} />

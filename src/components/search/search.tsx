@@ -2,20 +2,25 @@
 
 import FormPopover from '@/components/form-popover';
 import PriceInput from '@/components/input/price-input';
+import SearchSuggest from '@/components/search/search-suggest';
 import { interiorOptions } from '@/constants/init-data';
 import { inputNumberProps, selectProps } from '@/constants/init-props';
+import useDebounce from '@/hooks/useDebounce';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import { IAttributeCbb } from '@/interfaces/attribute';
+import { SuggestSearch } from '@/interfaces/property';
 import { IPropertyType } from '@/interfaces/property-type';
 import { convertCurrencyToText, convertObjectToParams, formatCurrency } from '@/lib/utils';
 import { SEARCH } from '@/path';
 import { getCities, getDistricts, getWards, IAddress } from '@/services/address-service';
 import { getAllAttributesCbb } from '@/services/attribute-service';
+import { suggestSearch } from '@/services/property-service';
 import { getPropertyTypes } from '@/services/property-type';
 import { Col, Flex, Form, Input, InputNumber, Row, Select, Slider, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { RotateCcw, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface ISearchInput {
     search: string;
@@ -71,7 +76,6 @@ const SearchComponent = () => {
         ward: '',
     });
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 0]);
-    console.log('🚀 ~ SearchComponent ~ priceRange:', priceRange);
     const [attributes, setAttributes] = useState<IAttributeCbb[]>([]);
     const [loadingAttributes, setLoadingAttributes] = useState(false);
     const [selectedAttributes, setSelectedAttributes] = useState<string[]>([]);
@@ -83,6 +87,16 @@ const SearchComponent = () => {
         furniture: '',
         type: '',
         typeId: '',
+    });
+    const [search, setSearch] = useState('');
+    const searchDebounce = useDebounce(search, 500);
+    const [searchLoading, setSearchLoading] = useState(false);
+    const [suggestSearches, setSuggestSearches] = useState<SuggestSearch[]>([]);
+    const [openSuggest, setOpenSuggest] = useState(false);
+    const ref = useRef(null);
+
+    useOnClickOutside(ref, () => {
+        setOpenSuggest(false);
     });
 
     const handleCityChange = async (cityId: string) => {
@@ -272,6 +286,27 @@ const SearchComponent = () => {
         form.setFieldValue('price', [priceRange[0], value || 0]);
     };
 
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSuggestSearches([]);
+        setSearch(e.target.value);
+    };
+
+    const fetchSuggestSearch = useCallback(async () => {
+        if (!searchDebounce) return;
+
+        setSuggestSearches([]);
+        setSearchLoading(true);
+        setOpenSuggest(true);
+        try {
+            const data = await suggestSearch(searchDebounce);
+            setSuggestSearches(data);
+        } catch (error) {
+            setOpenSuggest(false);
+        } finally {
+            setSearchLoading(false);
+        }
+    }, [searchDebounce]);
+
     useEffect(() => {
         const fetchCities = async () => {
             setCityLoading(true);
@@ -305,17 +340,25 @@ const SearchComponent = () => {
         fetchTypes();
     }, []);
 
+    useEffect(() => {
+        fetchSuggestSearch();
+    }, [fetchSuggestSearch]);
+
     return (
         <div>
             <Form layout="vertical" form={form} onFinish={handleSearch}>
-                <label>
+                <label className="block relative" ref={ref}>
                     <Flex align="center" className="border border-[#ecedf1] rounded-full overflow-hidden h-14 pl-4">
                         <Form.Item name="search" className="flex-1 !mb-0">
                             <Input
+                                value={search}
+                                onChange={handleSearchChange}
+                                onFocus={() => setOpenSuggest(true)}
                                 allowClear
                                 size="large"
                                 variant="borderless"
                                 placeholder="Tìm kiếm nhà, tiện ích..."
+                                autoComplete="off"
                             />
                         </Form.Item>
                         <button
@@ -326,6 +369,9 @@ const SearchComponent = () => {
                             Search
                         </button>
                     </Flex>
+                    {(searchLoading || suggestSearches.length > 0) && openSuggest && (
+                        <SearchSuggest data={suggestSearches} loading={searchLoading} />
+                    )}
                 </label>
                 <Flex className="mt-6" gap={12}>
                     <Row className="flex-1" gutter={12}>
