@@ -1,5 +1,5 @@
 import SearchResult from '@/app/(base)/search/search-result';
-import SearchComponent from '@/components/search';
+import SearchComponent from '@/components/search/search';
 import { ICountAvailableProperties } from '@/interfaces/property';
 import { countAvailableProperties } from '@/services/property-service';
 import { Divider } from 'antd';
