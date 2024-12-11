@@ -30,7 +30,7 @@ import {
 import { Button, Col, DatePicker, Flex, Form, Input, Select, Space, TableProps, Tag, Tooltip } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { Eye, Filter, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const propertyFilterOption = (input: string, option: IProperty | undefined) =>
@@ -62,6 +62,8 @@ const Contracts = () => {
     const [users, setUsers] = useState<IUserOption[]>([]);
     const [usersLoading, setUsersLoading] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
 
     const handleClickCancel = (contract: IContract) => {
         setCancelContract(contract);
@@ -211,7 +213,7 @@ const Contracts = () => {
             ...pagination,
             ...form.getFieldsValue(),
         });
-    }, [fetchData, form, page, pageSize]);
+    }, [fetchData, form, page, pageSize, id]);
 
     useEffect(() => {
         const fetchProperties = async () => {

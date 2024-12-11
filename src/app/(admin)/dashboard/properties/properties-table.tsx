@@ -17,6 +17,7 @@ import { getAllNotDeletedProperties, updateApprovalProperties } from '@/services
 import { Button, Col, Flex, Form, Input, Select, Space, TableProps, Tag, Tooltip } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { Check, Eye, Filter, X } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -45,6 +46,8 @@ const PropertiesTable = () => {
     });
 
     const { page, pageSize } = usePagination();
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
 
     const handleApprove = useCallback(async (propertyId: string) => {
         try {
@@ -306,7 +309,7 @@ const PropertiesTable = () => {
         const data = toSkipTake(page, pageSize);
 
         fetchProperties(data);
-    }, [fetchProperties, page, pageSize]);
+    }, [fetchProperties, page, pageSize, id]);
 
     useEffect(() => {
         const fetchCities = async () => {

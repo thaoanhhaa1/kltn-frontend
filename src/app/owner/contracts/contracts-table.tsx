@@ -27,7 +27,7 @@ import { getContractsByOwner, getPropertiesByOwnerService, getUsersByOwnerServic
 import { Button, Col, DatePicker, Flex, Form, Input, Select, Space, TableProps, Tag, Tooltip } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { Eye, Filter, Plus, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const propertyFilterOption = (input: string, option: IProperty | undefined) =>
@@ -60,6 +60,8 @@ const ContractsTable = () => {
     const [users, setUsers] = useState<IUserOption[]>([]);
     const [usersLoading, setUsersLoading] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
 
     const handleClickCancel = (contract: IContract) => {
         setCancelContract(contract);
@@ -218,7 +220,7 @@ const ContractsTable = () => {
             ...pagination,
             ...form.getFieldsValue(),
         });
-    }, [form, getContracts, page, pageSize]);
+    }, [form, getContracts, page, pageSize, id]);
 
     useEffect(() => {
         const fetchProperties = async () => {
