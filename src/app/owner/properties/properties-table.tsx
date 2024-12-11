@@ -26,6 +26,7 @@ import { Button, Col, Flex, Form, Input, Modal, Popconfirm, Select, Space, Table
 import { useForm } from 'antd/es/form/Form';
 import { BaseOptionType, DefaultOptionType } from 'antd/es/select';
 import { Eye, FileSpreadsheetIcon, Filter, Trash } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -53,8 +54,9 @@ const PropertiesTable = () => {
     const [propertySelected, setPropertySelected] = useState<IProperty | null>(null);
     const [rejectReasons, setRejectReasons] = useState<IRejectReason[]>([]);
     const [rejectReasonLoading, setRejectReasonLoading] = useState<boolean>(false);
-
+    const searchParams = useSearchParams();
     const { page, pageSize } = usePagination();
+    const id = searchParams.get('id');
 
     const getProperties = useCallback(
         async ({
@@ -416,7 +418,7 @@ const PropertiesTable = () => {
             page,
             pageSize,
         });
-    }, [getProperties, page, pageSize]);
+    }, [getProperties, page, pageSize, id]);
 
     useEffect(() => {
         if (propertySelected) {

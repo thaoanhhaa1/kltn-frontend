@@ -17,7 +17,8 @@ import { updateNotificationStatus } from '@/services/notification-service';
 import { useNotificationStore } from '@/stores/notification-store';
 import { Typography } from 'antd';
 import Link from 'next/link';
-import { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import { MouseEvent, useMemo } from 'react';
 import Markdown from 'react-markdown';
 
 const getLink = (type: NotificationType) => {
@@ -53,8 +54,16 @@ const Notification = ({ notification, onClose }: { notification: INotification; 
         return getLink(notification.type);
     }, [notification.docId, notification.type]);
     const time = useMemo(() => convertDateToTimeAgo(new Date(notification.createdAt)), [notification.createdAt]);
+    const router = useRouter();
 
-    const handleClick = () => {
+    const handleClick = (e: MouseEvent) => {
+        const currentUrl = typeof window !== 'undefined' ? window.location.pathname : '';
+
+        if (currentUrl === url) {
+            e.preventDefault();
+            router.push(`${url}?id=${notification.docId}`);
+        }
+
         if (notification.status === 'RECEIVED') {
             readNotification(notification.id);
             updateNotificationStatus([notification.id], 'READ').then();
