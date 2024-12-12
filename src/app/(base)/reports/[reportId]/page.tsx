@@ -14,6 +14,7 @@ import Title from '@/components/title';
 import { IReportDetail } from '@/interfaces/report';
 import {
     formatDateTime,
+    getLocalTime,
     getReportPriorityColor,
     getReportPriorityText,
     getReportStatusColor,
@@ -62,7 +63,7 @@ const ReportDetailPage = async ({
 
     const timelineItems = report.history.map((item) => ({
         color: item.status === 'owner_not_resolved' ? 'red' : item.status === 'renter_completed' ? 'green' : 'blue',
-        label: formatDateTime(item.createdAt),
+        label: formatDateTime(getLocalTime(item.createdAt)),
         children: <TimelineItem status={item.status} />,
     }));
 
@@ -105,7 +106,10 @@ const ReportDetailPage = async ({
                                     <ReportItem title="Người báo cáo" description={report.renter.name} />
                                 </Col>
                                 <Col span={12}>
-                                    <ReportItem title="Ngày báo cáo" description={formatDateTime(report.createdAt)} />
+                                    <ReportItem
+                                        title="Ngày báo cáo"
+                                        description={formatDateTime(getLocalTime(report.createdAt))}
+                                    />
                                 </Col>
                             </Row>
                         </Card>
