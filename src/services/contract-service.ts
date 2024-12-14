@@ -1,3 +1,4 @@
+import { Contract } from '@/app/(base)/[slug]/base-info';
 import {
     IContract,
     IContractDetail,
@@ -70,4 +71,8 @@ export const getPropertiesByRenterService = () => {
 
 export const getUsersByRenterService = () => {
     return http.get<IBaseUser[]>(`${ENDPOINT}/renter/user/cbb`);
+};
+
+export const getOnGoingContracts = (slug: string) => {
+    return http.get<Array<Contract>>(`${ENDPOINT}/property/${slug}`);
 };

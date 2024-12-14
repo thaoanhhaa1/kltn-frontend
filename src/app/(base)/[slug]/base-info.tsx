@@ -5,14 +5,20 @@ import HeartBtn from '@/components/property/heart-btn';
 import { IConversation } from '@/interfaces/chat';
 import { IProperty } from '@/interfaces/property';
 import { IPropertyInteraction } from '@/interfaces/property-interaction';
-import { convertDateToTimeAgo, createChatConversation, formatCurrency } from '@/lib/utils';
+import { convertDateToTimeAgo, createChatConversation, formatCurrency, formatDate } from '@/lib/utils';
 import { CHAT } from '@/path';
+import { getOnGoingContracts } from '@/services/contract-service';
 import { getFavoriteBySlug } from '@/services/property-interaction-service';
 import { useConversationStore } from '@/stores/conversation-store';
 import { useUserStore } from '@/stores/user-store';
 import { Button, Flex, Typography } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
+export interface Contract {
+    startDate: string;
+    endDateActual: string;
+}
 
 const BaseInfo = ({ property }: { property: IProperty }) => {
     const router = useRouter();
@@ -21,6 +27,7 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
     const [openRentalRequest, setOpenRentalRequest] = useState(false);
     const [interaction, setInteraction] = useState<IPropertyInteraction | undefined>();
     const disabled = !user || user.userId === property.owner?.userId || !user.userTypes.includes('renter');
+    const [contracts, setContracts] = useState<Contract[]>([]);
 
     const handleOpenRentalRequest = () => {
         setOpenRentalRequest(true);
@@ -59,6 +66,12 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
 
         fetch();
     }, [property.slug, user]);
+
+    useEffect(() => {
+        getOnGoingContracts(property.slug).then((res) => {
+            setContracts(res);
+        });
+    }, [property.slug]);
 
     return (
         <>
@@ -109,6 +122,20 @@ const BaseInfo = ({ property }: { property: IProperty }) => {
                 </Button>
                 <HeartBtn propertyId={property.propertyId} isFavorite={interaction?.interactionType === 'FAVORITED'} />
             </Flex>
+            {contracts.length > 0 && (
+                <div>
+                    <Typography.Title level={4} style={{ marginTop: '20px' }}>
+                        Các hợp đồng đang diễn ra
+                    </Typography.Title>
+                    {contracts.map((contract, index) => (
+                        <div key={index}>
+                            <Typography.Text>
+                                Từ {formatDate(contract.startDate)} đến {formatDate(contract.endDateActual)}
+                            </Typography.Text>
+                        </div>
+                    ))}
+                </div>
+            )}
             <RentalRequestModal property={property} open={openRentalRequest} setOpen={setOpenRentalRequest} />
         </>
     );

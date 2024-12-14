@@ -52,7 +52,7 @@ const Payments = () => {
             <Row gutter={[12, 12]}>
                 {transactions.map((transaction) => (
                     <Col key={transaction.id} span={12}>
-                        <Payment transaction={transaction} />
+                        <Payment transaction={transaction} fetchTransactions={fetchTransactions} />
                     </Col>
                 ))}
             </Row>

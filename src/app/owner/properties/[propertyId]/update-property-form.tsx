@@ -198,7 +198,7 @@ const UpdatePropertyForm = ({
             toast.success('Cập nhật bất động sản thành công');
         } catch (error) {
             console.error(error);
-            toast.error('Cập nhật bất động sản thất bại');
+            toast.error((error as Error)?.message || 'Cập nhật bất động sản thất bại');
         } finally {
             setLoading(false);
         }
