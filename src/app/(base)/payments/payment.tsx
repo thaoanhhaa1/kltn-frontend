@@ -10,7 +10,7 @@ import dayjs from 'dayjs';
 import { ReceiptText } from 'lucide-react';
 import Markdown from 'react-markdown';
 
-const Payment = ({ transaction }: { transaction: ITransaction }) => {
+const Payment = ({ transaction, fetchTransactions }: { transaction: ITransaction; fetchTransactions: () => void }) => {
     return (
         <Card className="p-4">
             <Flex align="center" gap={16}>
@@ -82,6 +82,7 @@ const Payment = ({ transaction }: { transaction: ITransaction }) => {
                                     isDeposit={!transaction.toId}
                                     transactionId={transaction.id}
                                     contractId={transaction.contractId}
+                                    fetchTransactions={fetchTransactions}
                                 />
                             </Flex>
                         )}

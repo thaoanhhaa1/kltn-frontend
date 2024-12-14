@@ -97,7 +97,7 @@ const PropertiesTable = () => {
                 toast.success('Xóa bất động sản thành công');
             } catch (error) {
                 console.log(error);
-                toast.error('Xóa bất động sản thất bại');
+                toast.error((error as Error)?.message || 'Xóa bất động sản thất bại');
             }
         },
         [getProperties, pageSize],
@@ -276,7 +276,7 @@ const PropertiesTable = () => {
             setSelectedRowKeys([]);
             toast.success('Bất động sản đã được ẩn');
         } catch (error) {
-            toast.error('Ẩn bất động sản thất bại');
+            toast.error((error as Error)?.message || 'Ẩn bất động sản thất bại');
         }
     }, [handleUpdateProperties, selectedRowKeys]);
 
