@@ -1,7 +1,8 @@
 import { IPagination } from '@/interfaces/pagination';
+import { IProperty } from '@/interfaces/property';
 import { IGenerateContractRequest, IGenerateContractResponse, IRentalRequest } from '@/interfaces/rentalRequest';
 import { ITable } from '@/interfaces/table';
-import { IUser } from '@/interfaces/user';
+import { IBaseUser, IUser } from '@/interfaces/user';
 import http from '@/lib/http';
 import { convertObjectToParams } from '@/lib/utils';
 import {
@@ -42,4 +43,12 @@ export const generateContract = (params: IGenerateContractRequest) => {
 
 export const ownerGetRenterRequests = () => {
     return http.get<IUser[]>(`${ENDPOINT}/owner/renter/cbb`);
+};
+
+export const getPropertyCbbForRenterService = () => {
+    return http.get<IProperty[]>(`${ENDPOINT}/renter/property/cbb`);
+};
+
+export const getOwnerCbbForRenterService = () => {
+    return http.get<IBaseUser[]>(`${ENDPOINT}/renter/owner/cbb`);
 };

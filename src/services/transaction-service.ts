@@ -1,18 +1,16 @@
+import { IFilterPayment } from '@/app/(base)/payments/payments';
 import { ITable } from '@/interfaces/table';
 import {
     IDepositTransaction,
     IGetHistoryTransactions,
     ITransaction,
     ITransactionDetail,
-    TransactionStatus,
 } from '@/interfaces/transaction';
 import http from '@/lib/http';
 
-export const getTransactionsByRenter = (status?: TransactionStatus) => {
+export const getTransactionsByRenter = (params: IFilterPayment) => {
     return http.get<Array<ITransaction>>('/contract-service/transactions/renter', {
-        params: {
-            status,
-        },
+        params,
     });
 };
 

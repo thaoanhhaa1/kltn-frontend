@@ -33,10 +33,10 @@ const FormPopover = ({
                     <div>{children}</div>
                     <Flex justify="space-between">
                         <Button icon={<RotateCcw className="w-4 h-4" />} type="text" onClick={onReset}>
-                            Reset
+                            Đặt lại
                         </Button>
                         <Button onClick={handleApply} type="primary">
-                            Apply
+                            Áp dụng
                         </Button>
                     </Flex>
                 </Flex>

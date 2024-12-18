@@ -27,8 +27,9 @@ import {
     getPropertiesByRenterService,
     getUsersByRenterService,
 } from '@/services/contract-service';
-import { Button, Col, DatePicker, Flex, Form, Input, Select, Space, TableProps, Tag, Tooltip } from 'antd';
+import { Button, Col, DatePicker, Flex, Form, Input, Select, Space, TablePaginationConfig, Tag, Tooltip } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { ColumnsType, FilterValue, SorterResult, SortOrder } from 'antd/es/table/interface';
 import { Eye, Filter, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -50,6 +51,11 @@ const userFieldNames = {
 
 type IUserOption = IBaseUser & { label: string };
 
+interface TableParams {
+    sortField?: string;
+    sortOrder?: SortOrder;
+}
+
 const Contracts = () => {
     const [contracts, setContracts] = useState<ITable<IContract>>(initDataTable);
     const [loading, setLoading] = useState(true);
@@ -64,12 +70,13 @@ const Contracts = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
+    const [tableParams, setTableParams] = useState<TableParams>({});
 
     const handleClickCancel = (contract: IContract) => {
         setCancelContract(contract);
     };
 
-    const columns: TableProps<IContract>['columns'] = useMemo(
+    const columns: ColumnsType<IContract> = useMemo(
         () => [
             {
                 title: '#',
@@ -81,35 +88,41 @@ const Contracts = () => {
                 title: 'Mã hợp đồng',
                 dataIndex: 'contractId',
                 width: 200,
+                sorter: true,
             },
             {
-                title: 'Tiêu đề',
+                title: 'Bất động sản',
                 dataIndex: ['property', 'title'],
                 width: 250,
+                sorter: true,
             },
             {
                 title: 'Chủ nhà',
                 dataIndex: ['owner', 'name'],
                 width: 200,
+                sorter: true,
             },
             {
                 title: 'Ngày bắt đầu',
                 dataIndex: 'startDate',
                 width: 170,
                 render: formatDate,
+                sorter: true,
             },
             {
                 title: 'Ngày kết thúc',
                 dataIndex: 'endDateActual',
                 width: 170,
                 render: formatDate,
+                sorter: true,
             },
             {
-                title: 'Giá',
+                title: 'Giá thuê',
                 dataIndex: 'monthlyRent',
                 width: 170,
                 align: 'right',
                 render: (value) => formatCurrency(value, true),
+                sorter: true,
             },
             {
                 title: 'Tiền cọc',
@@ -117,6 +130,7 @@ const Contracts = () => {
                 width: 170,
                 align: 'right',
                 render: (value) => formatCurrency(value, true),
+                sorter: true,
             },
             {
                 title: 'Trạng thái',
@@ -125,18 +139,21 @@ const Contracts = () => {
                 render: (status: ContractStatus) => {
                     return <Tag color={getContractColor(status)}>{getContractStatusText(status)}</Tag>;
                 },
+                sorter: true,
             },
             {
                 title: 'Ngày tạo',
                 dataIndex: 'createdAt',
                 width: 170,
                 render: formatDateTime,
+                sorter: true,
             },
             {
                 title: 'Ngày cập nhật',
                 dataIndex: 'updatedAt',
                 width: 170,
                 render: formatDateTime,
+                sorter: true,
             },
             {
                 title: 'Hành động',
@@ -174,23 +191,33 @@ const Contracts = () => {
         setCancelContract(null);
     };
 
-    const fetchData = useCallback(async (data: IGetContractsByRenter) => {
-        setLoading(true);
+    const fetchData = useCallback(
+        async (data: IGetContractsByRenter) => {
+            setLoading(true);
 
-        try {
-            const res = await getContractsByRenter({
-                ...data,
-                startDate: data.startDate && formatDate(data.startDate),
-                endDate: data.endDate && formatDate(data.endDate),
-            });
+            try {
+                const sort = tableParams.sortField &&
+                    tableParams.sortOrder && {
+                        field: tableParams.sortField,
+                        order: tableParams.sortOrder === 'ascend' ? 'asc' : 'desc',
+                    };
 
-            setContracts(res);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+                const res = await getContractsByRenter({
+                    ...data,
+                    ...(sort && { ...sort }),
+                    startDate: data.startDate && formatDate(data.startDate),
+                    endDate: data.endDate && formatDate(data.endDate),
+                });
+
+                setContracts(res);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [tableParams.sortField, tableParams.sortOrder],
+    );
 
     const handleToggleFilter = () => setActiveFilter((prev) => !prev);
 
@@ -204,6 +231,18 @@ const Contracts = () => {
 
         if (page === 1) fetchData({ take: pageSize, skip: 0 });
         else router.replace(`${RENTAL_CONTRACTS}?page=1&pageSize=${pageSize}`);
+    };
+
+    const handleTableChange = (
+        pagination: TablePaginationConfig,
+        filters: Record<string, FilterValue | null>,
+        sorter: SorterResult<IContract> | SorterResult<IContract>[],
+    ) => {
+        if (Array.isArray(sorter)) return;
+        setTableParams({
+            sortField: Array.isArray(sorter.field) ? sorter.field[0] : sorter.field,
+            sortOrder: sorter.order,
+        });
     };
 
     useEffect(() => {
@@ -322,6 +361,7 @@ const Contracts = () => {
                 columns={columns}
                 dataSource={contracts.data}
                 pagination={contracts.pageInfo}
+                onChange={handleTableChange}
                 // rowSelection={{
                 //     fixed: true,
                 //     type: 'checkbox',
