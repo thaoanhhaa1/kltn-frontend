@@ -1,18 +1,14 @@
-import { IPagination } from '@/interfaces/pagination';
 import { ITable } from '@/interfaces/table';
-import { IUser } from '@/interfaces/user';
+import { IGetUsersByAdmin, IUser } from '@/interfaces/user';
 import http from '@/lib/http';
 import { ForgotPasswordInput, UpdatePasswordInput } from '@/schemas/user.schema';
 
 const ENDPOINT = '/estate-manager-service/users';
 
-export const getAllUsers = async (params: IPagination): Promise<ITable<IUser>> => {
-    const search = new URLSearchParams({
-        skip: String(params.skip),
-        take: String(params.take),
-    }).toString();
-
-    return http.get<ITable<IUser>>(`${ENDPOINT}?${search}`);
+export const getAllUsers = async (params: IGetUsersByAdmin): Promise<ITable<IUser>> => {
+    return http.get<ITable<IUser>>(`${ENDPOINT}`, {
+        params,
+    });
 };
 
 export const getMe = async (accessToken: string): Promise<IUser> => {

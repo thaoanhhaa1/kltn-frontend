@@ -1,3 +1,4 @@
+import { IPagination } from '@/interfaces/pagination';
 import { Role } from '@/types/role';
 import { UserStatus } from '@/types/user-status';
 
@@ -19,4 +20,15 @@ export interface IUser extends IBaseUser {
     isVerified: boolean;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface IGetUsersByAdmin extends IPagination {
+    userId?: string;
+    name?: string;
+    email?: string;
+    phoneNumber?: string;
+    type?: Role;
+    status?: UserStatus;
+    sortField?: string;
+    sortOrder?: string;
 }

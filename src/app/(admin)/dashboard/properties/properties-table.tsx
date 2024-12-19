@@ -14,8 +14,9 @@ import { formatCurrency, formatDateTime, getPropertyStatusColor, getPropertyStat
 import { DASHBOARD_PROPERTIES } from '@/path';
 import { getCities, getDistricts, getWards, IAddress } from '@/services/address-service';
 import { getAllNotDeletedProperties, updateApprovalProperties } from '@/services/property-service';
-import { Button, Col, Flex, Form, Input, Select, Space, TableProps, Tag, Tooltip } from 'antd';
+import { Button, Col, Flex, Form, Input, Select, Space, TablePaginationConfig, TableProps, Tag, Tooltip } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { FilterValue, SorterResult, SortOrder } from 'antd/es/table/interface';
 import { Check, Eye, Filter, X } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -44,6 +45,10 @@ const PropertiesTable = () => {
         district: '',
         ward: '',
     });
+    const [tableParams, setTableParams] = useState<{
+        sortField?: string;
+        sortOrder?: SortOrder;
+    }>({});
 
     const { page, pageSize } = usePagination();
     const searchParams = useSearchParams();
@@ -100,6 +105,7 @@ const PropertiesTable = () => {
                 title: 'Tiêu đề',
                 dataIndex: 'title',
                 width: 170,
+                sorter: true,
                 render: (value: string) => (
                     <Tooltip title={value}>
                         <span className="line-clamp-3">{value}</span>
@@ -120,25 +126,30 @@ const PropertiesTable = () => {
                 title: 'Địa chỉ',
                 dataIndex: ['address', 'street'],
                 width: 170,
+                sorter: true,
             },
             {
                 title: 'Phường',
                 dataIndex: ['address', 'ward'],
-                width: 120,
+                width: 170,
+                sorter: true,
             },
             {
                 title: 'Quận',
                 dataIndex: ['address', 'district'],
-                width: 120,
+                width: 150,
+                sorter: true,
             },
             {
                 title: 'Thành phố',
                 dataIndex: ['address', 'city'],
-                width: 120,
+                width: 150,
+                sorter: true,
             },
             {
                 title: 'ID - Chủ sở hữu',
                 width: 150,
+                sorter: true,
                 render: (record: IProperty) => `${record.owner.userId} - ${record.owner.name}`,
             },
             {
@@ -146,6 +157,7 @@ const PropertiesTable = () => {
                 dataIndex: 'deposit',
                 align: 'right',
                 width: 130,
+                sorter: true,
                 render: (value) => formatCurrency(value, true),
             },
             {
@@ -153,12 +165,14 @@ const PropertiesTable = () => {
                 dataIndex: 'price',
                 align: 'right',
                 width: 130,
+                sorter: true,
                 render: (value) => formatCurrency(value, true),
             },
             {
                 title: 'Trạng thái',
                 dataIndex: 'status',
-                width: 100,
+                width: 120,
+                sorter: true,
                 render: (status: PropertyStatus) => (
                     <Tag color={getPropertyStatusColor(status)}>{getPropertyStatusText(status)}</Tag>
                 ),
@@ -167,12 +181,14 @@ const PropertiesTable = () => {
                 title: 'Ngày tạo',
                 dataIndex: 'createdAt',
                 width: 170,
+                sorter: true,
                 render: formatDateTime,
             },
             {
                 title: 'Ngày cập nhật',
                 dataIndex: 'updatedAt',
                 width: 170,
+                sorter: true,
                 render: formatDateTime,
             },
             {
@@ -207,19 +223,25 @@ const PropertiesTable = () => {
         [handleApprove, handleReject, page, pageSize],
     );
 
-    const fetchProperties = useCallback(async (data: IGetNotDeletedProperties) => {
-        setLoading(true);
+    const fetchProperties = useCallback(
+        async (data: IGetNotDeletedProperties) => {
+            setLoading(true);
 
-        try {
-            const res = await getAllNotDeletedProperties(data);
+            try {
+                const res = await getAllNotDeletedProperties({
+                    ...data,
+                    ...tableParams,
+                });
 
-            setData(res);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+                setData(res);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [tableParams],
+    );
 
     const handleToggleFilter = () => setActiveFilter((prev) => !prev);
 
@@ -302,6 +324,18 @@ const PropertiesTable = () => {
             city: city?.name || '',
             district: district?.name || '',
             ward: ward?.name || '',
+        });
+    };
+
+    const handleTableChange = (
+        pagination: TablePaginationConfig,
+        filters: Record<string, FilterValue | null>,
+        sorter: SorterResult<IProperty> | SorterResult<IProperty>[],
+    ) => {
+        if (Array.isArray(sorter)) return;
+        setTableParams({
+            sortField: Array.isArray(sorter.field) ? sorter.field.at(-1) : sorter.field,
+            sortOrder: sorter.order,
         });
     };
 
@@ -396,6 +430,7 @@ const PropertiesTable = () => {
                 columns={columns}
                 dataSource={data.data}
                 pagination={data.pageInfo}
+                onChange={handleTableChange}
             />
             {selectedProperty && (
                 <RejectPropertyModal

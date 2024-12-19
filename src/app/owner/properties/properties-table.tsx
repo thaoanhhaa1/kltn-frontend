@@ -22,15 +22,35 @@ import {
 } from '@/services/property-service';
 import { getRejectReasonsByPropertyId } from '@/services/reject-reason-service';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Button, Col, Flex, Form, Input, Modal, Popconfirm, Select, Space, TableProps, Tag, Tooltip } from 'antd';
+import {
+    Button,
+    Col,
+    Flex,
+    Form,
+    Input,
+    Modal,
+    Popconfirm,
+    Select,
+    Space,
+    TablePaginationConfig,
+    TableProps,
+    Tag,
+    Tooltip,
+} from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { BaseOptionType, DefaultOptionType } from 'antd/es/select';
+import { FilterValue, SorterResult, SortOrder } from 'antd/es/table/interface';
 import { Eye, FileSpreadsheetIcon, Filter, Trash } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
 type IPropertiesTable = ITable<IProperty>;
+
+interface TableParams {
+    sortField?: string;
+    sortOrder?: SortOrder;
+}
 
 const PropertiesTable = () => {
     const [form] = useForm<IFiterProperty>();
@@ -57,6 +77,7 @@ const PropertiesTable = () => {
     const searchParams = useSearchParams();
     const { page, pageSize } = usePagination();
     const id = searchParams.get('id');
+    const [tableParams, setTableParams] = useState<TableParams>({});
 
     const getProperties = useCallback(
         async ({
@@ -73,6 +94,7 @@ const PropertiesTable = () => {
                 const res = await getAllNotDeletedPropertiesByOwnerId({
                     ...toSkipTake(page, pageSize),
                     ...filter,
+                    ...tableParams,
                 });
 
                 setData(res);
@@ -82,7 +104,7 @@ const PropertiesTable = () => {
                 setLoading(false);
             }
         },
-        [],
+        [tableParams],
     );
 
     const handleSoftDeleteProperties = useCallback(
@@ -119,6 +141,7 @@ const PropertiesTable = () => {
                 title: 'Tiêu đề',
                 dataIndex: 'title',
                 width: 170,
+                sorter: true,
                 render: (value: string) => (
                     <Tooltip title={value}>
                         <span className="line-clamp-3">{value}</span>
@@ -139,27 +162,32 @@ const PropertiesTable = () => {
                 title: 'Địa chỉ',
                 dataIndex: ['address', 'street'],
                 width: 170,
+                sorter: true,
             },
             {
                 title: 'Phường',
                 dataIndex: ['address', 'ward'],
                 width: 120,
+                sorter: true,
             },
             {
                 title: 'Quận',
                 dataIndex: ['address', 'district'],
                 width: 120,
+                sorter: true,
             },
             {
                 title: 'Thành phố',
                 dataIndex: ['address', 'city'],
                 width: 120,
+                sorter: true,
             },
             {
                 title: 'Tiền cọc',
                 dataIndex: 'deposit',
                 align: 'right',
                 width: 130,
+                sorter: true,
                 render: (value) => formatCurrency(value, true),
             },
             {
@@ -167,12 +195,14 @@ const PropertiesTable = () => {
                 dataIndex: 'price',
                 align: 'right',
                 width: 130,
+                sorter: true,
                 render: (value) => formatCurrency(value, true),
             },
             {
                 title: 'Trạng thái',
                 dataIndex: 'status',
                 width: 100,
+                sorter: true,
                 render: (status: PropertyStatus) => (
                     <Tag color={getPropertyStatusColor(status)}>{getPropertyStatusText(status)}</Tag>
                 ),
@@ -181,12 +211,14 @@ const PropertiesTable = () => {
                 title: 'Ngày tạo',
                 dataIndex: 'createdAt',
                 width: 170,
+                sorter: true,
                 render: formatDateTime,
             },
             {
                 title: 'Ngày cập nhật',
                 dataIndex: 'updatedAt',
                 width: 170,
+                sorter: true,
                 render: formatDateTime,
             },
             {
@@ -382,6 +414,18 @@ const PropertiesTable = () => {
         setRejectReasons([]);
     };
 
+    const handleTableChange = (
+        pagination: TablePaginationConfig,
+        filters: Record<string, FilterValue | null>,
+        sorter: SorterResult<IProperty> | SorterResult<IProperty>[],
+    ) => {
+        if (Array.isArray(sorter)) return;
+        setTableParams({
+            sortField: Array.isArray(sorter.field) ? sorter.field.at(-1) : sorter.field,
+            sortOrder: sorter.order,
+        });
+    };
+
     useEffect(() => {
         const fetchCities = async () => {
             setCityLoading(true);
@@ -529,6 +573,7 @@ const PropertiesTable = () => {
                     getCheckboxProps,
                     onChange: setSelectedRowKeys,
                 }}
+                onChange={handleTableChange}
             />
             <Modal title="Lý do từ chối" open={Boolean(propertySelected)} onCancel={handleCancel} footer={null}>
                 <RejectReasons loading={rejectReasonLoading} rejectReasons={rejectReasons} />

@@ -20,7 +20,7 @@ const Overview = ({ overview }: { overview: IOverviewByAdminRes }) => {
             <OverviewItem title="Người thuê" value={secondUserByType.count} />
             {/* <OverviewItem title="Người dùng mới" value={overview.newUsersInMonth} /> */}
             <OverviewItem title="Tổng số giao dịch" value={overview.transactionStats.count} />
-            <OverviewItem title="Tổng doanh thu" value={formatCurrency(overview.transactionStats.revenue, true)} />
+            <OverviewItem title="Tổng doanh thu" value={formatCurrency(overview.transactionStats.revenue)} />
 
             {data
                 .filter((item) => item?.status)

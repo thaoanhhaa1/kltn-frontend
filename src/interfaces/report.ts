@@ -33,6 +33,7 @@ export interface IReport {
     compensation: number;
     proposed: string;
     reportChildId: number;
+    renter: Owner;
 }
 
 export interface IReportDetail {
@@ -111,4 +112,5 @@ export interface IReportFilterByOwner {
     status: ReportFilterStatus;
     type: ReportType;
     sort: ReportSort;
+    resolvedAt?: string;
 }

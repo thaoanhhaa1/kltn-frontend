@@ -12,3 +12,9 @@ export type IAttributeCbb = Pick<IAttribute, 'id' | 'name'>;
 export type ICreateAttribute = Pick<IAttribute, 'type' | 'name'>;
 
 export type IUpdateAttribute = Pick<IAttribute, 'id' | 'type' | 'name'>;
+
+export interface IGetAllAttributes {
+    id?: string;
+    name?: string;
+    type?: string;
+}

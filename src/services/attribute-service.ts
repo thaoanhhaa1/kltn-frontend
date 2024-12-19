@@ -1,4 +1,10 @@
-import { IAttribute, IAttributeCbb, ICreateAttribute, IUpdateAttribute } from '@/interfaces/attribute';
+import {
+    IAttribute,
+    IAttributeCbb,
+    ICreateAttribute,
+    IGetAllAttributes,
+    IUpdateAttribute,
+} from '@/interfaces/attribute';
 import http from '@/lib/http';
 
 const ENDPOINT = '/estate-manager-service/attributes';
@@ -7,11 +13,9 @@ export const getAllAttributesCbb = () => {
     return http.get<Array<IAttributeCbb>>(`${ENDPOINT}/cbb`);
 };
 
-export const getAllAttributes = (accessToken: string) => {
+export const getAllAttributes = (params: IGetAllAttributes) => {
     return http.get<Array<IAttribute>>(ENDPOINT, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
+        params,
     });
 };
 
