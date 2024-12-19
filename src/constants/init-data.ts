@@ -96,6 +96,17 @@ export const statusReportOwnerOptions = [
     },
 ];
 
+export const typeReportOwnerOptions = [
+    {
+        label: 'Sự cố',
+        value: 'incident',
+    },
+    {
+        label: 'Vi phạm',
+        value: 'violation',
+    },
+];
+
 export const rentalRequestStatusOptions = [
     {
         label: getRentalRequestStatusText('PENDING'),
