@@ -2,7 +2,8 @@
 
 import Title from '@/components/title';
 import { ITransactionDetail } from '@/interfaces/transaction';
-import { formatCurrency, formatEth } from '@/lib/utils';
+import { formatCurrency, formatDateTime, formatEth, getTransactionTypeText } from '@/lib/utils';
+import { useUserStore } from '@/stores/user-store';
 import { Button, Flex } from 'antd';
 import html2canvas from 'html2canvas-pro';
 import { jsPDF } from 'jspdf';
@@ -22,6 +23,10 @@ const Price = ({ price, priceEth, title }: { title: string; price: number; price
 
 const Invoice = ({ transaction }: { transaction: ITransactionDetail }) => {
     const pdfRef = React.useRef<HTMLDivElement>(null);
+    const { user } = useUserStore();
+    const isFromMe = transaction.fromId === user?.userId;
+    const fee = isFromMe ? transaction.fee || 0 : 0;
+    const feeEth = isFromMe ? transaction.feeEth || 0 : 0;
 
     const generatePDF = () => {
         const input = pdfRef.current;
@@ -60,14 +65,14 @@ const Invoice = ({ transaction }: { transaction: ITransactionDetail }) => {
                                 textAlign: 'center',
                             }}
                         >
-                            Thanh toán tiền thuê tháng 12
+                            {transaction.title}
                         </Title>
                         <Flex justify="space-between" align="center">
                             <p>
-                                <b>Người gửi:</b> TRƯƠNG VĂN THÔNG
+                                <b>Người gửi:</b> {transaction.from?.name || 'Smart Contract'}
                             </p>
                             <p>
-                                <b>Người nhận:</b> VÕ THỊ VŨ
+                                <b>Người nhận:</b> {transaction.to?.name || 'Smart Contract'}
                             </p>
                         </Flex>
                         <hr />
@@ -80,26 +85,24 @@ const Invoice = ({ transaction }: { transaction: ITransactionDetail }) => {
                             Thông tin thanh toán
                         </Title>
                         <Price title="Số tiền" price={transaction.amount} priceEth={transaction.amountEth || 0} />
-                        <Price title="Phí" price={transaction.fee} priceEth={transaction.feeEth || 0} />
+                        <Price title="Phí" price={fee} priceEth={feeEth || 0} />
                         <Price
                             title="Tổng tiền"
-                            price={transaction.amount + transaction.fee}
-                            priceEth={transaction.feeEth + transaction.amountEth}
+                            price={transaction.amount + fee}
+                            priceEth={feeEth + transaction.amountEth}
                         />
                         <hr />
                         <p>
-                            <b>Loại giao dịch:</b> Thanh toán thuê nhà
+                            <b>Loại giao dịch:</b> {getTransactionTypeText(transaction.type)}
                         </p>
                         <p>
-                            <b>Ngày tạo:</b> 19:41:29 14/12/2024
+                            <b>Ngày tạo:</b> {formatDateTime(transaction.createdAt)}
                         </p>
                         <p>
-                            <b>Mô tả:</b> Thanh toán tiền thuê tháng 12 cho hợp đồng
-                            <b> e2c1aa90-a125-4980-b211-be60aa5a4678</b>
+                            <b>Mô tả:</b> {transaction.description}
                         </p>
                         <p>
-                            <b>Mã giao dịch (Hash):</b>{' '}
-                            <a href="#">0xad060c5620bb6e4e8f287e27ab5c0be0b8f224f9e9b76cfd8ad1cf2209d277e</a>
+                            <b>Mã giao dịch (Hash):</b> <a href="#">{transaction.transactionHash}</a>
                         </p>
                     </div>
                 </div>
