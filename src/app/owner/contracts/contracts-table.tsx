@@ -24,9 +24,24 @@ import {
 } from '@/lib/utils';
 import { OWNER_CONTRACTS, RENTAL_CONTRACTS } from '@/path';
 import { getContractsByOwner, getPropertiesByOwnerService, getUsersByOwnerService } from '@/services/contract-service';
-import { Button, Col, DatePicker, Flex, Form, Input, Select, Space, TableProps, Tag, Tooltip } from 'antd';
+import {
+    Button,
+    Col,
+    DatePicker,
+    Flex,
+    Form,
+    Input,
+    Select,
+    Space,
+    TablePaginationConfig,
+    TableProps,
+    Tag,
+    Tooltip,
+} from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { FilterValue, SorterResult, SortOrder } from 'antd/es/table/interface';
 import { Eye, Filter, Plus, X } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -62,6 +77,7 @@ const ContractsTable = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
+    const [tableParams, setTableParams] = useState<{ sortField?: string; sortOrder?: SortOrder }>({});
 
     const handleClickCancel = (contract: IContract) => {
         setCancelContract(contract);
@@ -79,27 +95,45 @@ const ContractsTable = () => {
                 title: 'Mã hợp đồng',
                 dataIndex: 'contractId',
                 width: 200,
+                sorter: true,
+                render: (value, record) => {
+                    if (record.transactionHashContract)
+                        return (
+                            <Link
+                                href={`https://holesky.etherscan.io/tx/${record.transactionHashContract}`}
+                                target="_blank"
+                            >
+                                {value}
+                            </Link>
+                        );
+
+                    return value;
+                },
             },
             {
                 title: 'Bất động sản',
                 dataIndex: ['property', 'title'],
                 width: 250,
+                sorter: true,
             },
             {
                 title: 'Người thuê',
                 dataIndex: ['renter', 'name'],
                 width: 200,
+                sorter: true,
             },
             {
                 title: 'Ngày bắt đầu',
                 dataIndex: 'startDate',
                 width: 170,
+                sorter: true,
                 render: formatDate,
             },
             {
                 title: 'Ngày kết thúc',
                 dataIndex: 'endDateActual',
                 width: 170,
+                sorter: true,
                 render: formatDate,
             },
             {
@@ -107,6 +141,7 @@ const ContractsTable = () => {
                 dataIndex: 'monthlyRent',
                 width: 170,
                 align: 'right',
+                sorter: true,
                 render: (value) => formatCurrency(value, true),
             },
             {
@@ -114,12 +149,14 @@ const ContractsTable = () => {
                 dataIndex: 'depositAmount',
                 width: 170,
                 align: 'right',
+                sorter: true,
                 render: (value) => formatCurrency(value, true),
             },
             {
                 title: 'Trạng thái',
                 dataIndex: 'status',
                 width: 170,
+                sorter: true,
                 render: (status: ContractStatus) => {
                     return <Tag color={getContractColor(status)}>{getContractStatusText(status)}</Tag>;
                 },
@@ -128,12 +165,14 @@ const ContractsTable = () => {
                 title: 'Ngày tạo',
                 dataIndex: 'createdAt',
                 width: 170,
+                sorter: true,
                 render: formatDateTime,
             },
             {
                 title: 'Ngày cập nhật',
                 dataIndex: 'updatedAt',
                 width: 170,
+                sorter: true,
                 render: formatDateTime,
             },
             {
@@ -176,23 +215,27 @@ const ContractsTable = () => {
         setShowAddModal(true);
     };
 
-    const getContracts = useCallback(async (data: IGetContractsByOwner) => {
-        setLoading(true);
+    const getContracts = useCallback(
+        async (data: IGetContractsByOwner) => {
+            setLoading(true);
 
-        try {
-            const res = await getContractsByOwner({
-                ...data,
-                startDate: data.startDate && formatDate(data.startDate),
-                endDate: data.endDate && formatDate(data.endDate),
-            });
+            try {
+                const res = await getContractsByOwner({
+                    ...data,
+                    startDate: data.startDate && formatDate(data.startDate),
+                    endDate: data.endDate && formatDate(data.endDate),
+                    ...tableParams,
+                });
 
-            setContracts(res);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+                setContracts(res);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        },
+        [tableParams],
+    );
 
     const refresh = () => {
         const pagination = toSkipTake(page, pageSize);
@@ -212,6 +255,18 @@ const ContractsTable = () => {
 
         if (page === 1) getContracts({ take: pageSize, skip: 0 });
         else router.replace(`${OWNER_CONTRACTS}?page=1&pageSize=${pageSize}`);
+    };
+
+    const handleTableChange = (
+        pagination: TablePaginationConfig,
+        filters: Record<string, FilterValue | null>,
+        sorter: SorterResult<IContract> | SorterResult<IContract>[],
+    ) => {
+        if (Array.isArray(sorter)) return;
+        setTableParams({
+            sortField: Array.isArray(sorter.field) ? sorter.field.at(-1) : sorter.field,
+            sortOrder: sorter.order,
+        });
     };
 
     useEffect(() => {
@@ -338,6 +393,7 @@ const ContractsTable = () => {
                 //     getCheckboxProps,
                 //     onChange: setSelectedRowKeys,
                 // }}
+                onChange={handleTableChange}
             />
             <CancelModal contract={cancelContract} onClose={handleCloseCancelContract} setContracts={setContracts} />
         </>
