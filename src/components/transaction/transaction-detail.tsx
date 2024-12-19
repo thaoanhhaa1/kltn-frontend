@@ -8,9 +8,10 @@ import {
     getTransactionTypeText,
     sumAmountCurrency,
 } from '@/lib/utils';
-import { Modal, Tag } from 'antd';
+import { Flex, Modal, Tag } from 'antd';
 import { BookOpen, Clock, FileText, Users } from 'lucide-react';
 import Markdown from 'react-markdown';
+import Invoice from '../invoice';
 
 const TransactionDetailView = ({
     transaction,
@@ -34,7 +35,13 @@ const TransactionDetailView = ({
             }}
             closable
             onCancel={onClose}
-            footer={null}
+            footer={() => {
+                return (
+                    <Flex justify="flex-end">
+                        <Invoice transaction={transaction} />
+                    </Flex>
+                );
+            }}
         >
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-bold text-gray-800">{transaction.title}</h2>
