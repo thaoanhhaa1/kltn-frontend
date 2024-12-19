@@ -1,5 +1,6 @@
 import PaymentTransaction from '@/app/(base)/payments/payment-transaction';
 import Extension from '@/components/extension';
+import Invoice from '@/components/invoice';
 import Text from '@/components/text';
 import Title from '@/components/title';
 import { Card } from '@/components/ui/card';
@@ -12,10 +13,10 @@ import Markdown from 'react-markdown';
 
 const Payment = ({ transaction, fetchTransactions }: { transaction: ITransaction; fetchTransactions: () => void }) => {
     return (
-        <Card className="p-4">
-            <Flex align="center" gap={16}>
+        <Card className="p-4 h-full">
+            <Flex align="center" gap={16} style={{ height: '100%' }}>
                 <ReceiptText size={30} className="text-antd-primary" />
-                <div>
+                <div className="h-full flex flex-col">
                     <Title level={5}>{transaction.title}</Title>
                     {transaction.description && (
                         <Text>
@@ -63,8 +64,9 @@ const Payment = ({ transaction, fetchTransactions }: { transaction: ITransaction
                         style={{
                             marginTop: 8,
                         }}
-                        align="center"
+                        align="flex-end"
                         justify="space-between"
+                        flex={1}
                     >
                         <Tag color={getTransactionColor(transaction.status)}>
                             {getTransactionStatusText(transaction.status)}
@@ -86,6 +88,7 @@ const Payment = ({ transaction, fetchTransactions }: { transaction: ITransaction
                                 />
                             </Flex>
                         )}
+                        {transaction.status === 'COMPLETED' && <Invoice transaction={transaction as any} />}
                     </Flex>
                 </div>
             </Flex>

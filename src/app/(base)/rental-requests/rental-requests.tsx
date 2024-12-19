@@ -127,17 +127,14 @@ const RentalRequests = () => {
         fetchRentalRequests({ take: 10, skip: 0 });
     };
 
-    const handleChangeSort = useCallback(
-        (value: string) => {
-            setSort(value);
-            setRentalRequests(initDataTable);
-            fetchRentalRequests({
-                take: 10,
-                skip: 0,
-            });
-        },
-        [fetchRentalRequests],
-    );
+    const handleChangeSort = useCallback((value: string) => {
+        setSort(value);
+        setRentalRequests(initDataTable);
+        // fetchRentalRequests({
+        //     take: 10,
+        //     skip: 0,
+        // });
+    }, []);
 
     useEffect(() => {
         fetchRentalRequests({

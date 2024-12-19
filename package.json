@@ -38,6 +38,8 @@
         "dayjs": "^1.11.12",
         "firebase": "^10.13.2",
         "frontend": "file:",
+        "html2canvas-pro": "^1.5.8",
+        "jspdf": "^2.5.2",
         "jwt-decode": "^4.0.0",
         "lucide-react": "^0.417.0",
         "negotiator": "^0.6.3",
