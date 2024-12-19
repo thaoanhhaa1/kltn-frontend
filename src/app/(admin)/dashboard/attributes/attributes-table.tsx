@@ -1,32 +1,40 @@
 'use client';
 
+import TableFilter from '@/components/table-filter';
+import TablePagination from '@/components/table-pagination';
 import { initAttribute, types } from '@/constants/attribute';
 import { IAttribute } from '@/interfaces/attribute';
 import { formatDateTime, getAttributeTypeColor } from '@/lib/utils';
-import { createAttribute, deleteAttribute, updateAttribute } from '@/services/attribute-service';
-import { Button, Flex, Form, Input, Select, Space, Table, TableProps, Tag } from 'antd';
+import { DASHBOARD_ATTRIBUTES } from '@/path';
+import { createAttribute, deleteAttribute, getAllAttributes, updateAttribute } from '@/services/attribute-service';
+import { Button, Col, Flex, Form, Input, Select, Space, TableProps, Tag } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { Edit2, Plus, Save, Trash, X } from 'lucide-react';
+import { Edit2, Filter, Plus, Save, Trash, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 
 const attributeOptions = Object.keys(types).map((key) => ({ label: types[key as keyof typeof types], value: key }));
 
-const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
-    const [data, setData] = useState<Array<IAttribute>>(attributes);
+export interface IFilterAttribute {}
+
+const AttributesTable = () => {
+    const [attributes, setAttributes] = useState<Array<IAttribute>>([]);
     const [loading, setLoading] = useState(false);
     const [editIndex, setEditIndex] = useState<number>(-1);
     const [isAdd, setIsAdd] = useState(false);
     const router = useRouter();
     const [form] = useForm();
+    const [activeFilter, setActiveFilter] = useState(false);
+    const [attributeLoading, setAttributeLoading] = useState(false);
+    const [filterForm] = useForm();
 
     const handleToggleAdd = () => {
         if (isAdd) {
-            data.shift();
+            setAttributes((prev) => prev.slice(1));
         } else {
             form.resetFields();
-            setData((prev) => [initAttribute, ...prev]);
+            setAttributes((prev) => [initAttribute, ...prev]);
         }
 
         setIsAdd((prev) => !prev);
@@ -54,8 +62,8 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
         setEditIndex(-1);
         setIsAdd(false);
 
-        if (isAdd) data.shift();
-    }, [data, isAdd]);
+        if (isAdd) attributes.shift();
+    }, [attributes, isAdd]);
 
     const handleSave = useCallback(async () => {
         await form.validateFields();
@@ -63,7 +71,7 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
             setLoading(true);
             const values = await form.getFieldsValue();
 
-            await (isAdd ? createAttribute(values) : updateAttribute({ id: data[editIndex].id, ...values }));
+            await (isAdd ? createAttribute(values) : updateAttribute({ id: attributes[editIndex].id, ...values }));
 
             setEditIndex(-1);
             setIsAdd(false);
@@ -74,7 +82,7 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
         } finally {
             setLoading(false);
         }
-    }, [data, editIndex, form, isAdd, router]);
+    }, [attributes, editIndex, form, isAdd, router]);
 
     const columns: TableProps<IAttribute>['columns'] = useMemo(
         () => [
@@ -82,12 +90,14 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
                 title: 'ID',
                 dataIndex: 'id',
                 width: 50,
+                sorter: (a, b) => a.id.localeCompare(b.id),
                 render: (value) => value || '-',
             },
             {
                 title: 'Tên tiện ích',
                 dataIndex: 'name',
                 width: 250,
+                sorter: (a, b) => a.name.localeCompare(b.name),
                 render: (value, _, index) => {
                     if ((isAdd && index === 0) || editIndex === index)
                         return (
@@ -112,9 +122,10 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
                 },
             },
             {
-                title: 'Loai tiện ích',
+                title: 'Loại tiện ích',
                 dataIndex: 'type',
                 width: 150,
+                sorter: (a, b) => a.type.localeCompare(b.type),
                 render: (type: string, _, index) => {
                     if ((isAdd && index === 0) || editIndex === index)
                         return (
@@ -146,12 +157,14 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
                 title: 'Ngày tạo',
                 dataIndex: 'createdAt',
                 width: 170,
+                sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
                 render: (value) => (value ? formatDateTime(value) : '-'),
             },
             {
                 title: 'Ngày cập nhật',
                 dataIndex: 'updatedAt',
                 width: 170,
+                sorter: (a, b) => a.updatedAt.localeCompare(b.updatedAt),
                 render: (value) => (value ? formatDateTime(value) : '-'),
             },
             {
@@ -187,22 +200,80 @@ const AttributesTable = ({ attributes }: { attributes: Array<IAttribute> }) => {
         [editIndex, handleCancel, handleDelete, handleEdit, handleSave, isAdd],
     );
 
+    const fetchAttributes = useCallback(async () => {
+        setAttributeLoading(true);
+
+        try {
+            const attributes = await getAllAttributes({
+                ...filterForm.getFieldsValue(),
+            });
+
+            setAttributes(attributes);
+        } catch (error) {
+        } finally {
+            setAttributeLoading(false);
+        }
+    }, [filterForm]);
+
+    const handleToggleFilter = () => {
+        setActiveFilter((prev) => !prev);
+    };
+
+    const handleFilter = (values: IFilterAttribute) => {
+        fetchAttributes();
+        router.push(DASHBOARD_ATTRIBUTES);
+    };
+
+    const handleReset = useCallback(() => {
+        form.resetFields();
+        fetchAttributes();
+        router.push(DASHBOARD_ATTRIBUTES);
+    }, [fetchAttributes, form, router]);
+
     useEffect(() => {
-        setData(attributes);
-    }, [attributes]);
+        fetchAttributes();
+    }, [fetchAttributes]);
 
     return (
         <>
-            <Flex gap="small" wrap className="my-4">
+            <Flex gap="small" justify="flex-end" wrap className="my-4">
+                <Button
+                    type={activeFilter ? 'primary' : 'default'}
+                    icon={<Filter className="w-5 h-5" />}
+                    onClick={handleToggleFilter}
+                />
                 <Button
                     type={isAdd ? 'primary' : 'default'}
-                    className="ml-auto"
                     icon={<Plus className="w-5 h-5" />}
                     onClick={handleToggleAdd}
                 />
             </Flex>
+            {activeFilter && (
+                <TableFilter<IFilterAttribute> onFinish={handleFilter} onReset={handleReset} form={filterForm}>
+                    <Col span={8}>
+                        <Form.Item name="id" label="ID">
+                            <Input allowClear placeholder="Nhập ID" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item name="name" label="Tiện ích">
+                            <Input allowClear placeholder="Nhập họ tên tiện ích" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item name="type" label="Loại tiện ích">
+                            <Select options={attributeOptions} placeholder="Chọn loại tiện ích" allowClear />
+                        </Form.Item>
+                    </Col>
+                </TableFilter>
+            )}
             <Form form={form}>
-                <Table loading={loading} rowKey={(record) => record.id} columns={columns} dataSource={data} />
+                <TablePagination
+                    loading={loading || attributeLoading}
+                    rowKey={(record) => record.id}
+                    columns={columns}
+                    dataSource={attributes}
+                />
             </Form>
         </>
     );
