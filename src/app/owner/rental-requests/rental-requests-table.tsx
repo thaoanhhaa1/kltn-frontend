@@ -24,8 +24,9 @@ import {
     ownerGetRenterRequests,
     ownerUpdateRentalRequestStatus,
 } from '@/services/rental-request-service';
-import { Button, Col, Flex, Form, Select, Space, TableProps, Tag } from 'antd';
+import { Button, Col, Flex, Form, Select, Space, TablePaginationConfig, TableProps, Tag } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { FilterValue, SorterResult, SortOrder } from 'antd/es/table/interface';
 import { Check, Filter, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -62,13 +63,17 @@ const RentalRequestsTable = () => {
     const [renterLoading, setRenterLoading] = useState(false);
     const [properties, setProperties] = useState<IProperty[]>([]);
     const [propertyLoading, setPropertyLoading] = useState(false);
+    const [tableParams, setTableParams] = useState<{ sortField?: string; sortOrder?: SortOrder }>({});
 
     const fetchRentalRequests = useCallback(async () => {
         setLoading(true);
 
         try {
             const pagination = toSkipTake(page, pageSize);
-            const res = await ownerGetAllRentalRequests(pagination);
+            const res = await ownerGetAllRentalRequests({
+                ...pagination,
+                ...tableParams,
+            });
 
             setData(res);
         } catch (error) {
@@ -76,7 +81,7 @@ const RentalRequestsTable = () => {
         } finally {
             setLoading(false);
         }
-    }, [page, pageSize]);
+    }, [page, pageSize, tableParams]);
 
     const handleUpdateStatus = useCallback(
         async (params: IUpdateRentalRequestStatus) => {
@@ -109,6 +114,7 @@ const RentalRequestsTable = () => {
                 const res = await ownerGetAllRentalRequests({
                     ...pagination,
                     ...values,
+                    ...tableParams,
                 });
                 setData(res);
             } catch (error) {
@@ -117,7 +123,7 @@ const RentalRequestsTable = () => {
                 setLoading(false);
             }
         },
-        [pageSize],
+        [pageSize, tableParams],
     );
 
     const handleReset = useCallback(() => {
@@ -137,22 +143,26 @@ const RentalRequestsTable = () => {
                 title: 'Tiêu đề',
                 dataIndex: ['property', 'title'],
                 width: 300,
+                sorter: true,
             },
             {
                 title: 'Người thuê',
                 dataIndex: ['renter', 'name'],
                 width: 200,
+                sorter: true,
             },
             {
                 title: 'Email',
                 dataIndex: ['renter', 'email'],
                 width: 200,
+                sorter: true,
             },
             {
                 align: 'right',
                 title: 'Giá thuê',
                 dataIndex: 'rentalPrice',
                 width: 150,
+                sorter: true,
                 render: (value) => formatCurrency(value, true),
             },
             {
@@ -160,36 +170,42 @@ const RentalRequestsTable = () => {
                 title: 'Tiền cọc',
                 dataIndex: 'rentalDeposit',
                 width: 150,
+                sorter: true,
                 render: (value) => formatCurrency(value, true),
             },
             {
                 title: 'Ngày bắt đầu',
                 dataIndex: 'rentalStartDate',
-                width: 130,
+                width: 140,
+                sorter: true,
                 render: (value) => formatDate(value),
             },
             {
                 title: 'Ngày kết thúc',
                 dataIndex: 'rentalEndDate',
-                width: 130,
+                width: 140,
+                sorter: true,
                 render: (value) => formatDate(value),
             },
             {
                 title: 'Trạng thái',
                 dataIndex: 'status',
                 width: 100,
+                sorter: true,
                 render: (value) => <Tag color={getRentalRequestColor(value)}>{getRentalRequestStatusText(value)}</Tag>,
             },
             {
                 title: 'Ngày tạo',
                 dataIndex: 'createdAt',
                 width: 180,
+                sorter: true,
                 render: (value) => formatDateTime(value),
             },
             {
                 title: 'Ngày cập nhật',
                 dataIndex: 'updatedAt',
                 width: 180,
+                sorter: true,
                 render: (value) => formatDateTime(value),
             },
             {
@@ -223,6 +239,18 @@ const RentalRequestsTable = () => {
         ],
         [handlePreAccept, handleUpdateStatus, page, pageSize],
     );
+
+    const handleTableChange = (
+        pagination: TablePaginationConfig,
+        filters: Record<string, FilterValue | null>,
+        sorter: SorterResult<IRentalRequest> | SorterResult<IRentalRequest>[],
+    ) => {
+        if (Array.isArray(sorter)) return;
+        setTableParams({
+            sortField: Array.isArray(sorter.field) ? sorter.field.at(-1) : sorter.field,
+            sortOrder: sorter.order,
+        });
+    };
 
     useEffect(() => {
         fetchRentalRequests();
@@ -313,6 +341,7 @@ const RentalRequestsTable = () => {
                 columns={columns}
                 dataSource={data.data}
                 pagination={data.pageInfo}
+                onChange={handleTableChange}
             />
             <ContractModal
                 open={!!selectedRentalRequest}
