@@ -1,5 +1,10 @@
 import { ITable } from '@/interfaces/table';
-import { getContractStatusText, getPropertyStatusText, getRentalRequestStatusText } from '@/lib/utils';
+import {
+    getContractStatusText,
+    getPropertyStatusText,
+    getRentalRequestStatusText,
+    getUserStatusText,
+} from '@/lib/utils';
 
 export const initDataTable = {
     data: [],
@@ -119,6 +124,32 @@ export const rentalRequestStatusOptions = [
     {
         label: getRentalRequestStatusText('REJECTED'),
         value: 'REJECTED',
+    },
+];
+
+export const userTypeOptions = [
+    {
+        label: 'Chủ nhà',
+        value: 'owner',
+    },
+    {
+        label: 'Người thuê',
+        value: 'renter',
+    },
+];
+
+export const userStatusOptions = [
+    {
+        label: getUserStatusText('ACTIVE'),
+        value: 'ACTIVE',
+    },
+    {
+        label: getUserStatusText('INACTIVE'),
+        value: 'INACTIVE',
+    },
+    {
+        label: getUserStatusText('BLOCKED'),
+        value: 'BLOCKED',
     },
 ];
 
