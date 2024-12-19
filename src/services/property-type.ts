@@ -1,4 +1,4 @@
-import { IPropertyType, IPropertyTypeDetail } from '@/interfaces/property-type';
+import { IGetPropertyTypeByAdmin, IPropertyType, IPropertyTypeDetail } from '@/interfaces/property-type';
 import http from '@/lib/http';
 
 const ENDPOINT = '/estate-manager-service/property-types';
@@ -7,11 +7,9 @@ export const getPropertyTypes = () => {
     return http.get<Array<IPropertyType>>(ENDPOINT);
 };
 
-export const getPropertyTypesByAdmin = (accessToken: string) => {
+export const getPropertyTypesByAdmin = (params: IGetPropertyTypeByAdmin) => {
     return http.get<Array<IPropertyTypeDetail>>(`${ENDPOINT}/all`, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
+        params,
     });
 };
 

@@ -257,7 +257,7 @@ const AttributesTable = () => {
                     </Col>
                     <Col span={8}>
                         <Form.Item name="name" label="Tiện ích">
-                            <Input allowClear placeholder="Nhập họ tên tiện ích" />
+                            <Input allowClear placeholder="Nhập tên tiện ích" />
                         </Form.Item>
                     </Col>
                     <Col span={8}>

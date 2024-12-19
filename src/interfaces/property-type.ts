@@ -10,3 +10,8 @@ export interface IPropertyTypeDetail {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface IGetPropertyTypeByAdmin {
+    id?: string;
+    name?: string;
+}
